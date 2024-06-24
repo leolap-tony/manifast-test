@@ -1,4 +1,4 @@
-import NextAuth from "next-auth"
+import NextAuth, { NextAuthConfig, type Session } from "next-auth"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { PrismaClient } from "@prisma/client"
 import credentials from "next-auth/providers/credentials"
@@ -10,6 +10,9 @@ const prisma = new PrismaClient()
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
     adapter: PrismaAdapter(prisma),
+    pages: {
+      newUser:'/signup'
+    },
     providers: [
         // credentials({
         //     async authorize(credentials) {
@@ -21,11 +24,36 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET
         }),
-        naver({
+        // naver({
 
-        }),
-        kakao({
+        // }),
+        // kakao({
 
-        })
+        // })
     ],
-})
+    session: {
+        strategy: "jwt",
+        maxAge: 10*60, // 30 days
+        updateAge: 0
+      },
+      callbacks: {  
+        async jwt(props) {
+          if (props) {
+            console.log(`in jwt : ${JSON.stringify(props, null, 2)}`)
+          }
+          return props.token
+        },
+        async session({session, token} : {session: Session, token?: any}) {
+          // console.log('in session : '+JSON.stringify(props, null, 2))
+          if (session.user) {
+            session.user.sub = token ? token.sub : null  
+          }
+          return session
+        },
+        authorized( {request, auth} ) {
+          console.log('in authorize:',auth)
+          return !!auth
+        },
+      },
+} satisfies NextAuthConfig
+)
