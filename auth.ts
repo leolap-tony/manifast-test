@@ -39,7 +39,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       callbacks: {  
         async jwt(props) {
           if (props) {
-            console.log(`in jwt : ${JSON.stringify(props, null, 2)}`)
+            console.log(`in jwt2 : ${JSON.stringify(props)}`)
           }
           return props.token
         },
