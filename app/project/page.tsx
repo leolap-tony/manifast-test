@@ -1,5 +1,6 @@
 import { Separator } from '@/components/ui/separator'
 import React from 'react'
+import Link from 'next/link'
 
 import {
     Table,
@@ -10,11 +11,17 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
+import { Button } from '@/components/ui/button'
 
 const page = () => {
   return (
     <div className='w-full flex flex-col gap-8 p-12'>
-        <h1 className='text-4xl font-bold'>프로젝트</h1>
+        <div className='flex justify-between items-center'>
+          <h1 className='text-4xl font-bold'>프로젝트</h1>
+          <Button asChild>
+            <Link href="/project/request">프로젝트 요청</Link>
+          </Button>
+        </div>
         <Separator></Separator>
         <Table>          
           <TableHeader>
