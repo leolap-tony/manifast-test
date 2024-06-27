@@ -2,6 +2,7 @@ import { auth,signOut } from "@/auth";
 import Image from "next/image";
 
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button"
 import {
   Table,
   TableBody,
@@ -18,13 +19,23 @@ export default async function Home() {
   const session = await auth();
   return (
     <main className="flex flex-col gap-12 p-12 w-full">
-      <h1 className="text-4xl font-bold">{session?.user.name}님, 안녕하세요</h1>
-      <SignOutButton/>     
+      <div className="flex justify-between">
+        <h1 className="text-4xl font-bold">{session?.user.name}님, 안녕하세요</h1>
+        {/* <SignOutButton/>      */}
+        <form
+          action={async()=>{
+            'use server'
+            await signOut()
+          }}
+        >
+          <Button variant='outline'>로그 아웃</Button>
+        </form>
+      </div>
       <Separator/>      
       <div className="flex gap-4">
-        <div className="border rounded-lg w-96 p-12">진행중인 프로젝트</div>
-        <div className="border rounded-lg w-96 p-12">진행중인 프로젝트</div>
-        <div className="border rounded-lg w-96 p-12">진행중인 프로젝트</div>
+        <div className="border rounded-lg w-1/3 p-12">진행중인 프로젝트</div>
+        <div className="border rounded-lg w-1/3 p-12">진행중인 프로젝트</div>
+        <div className="border rounded-lg w-1/3 p-12">진행중인 프로젝트</div>
       </div>
       <section className="flex flex-col gap-8">
         <h2 className="text-3xl font-semibold">오늘 작업</h2>

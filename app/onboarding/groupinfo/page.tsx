@@ -6,8 +6,8 @@ import Link from 'next/link'
 
 const page = () => {
   return (
-    <div className='flex items-center justify-center w-full'>
-        <div className='flex flex-col gap-12 w-1/3'>
+    <div className='flex items-center justify-center w-full py-4'>
+        <div className='flex flex-col gap-10 w-1/3'>
             <h1 className='text-3xl font-semibold'>그룹(회사)에 대해 알려주세요.</h1>
             <div className='flex flex-col gap-4'>
                 <div>

@@ -5,7 +5,7 @@ import Logo from '@/public/Logo.svg'
 
 const Sidenav = () => {
   return (
-    <aside className="flex flex-col gap-6 w-64 h-full min-h-screen p-5 border-r">
+    <aside className="flex flex-col gap-6 w-64 min-h-screen p-5 border-r">
       <Image src={Logo} alt="Logo" height={48}/>
       <nav className="flex-1">
         <ul className="flex flex-col gap-4 text-xl">
