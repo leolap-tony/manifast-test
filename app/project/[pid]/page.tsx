@@ -49,7 +49,7 @@ const page = async ({ params }: { params: { pid: string}}) => {
         <Progress value={30}/>        
       </div>
 
-      <Tabs defaultValue="thread" className="w-[400px]">
+      <Tabs defaultValue="thread" className="">
           <TabsList>
             <TabsTrigger value="thread">스레드</TabsTrigger>
             <TabsTrigger value="wbs">WBS</TabsTrigger>
@@ -60,7 +60,7 @@ const page = async ({ params }: { params: { pid: string}}) => {
                 <ToggleGroupItem value="normal">일반 메시지</ToggleGroupItem>
                 <ToggleGroupItem value="complete">프로젝트 완료</ToggleGroupItem>
               </ToggleGroup>
-              <Textarea placeholder="Type your message here." id="message-2" />
+              <Textarea placeholder="Type your message here." id="message-2" />             
             </div>
           </TabsContent>
           <TabsContent value="wbs">

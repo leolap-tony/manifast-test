@@ -1,5 +1,6 @@
 import { auth,signOut } from "@/auth";
 import Image from "next/image";
+import { redirect } from "next/navigation"
 
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button"
@@ -17,6 +18,9 @@ import SignOutButton from "@/components/SignOutButton";
 
 export default async function Home() {
   const session = await auth();
+  if (!session?.user.role) {
+    redirect('/onboarding')
+  }
   return (
     <main className="flex flex-col gap-12 p-12 w-full">
       <div className="flex justify-between">

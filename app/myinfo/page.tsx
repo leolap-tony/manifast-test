@@ -13,7 +13,8 @@ const page = async () => {
   const session = await auth();
   const user = session && await prisma.user.findUnique({
     where:{
-      id:session.user.sub
+      // id:session.user.sub,
+      email:session.user.email as string
     }
   })
   return (
@@ -34,7 +35,7 @@ const page = async () => {
                 </div>
                 <div className='flex gap-4'>
                   <span className='mr-16 font-semibold'>연락처</span>
-                  <span>{user?.phone}</span>
+                  <span>{user?.role}</span>
                 </div>
                 <div className='flex gap-4'>
                   <span className='mr-16 font-semibold'>가입일</span>
@@ -42,7 +43,7 @@ const page = async () => {
                 </div>
                 <div className='flex gap-4'>
                   <span className='mr-16 font-semibold'>직무</span>
-                  <span>{user?.job}</span>
+                  <span>{user?.role}</span>
                 </div>
                 <div className='flex gap-4'>
                   <span className='mr-16 font-semibold'>권한</span>
@@ -73,7 +74,7 @@ const page = async () => {
                 </div>
                 <div className='flex gap-4'>
                   <span className='mr-16 font-semibold'>연락처</span>
-                  <span>{user?.phone}</span>
+                  <span>{user?.role}</span>
                 </div>
                 <div className='flex gap-4'>
                   <span className='mr-16 font-semibold'>가입일</span>
@@ -81,7 +82,7 @@ const page = async () => {
                 </div>
                 <div className='flex gap-4'>
                   <span className='mr-16 font-semibold'>직무</span>
-                  <span>{user?.job}</span>
+                  <span>{user?.role}</span>
                 </div>
                 <div className='flex gap-4'>
                   <span className='mr-16 font-semibold'>권한</span>
