@@ -54,6 +54,27 @@ export async function joinGroup(formData: FormData) {
     return {'msg':'error'}    
   }
   revalidatePath('/')
-  redirect('/')
-    
+  redirect('/')    
+}
+
+export async function createGroup(formData: FormData) {
+  const session = await auth()
+  if(!session?.user.sub) return
+  try {
+    await prisma.group.create({      
+      data: {
+        name: formData.get('name') as string,
+        ownerId: session?.user.sub,        
+        ceo: formData.get('ceo') as string,
+        businessNumber: formData.get('businessNumber') as string,
+        email: formData.get('email') as string,
+        phone: formData.get('phone') as string,
+        address: formData.get('address') as string
+      }
+    })
+  } catch (error) {
+    console.error('error in onboarding :',error)
+  }
+  revalidatePath('/')
+  redirect('/')    
 }
