@@ -35,7 +35,7 @@ import { Calendar } from "@/components/ui/calendar"
 
 
 
-const page = () => {
+const Page = () => {
   const [ type, setType ] =useState<String>();
   const [ startDate, setStartDate ] = useState<Date>();
   const [ endDate, setEndDate ] = useState<Date>();
@@ -162,4 +162,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page 
