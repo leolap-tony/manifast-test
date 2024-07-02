@@ -46,7 +46,7 @@ const page = async ({ params }: { params: { pid: string}}) => {
           <div className='text-lg'>30% 요청됨</div>
           <div className='text-lg'>2024.06.08 - 2024.06.18 (예정)</div>
         </div>
-        <Progress value={30}/>        
+        <Progress value={30} className='[&>*]:bg-pink-500'/>        
       </div>
 
       <Tabs defaultValue="thread" className="">

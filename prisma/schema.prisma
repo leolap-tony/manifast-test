@@ -90,11 +90,12 @@ model Group {
 model Project {
   id                String           @id @default(cuid())
   name              String
-  status            Int
-  difficulty        Int
+  message           String?
+  status            Int?
+  difficulty        Int?
   groupId           String
-  request_startDate DateTime
-  request_endDate   DateTime
+  request_startDate DateTime?
+  request_endDate   DateTime?
   startDate         DateTime?
   endDate           DateTime?
   createdAt         DateTime         @default(now())
@@ -107,11 +108,9 @@ model Project {
 model Task {
   id                String        @id @default(cuid())
   name              String
-  status            Int
-  isMilestone       Boolean
+  status            Int?
+  isMilestone       Boolean?
   projectId         String
-  request_startDate DateTime
-  request_endDate   DateTime
   startDate         DateTime?
   endDate           DateTime?
   project           Project       @relation(fields: [projectId], references: [id])
@@ -122,6 +121,8 @@ model Task_Worker {
   taskId    String
   userId    String
   inputRate Int
+  startDate         DateTime?
+  endDate           DateTime?
   task      Task   @relation(fields: [taskId], references: [id])
   worker    User   @relation(fields: [userId], references: [id])
 
