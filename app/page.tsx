@@ -1,6 +1,7 @@
 import { auth,signOut } from "@/auth";
 import Image from "next/image";
 import { redirect } from "next/navigation"
+import prisma from "@/db";
 
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button"
@@ -18,7 +19,12 @@ import SignOutButton from "@/components/SignOutButton";
 
 export default async function Home() {
   const session = await auth();
-  if (!session?.user.role) {
+  const user = session && await prisma.user.findUnique({
+    where:{
+      id: session.user.sub
+    }
+  })
+  if (!user?.role) {
     redirect('/onboarding')
   }
   return (
