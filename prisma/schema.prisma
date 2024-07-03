@@ -19,15 +19,16 @@ model User {
   role                      String?
   authority                 Int?
   groupId                   String?
+  group                     Group?           @relation(fields: [groupId], references: [id])
   createdAt                 DateTime         @default(now())
   updatedAt                 DateTime?        @updatedAt
+  
   accounts                  Account[]
   managementGroups          Group[]          @relation("GroupManager")
-  Group_Group_ownerIdToUser Group?           @relation("Group_ownerIdToUser")
+  owningGroup               Group?           @relation("GroupOwner")
   ProjectThread             Project_Thread[]
   sessions                  Session[]
   participationTask         Task_Worker[]
-  group                     Group?           @relation(fields: [groupId], references: [id])
 }
 
 model Account {
@@ -75,12 +76,12 @@ model Group {
   address                  String?
   businessNumber           String?
   ownerId                  String    @unique
+  owner                    User      @relation("GroupOwner", fields: [ownerId], references: [id])
   managerId                String?
-  supplierGroupId          String?
+  manager                  User?     @relation("GroupManager", fields: [managerId], references: [id])
   createdAt                DateTime  @default(now())
   updatedAt                DateTime  @updatedAt
-  manager                  User?     @relation("GroupManager", fields: [managerId], references: [id])
-  User_Group_ownerIdToUser User      @relation("Group_ownerIdToUser", fields: [ownerId], references: [id])
+  supplierGroupId          String?
   group                    Group?    @relation("Supply", fields: [supplierGroupId], references: [id])
   demandGroups             Group[]   @relation("Supply")
   projects                 Project[]
