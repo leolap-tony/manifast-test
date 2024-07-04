@@ -4,7 +4,6 @@ import "./globals.css";
 import SessionProvider from "@/components/SessionProvider";
 import Sidenav from "@/components/Sidenav";
 
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,8 +20,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider>
-          <main className='flex'>
-            <Sidenav/>
+          <main className="flex">
+            <Sidenav />
             {children}
           </main>
         </SessionProvider>

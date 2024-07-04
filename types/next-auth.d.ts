@@ -1,4 +1,4 @@
-import NextAuth, { DefaultSession, User, AdapterUser } from "next-auth"
+import NextAuth, { DefaultSession, User, AdapterUser } from "next-auth";
 
 declare module "next-auth" {
   /**
@@ -7,16 +7,15 @@ declare module "next-auth" {
   interface Session {
     user: {
       /** The user's postal address. */
-      sub: string,
-      role: string
-    } & DefaultSession["user"]
+      sub: string;
+      role: string;
+    } & DefaultSession["user"];
   }
 
   interface User extends DefaultUser {
-    role: string,
-    phoen: string
+    role: string;
+    phoen: string;
   }
-  
 }
 
 // declare module "next-auth/jwt" {
@@ -27,7 +26,7 @@ declare module "next-auth" {
 
 declare module "@auth/core/adapters" {
   export interface AdapterUser extends User {
-    role: string,
-    phone: string
+    role: string;
+    phone: string;
   }
 }

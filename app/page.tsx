@@ -1,10 +1,10 @@
-import { auth,signOut } from "@/auth";
+import { auth, signOut } from "@/auth";
 import Image from "next/image";
-import { redirect } from "next/navigation"
+import { redirect } from "next/navigation";
 import prisma from "@/db";
 
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -13,35 +13,38 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import SignOutButton from "@/components/SignOutButton";
-
 
 export default async function Home() {
   const session = await auth();
-  const user = session && await prisma.user.findUnique({
-    where:{
-      id: session.user.sub
-    }
-  })
+  const user =
+    session &&
+    (await prisma.user.findUnique({
+      where: {
+        id: session.user.sub,
+      },
+    }));
   if (!user?.role) {
-    redirect('/onboarding')
+    redirect("/onboarding");
   }
   return (
     <main className="flex flex-col gap-12 p-12 w-full">
       <div className="flex justify-between">
-        <h1 className="text-4xl font-bold">{session?.user.name}님, 안녕하세요</h1>
+        <h1 className="text-4xl font-bold">
+          {session?.user.name}님, 안녕하세요
+        </h1>
         {/* <SignOutButton/>      */}
         <form
-          action={async()=>{
-            'use server'
-            await signOut()
+          action={async () => {
+            "use server";
+            await signOut();
           }}
         >
-          <Button variant='outline'>로그 아웃</Button>
+          <Button variant="outline">로그 아웃</Button>
         </form>
       </div>
-      <Separator/>      
+      <Separator />
       <div className="flex gap-4">
         <div className="border rounded-lg w-1/3 p-12">진행중인 프로젝트</div>
         <div className="border rounded-lg w-1/3 p-12">진행중인 프로젝트</div>
@@ -49,7 +52,7 @@ export default async function Home() {
       </div>
       <section className="flex flex-col gap-8">
         <h2 className="text-3xl font-semibold">오늘 작업</h2>
-        <Table>          
+        <Table>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">작업 이름</TableHead>
@@ -87,11 +90,10 @@ export default async function Home() {
             </TableRow>
           </TableBody>
         </Table>
-
       </section>
       <section className="flex flex-col gap-8">
         <h2 className="text-3xl font-semibold">오늘 진행중인 프로젝트</h2>
-        <Table>          
+        <Table>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">프로젝트</TableHead>
@@ -109,7 +111,7 @@ export default async function Home() {
               <TableCell className="font-medium">INV001</TableCell>
               <TableCell>Project name</TableCell>
               <TableCell>2024.06.08</TableCell>
-              <TableCell >40%</TableCell>
+              <TableCell>40%</TableCell>
               <TableCell>50%</TableCell>
               <TableCell>메모</TableCell>
               <TableCell>상</TableCell>
@@ -119,13 +121,12 @@ export default async function Home() {
               <TableCell className="font-medium">INV001</TableCell>
               <TableCell>Project name</TableCell>
               <TableCell>2024.06.08</TableCell>
-              <TableCell >40%</TableCell>
+              <TableCell>40%</TableCell>
               <TableCell>50%</TableCell>
               <TableCell>메모</TableCell>
               <TableCell>상</TableCell>
               <TableCell>(그룹 관리자)</TableCell>
             </TableRow>
-            
           </TableBody>
         </Table>
       </section>
