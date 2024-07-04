@@ -8,27 +8,27 @@ datasource db {
 }
 
 model User {
-  id                        String           @id @default(cuid())
-  name                      String?
-  nickName                  String?
-  email                     String           @unique
-  emailVerified             DateTime?
-  image                     String?
-  phone                     String?
-  job                       String?
-  role                      String?
-  authority                 Int?
-  groupId                   String?
-  group                     Group?           @relation(fields: [groupId], references: [id])
-  createdAt                 DateTime         @default(now())
-  updatedAt                 DateTime?        @updatedAt
-  
-  accounts                  Account[]
-  managementGroups          Group[]          @relation("GroupManager")
-  owningGroup               Group?           @relation("GroupOwner")
-  ProjectThread             Project_Thread[]
-  sessions                  Session[]
-  participationTask         Task_Worker[]
+  id            String    @id @default(cuid())
+  name          String?
+  //nickName      String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  phone         String?
+  job           String?
+  role          String?
+  //authority     Int?
+  groupId       String?
+  group         Group?    @relation(fields: [groupId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+
+  accounts         Account[]
+  sessions         Session[]
+  managementGroups Group[]          @relation("GroupManager")
+  owningGroup      Group?           @relation("GroupOwner")
+  ProjectThread    Project_Thread[]
+  tasks            Task_Worker[]
 }
 
 model Account {
@@ -68,28 +68,29 @@ model VerificationToken {
 }
 
 model Group {
-  id                       String    @id @default(cuid())
-  name                     String
-  ceo                      String?
-  email                    String?
-  phone                    String?
-  address                  String?
-  businessNumber           String?
-  ownerId                  String    @unique
-  owner                    User      @relation("GroupOwner", fields: [ownerId], references: [id])
-  managerId                String?
-  manager                  User?     @relation("GroupManager", fields: [managerId], references: [id])
-  createdAt                DateTime  @default(now())
-  updatedAt                DateTime  @updatedAt
-  supplierGroupId          String?
-  group                    Group?    @relation("Supply", fields: [supplierGroupId], references: [id])
-  demandGroups             Group[]   @relation("Supply")
-  projects                 Project[]
-  members                  User[]
+  id             String   @id @default(cuid())
+  name           String
+  ceo            String?
+  email          String?
+  phone          String?
+  address        String?
+  businessNumber String?
+  ownerId        String   @unique
+  owner          User     @relation("GroupOwner", fields: [ownerId], references: [id])
+  managerId      String?
+  manager        User?    @relation("GroupManager", fields: [managerId], references: [id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  supplyGroupId  String?
+  supplyGroup    Group?   @relation("SupplyGroup", fields: [supplyGroupId], references: [id])
+
+  demandGroups Group[]   @relation("SupplyGroup")
+  projects     Project[]
+  members      User[]
 }
 
 model Project {
-  id                String           @id @default(cuid())
+  id                String    @id @default(cuid())
   name              String
   message           String?
   status            Int?
@@ -99,33 +100,35 @@ model Project {
   request_endDate   DateTime?
   startDate         DateTime?
   endDate           DateTime?
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
-  group             Group            @relation(fields: [groupId], references: [id])
-  threads           Project_Thread[]
-  tasks             Task[]
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  group             Group     @relation(fields: [groupId], references: [id])
+
+  threads Project_Thread[]
+  tasks   Task[]
 }
 
 model Task {
-  id                String        @id @default(cuid())
-  name              String
-  status            Int?
-  isMilestone       Boolean?
-  projectId         String
-  startDate         DateTime?
-  endDate           DateTime?
-  project           Project       @relation(fields: [projectId], references: [id])
-  workerList        Task_Worker[]
+  id          String    @id @default(cuid())
+  name        String
+  status      Int?
+  isMilestone Boolean?
+  projectId   String
+  startDate   DateTime?
+  endDate     DateTime?
+  project     Project   @relation(fields: [projectId], references: [id])
+
+  workers Task_Worker[]
 }
 
 model Task_Worker {
   taskId    String
   userId    String
   inputRate Int
-  startDate         DateTime?
-  endDate           DateTime?
-  task      Task   @relation(fields: [taskId], references: [id])
-  worker    User   @relation(fields: [userId], references: [id])
+  startDate DateTime?
+  endDate   DateTime?
+  task      Task      @relation(fields: [taskId], references: [id])
+  worker    User      @relation(fields: [userId], references: [id])
 
   @@id([userId, taskId])
 }

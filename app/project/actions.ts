@@ -30,10 +30,9 @@ export async function createProject(formData: FormData) {
           }),
         },
       },
-    });
-    revalidatePath(`/project/${project?.id}`);
+    });    
     redirect(`/project/${project?.id}`);
   } catch (error) {
-    console.error("error in onboarding :", error);
+    console.error(error);
   }
 }
