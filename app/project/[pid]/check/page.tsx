@@ -1,5 +1,6 @@
-import React from "react";
+'use client'
 
+import React, {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -14,7 +15,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import {
   Table,
   TableBody,
@@ -24,30 +24,62 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { TASKS,Task } from "@/data/tasks";
 
 const page = () => {
+  //세션 정보
+  //프로젝트 정보
+  //공급 그룹 정보
+  const [tasks, setTasks] = useState<Task[]>([])
+
+  useEffect(()=>{
+    TASKS[`uiux`].map((task)=>{
+      setTasks((prev)=>[...prev,{...task,startDate:'',}])
+    })
+  },[])
+
+  const handleChange = (e:ChangeEvent<HTMLInputElement>, i:number) => {
+    const {name, value} = e.target;
+    console.log(name, value)
+    console.log('test')
+    setTasks((prev)=>{
+      prev[i] = {...prev[i],[name]:value}
+      const newValue = [...prev]
+      newValue[i]={...newValue[i],[name]:value}
+      return newValue
+    })
+  }
+  const handleSwitch = (i:number) => {
+    setTasks((prev)=>{
+      const newValue = [...prev]
+      console.log(!newValue[i].milestone)
+      newValue[i] = {...newValue[i],milestone:!newValue[i].milestone}
+      return newValue
+    })
+  }
+
   return (
-    <div className="flex flex-col p-8 w-full gap-10">
+    <div className="flex flex-col gap-8 p-8 w-full">
       <h1 className="text-3xl font-bold">프로젝트 검토/수정</h1>
       <Separator />
-
+      <p>{JSON.stringify(tasks)}</p>
       <section className="flex flex-col">
         <h2 className="text-xl font-semibold">기본 정보</h2>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-4 p-4">
           <div className="flex items-center">
-            <div className="w-24">프로젝트명</div>
+            <Label className="w-28">프로젝트명</Label>
             <Input name="projectName" className="" />
           </div>
           <div className="flex items-center">
-            <div className="w-24">종류</div>
+            <Label className="w-28">종류</Label>
             <Input name="projectName" className="" />
           </div>
           <div className="flex items-center">
-            <div className="w-24">시작일</div>
+            <Label className="w-28">시작일</Label>
             <Input name="projectName" className="" />
           </div>
           <div className="flex items-center">
-            <div className="w-24">종료일</div>
+            <Label className="w-28">종료일</Label>
             <Input name="projectName" className="" />
           </div>
         </div>
@@ -76,39 +108,41 @@ const page = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>
-                <Checkbox />
-              </TableCell>
-              <TableCell>
-                <Input />
-              </TableCell>
-              <TableCell>
-                <Switch />
-              </TableCell>
-              <TableCell>
-                <Input />
-              </TableCell>
-              <TableCell>
-                <Input />
-              </TableCell>
-              <TableCell>
-                <div className="flex gap-2">
-                  <Select name="type">
-                    <SelectTrigger>
-                      <SelectValue placeholder="작업자 선택" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="wendy">Wendy</SelectItem>
-                      <SelectItem value="zoey">Zoey</SelectItem>
-                      <SelectItem value="tony">Tony</SelectItem>
-                    </SelectContent>
-                  </Select>
+            {tasks.map((task,i)=>(
+              <TableRow>
+                <TableCell>
+                  <Checkbox />
+                </TableCell>
+                <TableCell>
+                  <Input name='taskName' defaultValue={tasks[i].taskName} onChange={(e)=>handleChange(e,i)}/>
+                </TableCell>
+                <TableCell>
+                  <Switch name='milestone' defaultChecked={tasks[i].milestone} onClick={()=>handleSwitch(i)}/>
+                </TableCell>
+                <TableCell>
                   <Input />
-                  <Button>작업자추가</Button>
-                </div>
-              </TableCell>
-            </TableRow>
+                </TableCell>
+                <TableCell>
+                  <Input />
+                </TableCell>
+                <TableCell className="flex flex-col gap-1">
+                  <div className="flex gap-2">                  
+                    <Select name="type">
+                      <SelectTrigger>
+                        <SelectValue placeholder="작업자 선택" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="wendy">Wendy</SelectItem>
+                        <SelectItem value="zoey">Zoey</SelectItem>
+                        <SelectItem value="tony">Tony</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Input />                  
+                  </div>                  
+                </TableCell>
+                <TableCell><Button>작업자추가</Button></TableCell>              
+              </TableRow>
+            ))}            
           </TableBody>
         </Table>
       </section>

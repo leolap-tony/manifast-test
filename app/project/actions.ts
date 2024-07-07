@@ -17,8 +17,9 @@ export async function createProject(formData: FormData) {
   if (!user?.groupId) return;
   let tasks = formData.get("tasks") as any;
   tasks = JSON.parse(tasks);
+  let project;
   try {
-    const project = await prisma.project.create({
+    project = await prisma.project.create({
       data: {
         name: formData.get("projectName") as string,
         groupId: user.groupId,
@@ -31,8 +32,13 @@ export async function createProject(formData: FormData) {
         },
       },
     });    
-    redirect(`/project/${project?.id}`);
   } catch (error) {
     console.error(error);
+    return
   }
+  redirect(`/project/${project?.id}`);
+}
+
+export async function checkProject(formData: FormData) {
+  const session = await auth();
 }

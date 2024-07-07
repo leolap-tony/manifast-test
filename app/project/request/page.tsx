@@ -42,20 +42,20 @@ const Page = () => {
   const [endDate, setEndDate] = useState<Date>();
 
   return (
-    <form action={createProject} className="flex flex-col gap-6 w-full p-8">
+    <form action={createProject} className="flex flex-col gap-8 w-full p-8">
       <h1 className="text-3xl font-bold">프로젝트 요청</h1>
       <Separator />
       <div className="flex flex-col">
         <h2 className="text-xl font-semibold">기본 정보</h2>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4">
-          <div className="flex p-2 gap-4">
-            <div className="">프로젝트명</div>
-            <Input name="projectName" className="w-[300px]" />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-4 p-4">
+          <div className="flex items-center">
+            <Label className="w-28">프로젝트명</Label>
+            <Input name="projectName" className="" />
           </div>
-          <div className="flex p-1 gap-3">
-            <div>종류</div>
+          <div className="flex items-center">
+            <Label className="w-28">종류</Label>
             <Select name="type" onValueChange={(value) => setType(value)}>
-              <SelectTrigger className="w-[300px]">
+              <SelectTrigger className="">
                 <SelectValue placeholder="UXUI (웹/앱) 디자인" />
               </SelectTrigger>
               <SelectContent>
@@ -81,14 +81,14 @@ const Page = () => {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex p-1 gap-4">
-            <div>시작일</div>
+          <div className="flex items-center">
+            <Label className="w-28">시작일</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant={"outline"}
                   className={cn(
-                    "w-[280px] justify-start text-left font-normal",
+                    "w-full justify-start text-left font-normal",
                     !startDate && "text-muted-foreground",
                   )}
                 >
@@ -110,14 +110,14 @@ const Page = () => {
               </PopoverContent>
             </Popover>
           </div>
-          <div className="flex p-1 gap-4">
-            <div>종료일</div>
+          <div className="flex items-center">
+            <Label className="w-28">종료일</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant={"outline"}
                   className={cn(
-                    "w-[280px] justify-start text-left font-normal",
+                    "w-full justify-start text-left font-normal",
                     !endDate && "text-muted-foreground",
                   )}
                 >
