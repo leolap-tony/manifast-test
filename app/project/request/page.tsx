@@ -164,8 +164,8 @@ const Page = () => {
           id="message-2"
         />
       </div>
-      <input type="hidden" name="startDate" value={JSON.stringify(startDate)} />
-      <input type="hidden" name="endDate" value={JSON.stringify(endDate)} />
+      <input type="hidden" name="startDate" value={startDate?.toISOString()} />
+      <input type="hidden" name="endDate" value={endDate?.toISOString()} />
       <input
         type="hidden"
         name="tasks"
@@ -176,7 +176,7 @@ const Page = () => {
       ))}
       <Button className="w-fit">프로젝트 요청</Button>
       <div>{JSON.stringify(startDate)}</div>
-      <div>{JSON.stringify(endDate)}</div>
+      <div>{endDate?.toISOString()}</div>
     </form>
   );
 };

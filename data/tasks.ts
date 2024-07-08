@@ -16,9 +16,9 @@ export interface Task {
   order?: number;
   description?: string;
   time?: string;
-  startDate?:string;
-  endDate?:string;
-  worker?:[{worker:string,inputRate:number}]
+  startDate?: Date | undefined;
+  endDate?: Date | undefined;
+  workers?: [{ worker: string; inputRate: number }];
 }
 
 export const TASKS: Tasks = {
@@ -29,9 +29,9 @@ export const TASKS: Tasks = {
       taskName: "메뉴 구조도 작성",
       description: "",
       time: "2일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -39,9 +39,9 @@ export const TASKS: Tasks = {
       taskName: "1차 컨셉 디자인",
       description: "",
       time: "1주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -49,9 +49,9 @@ export const TASKS: Tasks = {
       taskName: "2차 상세 디자인",
       description: "",
       time: "2-3주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -59,9 +59,9 @@ export const TASKS: Tasks = {
       taskName: "3차 최종 디자인",
       description: "",
       time: "1-2주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -69,9 +69,9 @@ export const TASKS: Tasks = {
       taskName: "스토리보드 제작",
       description: "",
       time: "1-2주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
   ],
   branding: [
@@ -81,9 +81,9 @@ export const TASKS: Tasks = {
       taskName: "브랜드 요구사항 인터뷰",
       description: "",
       time: "1일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -91,9 +91,9 @@ export const TASKS: Tasks = {
       taskName: "디자인 전략",
       description: "",
       time: "1주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -101,9 +101,9 @@ export const TASKS: Tasks = {
       taskName: "1차 컨셉 시안",
       description: "",
       time: "1주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -111,9 +111,9 @@ export const TASKS: Tasks = {
       taskName: "2차 최종 시안",
       description: "",
       time: "1-2주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -121,9 +121,9 @@ export const TASKS: Tasks = {
       taskName: "어플리케이션 제작",
       description: "",
       time: "1-2주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -131,9 +131,9 @@ export const TASKS: Tasks = {
       taskName: "브랜드 가이드북",
       description: "",
       time: "2주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
   ],
   landingpage: [
@@ -143,9 +143,9 @@ export const TASKS: Tasks = {
       taskName: "와이어프레임 확정",
       description: "",
       time: "2일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -153,9 +153,9 @@ export const TASKS: Tasks = {
       taskName: "1차 컨셉 디자인",
       description: "",
       time: "1주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -163,9 +163,9 @@ export const TASKS: Tasks = {
       taskName: "2차 최종 디자인",
       description: "",
       time: "1-2주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -173,9 +173,9 @@ export const TASKS: Tasks = {
       taskName: "퍼블리싱 진행",
       description: "",
       time: "1-2주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -183,9 +183,9 @@ export const TASKS: Tasks = {
       taskName: "스토리보드 제작",
       description: "",
       time: "1주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -193,9 +193,9 @@ export const TASKS: Tasks = {
       taskName: "도메인-호스팅 연결",
       description: "",
       time: "1일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
   ],
   contents: [
@@ -205,9 +205,9 @@ export const TASKS: Tasks = {
       taskName: "사전 조율",
       description: "",
       time: "1일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -215,9 +215,9 @@ export const TASKS: Tasks = {
       taskName: "1차 컨셉 디자인",
       description: "",
       time: "1일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -225,9 +225,9 @@ export const TASKS: Tasks = {
       taskName: "최종 디자인",
       description: "",
       time: "2일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -235,9 +235,9 @@ export const TASKS: Tasks = {
       taskName: "디자인 수정",
       description: "",
       time: "1일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
   ],
   print: [
@@ -247,9 +247,9 @@ export const TASKS: Tasks = {
       taskName: "사전 조율",
       description: "",
       time: "1일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -257,9 +257,9 @@ export const TASKS: Tasks = {
       taskName: "1차 컨셉 디자인",
       description: "",
       time: "1일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -267,9 +267,9 @@ export const TASKS: Tasks = {
       taskName: "최종 디자인",
       description: "",
       time: "1일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -277,9 +277,9 @@ export const TASKS: Tasks = {
       taskName: "디자인 수정",
       description: "",
       time: "1일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
   ],
   ppt: [
@@ -289,9 +289,9 @@ export const TASKS: Tasks = {
       taskName: "사전 조율",
       description: "",
       time: "1일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -299,9 +299,9 @@ export const TASKS: Tasks = {
       taskName: "1차 컨셉 디자인",
       description: "",
       time: "2일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -309,9 +309,9 @@ export const TASKS: Tasks = {
       taskName: "최종 디자인",
       description: "",
       time: "2일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -319,9 +319,9 @@ export const TASKS: Tasks = {
       taskName: "디자인 수정",
       description: "",
       time: "1일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -329,9 +329,9 @@ export const TASKS: Tasks = {
       taskName: "추가 디자인",
       description: "",
       time: "2일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
   ],
   ux: [
@@ -341,9 +341,9 @@ export const TASKS: Tasks = {
       taskName: "리서치 요구사항 인터뷰",
       description: "",
       time: "1일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -351,9 +351,9 @@ export const TASKS: Tasks = {
       taskName: "리서치 개요 설정",
       description: "",
       time: "3일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -361,9 +361,9 @@ export const TASKS: Tasks = {
       taskName: "리서치 기획 및 참여자 선정",
       description: "",
       time: "1-2주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -371,9 +371,9 @@ export const TASKS: Tasks = {
       taskName: "테스트 진행",
       description: "",
       time: "1주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -381,9 +381,9 @@ export const TASKS: Tasks = {
       taskName: "결과 데이터 분석",
       description: "",
       time: "1주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -391,9 +391,9 @@ export const TASKS: Tasks = {
       taskName: "결과 보고서 제작",
       description: "",
       time: "1주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
   ],
   motiongraphic: [
@@ -403,9 +403,9 @@ export const TASKS: Tasks = {
       taskName: "사전 조율",
       description: "",
       time: "2일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -413,9 +413,9 @@ export const TASKS: Tasks = {
       taskName: "씬 구분 및 스타일 프레임",
       description: "",
       time: "3일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -423,9 +423,9 @@ export const TASKS: Tasks = {
       taskName: "프리비즈",
       description: "",
       time: "1-2주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -433,9 +433,9 @@ export const TASKS: Tasks = {
       taskName: "씬 제작",
       description: "",
       time: "1-3주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -443,9 +443,9 @@ export const TASKS: Tasks = {
       taskName: "프리뷰",
       description: "",
       time: "1주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -453,9 +453,9 @@ export const TASKS: Tasks = {
       taskName: "렌더링",
       description: "",
       time: "1-2주",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
   ],
   rendering: [
@@ -465,9 +465,9 @@ export const TASKS: Tasks = {
       taskName: "기획 내용 확인, 레퍼런스",
       description: "",
       time: "2일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -475,9 +475,9 @@ export const TASKS: Tasks = {
       taskName: "장면 구성 및 디자인 기획",
       description: "",
       time: "3일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -485,9 +485,9 @@ export const TASKS: Tasks = {
       taskName: "씬 제작 및 디벨롭",
       description: "",
       time: "2-4일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
     {
       milestone: true,
@@ -495,9 +495,9 @@ export const TASKS: Tasks = {
       taskName: "렌더링 및 공유",
       description: "",
       time: "2일",
-      startDate:"",
-      endDate:"",
-      worker:[{worker:"",inputRate:0}]
+      startDate: undefined,
+      endDate: undefined,
+      workers: [{ worker: "", inputRate: 0 }],
     },
   ],
 };

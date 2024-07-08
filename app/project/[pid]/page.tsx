@@ -1,5 +1,6 @@
 import React from "react";
 import { auth } from "@/auth";
+import Link from "next/link";
 
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -22,7 +23,9 @@ const page = async ({ params }: { params: { pid: string } }) => {
     <div className="flex flex-col p-8 w-full gap-8">
       <div className="flex justify-between">
         <h1 className="text-3xl font-bold">{params.pid}</h1>
-        <Button>프로젝트 검토하기</Button>
+        <Button asChild>
+          <Link href={`/project/${params.pid}/check`}>프로젝트 검토하기</Link>
+        </Button>
       </div>
       <div className="grid grid-cols-3 p-6 bg-slate-50 rounded-lg ">
         <div className="flex gap-8">

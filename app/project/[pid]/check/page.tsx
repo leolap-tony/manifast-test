@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import React, {ChangeEvent, FormEvent, useEffect, useState} from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -24,45 +24,90 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { TASKS,Task } from "@/data/tasks";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { TASKS, Task } from "@/data/tasks";
+import { checkProject, getProjectInfo } from "../../actions";
+import { useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 
 const page = () => {
   //세션 정보
+  const { data } = useSession();
   //프로젝트 정보
+  const { pid } = useParams();
+  const project = useQuery({
+    queryKey: ["project"],
+    queryFn: async () => {
+      const data = await getProjectInfo();
+      return data;
+    },
+  });
   //공급 그룹 정보
-  const [tasks, setTasks] = useState<Task[]>([])
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
+  const [difficulty, setDifficulty] = useState<string>();
 
-  useEffect(()=>{
-    TASKS[`uiux`].map((task)=>{
-      setTasks((prev)=>[...prev,{...task,startDate:'',}])
-    })
-  },[])
+  useEffect(() => {
+    TASKS[`uiux`].map((task) => {
+      setTasks((prev) => [...prev, { ...task }]);
+    });
+  }, []);
+  const checkProjectWithTasks = checkProject.bind(null, tasks);
 
-  const handleChange = (e:ChangeEvent<HTMLInputElement>, i:number) => {
-    const {name, value} = e.target;
-    console.log(name, value)
-    console.log('test')
-    setTasks((prev)=>{
-      prev[i] = {...prev[i],[name]:value}
-      const newValue = [...prev]
-      newValue[i]={...newValue[i],[name]:value}
-      return newValue
-    })
-  }
-  const handleSwitch = (i:number) => {
-    setTasks((prev)=>{
-      const newValue = [...prev]
-      console.log(!newValue[i].milestone)
-      newValue[i] = {...newValue[i],milestone:!newValue[i].milestone}
-      return newValue
-    })
-  }
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, i: number) => {
+    const { name, value } = e.target;
+    console.log(name, value);
+    console.log("test");
+    setTasks((prev) => {
+      const newValue = [...prev];
+      newValue[i] = { ...newValue[i], [name]: value };
+      return newValue;
+    });
+  };
+  const handleSwitch = (i: number) => {
+    setTasks((prev) => {
+      const newValue = [...prev];
+      newValue[i] = { ...newValue[i], milestone: !newValue[i].milestone };
+      return newValue;
+    });
+  };
+  const handleDate = (date: Date, i: number, name: string) => {
+    setTasks((prev) => {
+      const newValue = [...prev];
+      newValue[i] = { ...newValue[i], [name]: date };
+      return newValue;
+    });
+  };
+  const addWorker = (i: number) => {
+    setTasks((prev) => {
+      const newValue = [...prev];
+      newValue[i].workers?.push({ worker: "", inputRate: 0 });
+      return newValue;
+    });
+  };
 
   return (
-    <div className="flex flex-col gap-8 p-8 w-full">
+    <form
+      className="flex flex-col gap-8 p-8 w-full"
+      action={checkProjectWithTasks}
+    >
       <h1 className="text-3xl font-bold">프로젝트 검토/수정</h1>
       <Separator />
       <p>{JSON.stringify(tasks)}</p>
+      <p>{JSON.stringify(startDate)}</p>
+      <p>{JSON.stringify(endDate)}</p>
+      <p>session : {JSON.stringify(data)}</p>
+      <p>query:{JSON.stringify(project)}</p>
       <section className="flex flex-col">
         <h2 className="text-xl font-semibold">기본 정보</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-4 p-4">
@@ -72,15 +117,71 @@ const page = () => {
           </div>
           <div className="flex items-center">
             <Label className="w-28">종류</Label>
-            <Input name="projectName" className="" />
+            <Input name="projectType" className="" />
           </div>
           <div className="flex items-center">
             <Label className="w-28">시작일</Label>
-            <Input name="projectName" className="" />
+            <input
+              type="hidden"
+              name="startDate"
+              value={startDate?.toISOString()}
+            />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !startDate && "text-muted-foreground",
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {startDate ? (
+                    format(startDate, "PPP")
+                  ) : (
+                    <span>Pick a date</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={startDate}
+                  onSelect={setStartDate}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
           </div>
           <div className="flex items-center">
             <Label className="w-28">종료일</Label>
-            <Input name="projectName" className="" />
+            <input
+              type="hidden"
+              name="endDate"
+              value={endDate?.toISOString()}
+            />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !endDate && "text-muted-foreground",
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {endDate ? format(endDate, "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={endDate}
+                  onSelect={setEndDate}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </section>
@@ -89,9 +190,13 @@ const page = () => {
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold">예상 작업 리스트</h2>
           <div className="flex gap-4">
-            <Button variant={"outline"}>삭제</Button>
-            <Button variant={"outline"}>작업자 일괄 배정</Button>
-            <Button>작업 추가</Button>
+            <Button type="button" variant={"outline"}>
+              삭제
+            </Button>
+            <Button type="button" variant={"outline"}>
+              작업자 일괄 배정
+            </Button>
+            <Button type="button">작업 추가</Button>
           </div>
         </div>
         <Table>
@@ -108,61 +213,148 @@ const page = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {tasks.map((task,i)=>(
+            {tasks.map((task, i) => (
               <TableRow>
                 <TableCell>
                   <Checkbox />
                 </TableCell>
                 <TableCell>
-                  <Input name='taskName' defaultValue={tasks[i].taskName} onChange={(e)=>handleChange(e,i)}/>
+                  <Input
+                    name="taskName"
+                    defaultValue={tasks[i].taskName}
+                    onChange={(e) => handleChange(e, i)}
+                  />
                 </TableCell>
                 <TableCell>
-                  <Switch name='milestone' defaultChecked={tasks[i].milestone} onClick={()=>handleSwitch(i)}/>
+                  <Switch
+                    defaultChecked={tasks[i].milestone}
+                    onClick={() => handleSwitch(i)}
+                  />
                 </TableCell>
                 <TableCell>
-                  <Input />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !tasks[i].startDate && "text-muted-foreground",
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {tasks[i].startDate ? (
+                          format(tasks[i].startDate as Date, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={tasks[i].startDate}
+                        onSelect={(date) =>
+                          handleDate(date as Date, i, "startDate")
+                        }
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </TableCell>
                 <TableCell>
-                  <Input />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !tasks[i].endDate && "text-muted-foreground",
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {tasks[i].endDate ? (
+                          format(tasks[i].endDate as Date, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={tasks[i].endDate}
+                        onSelect={(date) =>
+                          handleDate(date as Date, i, "endDate")
+                        }
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </TableCell>
                 <TableCell className="flex flex-col gap-1">
-                  <div className="flex gap-2">                  
-                    <Select name="type">
-                      <SelectTrigger>
-                        <SelectValue placeholder="작업자 선택" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="wendy">Wendy</SelectItem>
-                        <SelectItem value="zoey">Zoey</SelectItem>
-                        <SelectItem value="tony">Tony</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Input />                  
-                  </div>                  
+                  {tasks[i].workers?.map((worker, j) => (
+                    <div className="flex items-center gap-2">
+                      <Select name="type">
+                        <SelectTrigger>
+                          <SelectValue placeholder="작업자 선택" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="wendy">Wendy</SelectItem>
+                          <SelectItem value="zoey">Zoey</SelectItem>
+                          <SelectItem value="tony">Tony</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="100"
+                        className="w-16"
+                        onChange={(e) =>
+                          setTasks((prev) => {
+                            const newValue = [...prev];
+                            newValue[i].workers![j].inputRate = parseInt(
+                              e.target.value,
+                            );
+                            return newValue;
+                          })
+                        }
+                      />
+                      <span>%</span>
+                    </div>
+                  ))}
                 </TableCell>
-                <TableCell><Button>작업자추가</Button></TableCell>              
+                <TableCell>
+                  <Button type="button" onClick={() => addWorker(i)}>
+                    작업자추가
+                  </Button>
+                </TableCell>
               </TableRow>
-            ))}            
+            ))}
           </TableBody>
         </Table>
       </section>
 
       <section className="flex flex-col items-start gap-5">
         <h2 className="text-xl font-semibold">난이도</h2>
-        <ToggleGroup type="single" variant={"outline"} size={"lg"}>
-          <ToggleGroupItem value="high">상</ToggleGroupItem>
-          <ToggleGroupItem value="medium">중</ToggleGroupItem>
-          <ToggleGroupItem value="low">하</ToggleGroupItem>
+        <ToggleGroup
+          type="single"
+          variant={"outline"}
+          size={"lg"}
+          onValueChange={setDifficulty}
+        >
+          <ToggleGroupItem value="3">상</ToggleGroupItem>
+          <ToggleGroupItem value="2">중</ToggleGroupItem>
+          <ToggleGroupItem value="1">하</ToggleGroupItem>
         </ToggleGroup>
+        <input type="hidden" name="difficulty" value={difficulty} />
       </section>
-
       <div className="flex justify-between items-center">
         <Button>검토 완료</Button>
         <Button variant={"outline"} className="text-red-500">
           프로젝트 취소/중단하기
         </Button>
       </div>
-    </div>
+    </form>
   );
 };
 

@@ -23,22 +23,34 @@ export async function createProject(formData: FormData) {
       data: {
         name: formData.get("projectName") as string,
         groupId: user.groupId,
-        // request_startDate:formData.get('startDate') as string,
-        // request_endDate:formData.get('endDate') as string,
-        tasks: {
-          create: tasks.map((task: any) => {
-            return { name: task.taskName, isMilestone: task.isMilestone };
-          }),
-        },
+        request_startDate: new Date(formData.get("startDate") as string),
+        request_endDate: new Date(formData.get("endDate") as string),
+        // tasks: {
+        //   create: tasks.map((task: any) => {
+        //     return { name: task.taskName, isMilestone: task.isMilestone };
+        //   }),
+        // },
       },
-    });    
+    });
   } catch (error) {
     console.error(error);
-    return
+    return;
   }
   redirect(`/project/${project?.id}`);
 }
 
-export async function checkProject(formData: FormData) {
+export async function checkProject(tasks: any, formData: FormData) {
   const session = await auth();
+  console.log(tasks);
+  console.log(formData);
+}
+
+export async function getProjectInfo() {
+  try {
+    const project = await prisma.project.findMany();
+    console.log(project);
+    return project;
+  } catch (error) {
+    return { error: error };
+  }
 }
