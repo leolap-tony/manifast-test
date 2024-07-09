@@ -71,8 +71,8 @@ const page = async ({ params }: { params: { cid: string } }) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {Array.from({ length: 1 }).map(() => (
-                <TableRow>
+              {Array.from({ length: 1 }).map((e, i) => (
+                <TableRow key={i}>
                   <TableCell className="font-medium">프로젝트명</TableCell>
                   <TableCell>진행중</TableCell>
                   <TableCell>Jane</TableCell>
@@ -89,8 +89,8 @@ const page = async ({ params }: { params: { cid: string } }) => {
         </TabsContent>
         <TabsContent value="wbs">
           <div className="flex flex-col gap-8 p-4">
-            {Array.from({ length: 3 }).map(() => (
-              <div className="flex flex-col">
+            {Array.from({ length: 3 }).map((e, i) => (
+              <div key={i} className="flex flex-col">
                 <h2>프로젝트명</h2>
                 <Table>
                   <TableHeader>
@@ -103,8 +103,8 @@ const page = async ({ params }: { params: { cid: string } }) => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {Array.from({ length: 2 }).map(() => (
-                      <TableRow>
+                    {Array.from({ length: 2 }).map((e, i) => (
+                      <TableRow key={i}>
                         <TableCell className="font-medium">작업명</TableCell>
                         <TableCell>Zoey</TableCell>
                         <TableCell>2024.06.28</TableCell>

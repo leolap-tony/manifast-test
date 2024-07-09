@@ -43,14 +43,65 @@ export async function checkProject(tasks: any, formData: FormData) {
   const session = await auth();
   console.log(tasks);
   console.log(formData);
+  try {
+    const updateUser = await prisma.project.update({
+      where: { id: formData.get("pid") as string },
+      data: {
+        status: "1",
+        startDate: new Date(formData.get("startDate") as string),
+        endDate: new Date(formData.get("endDate") as string),
+        difficulty: formData.get("difficulty") as string,
+        tasks: {
+          create: tasks.map((task: any, i: number) => ({
+            name: task.taskName,
+            isMilestone: task.isMilestone as boolean,
+            startDate: task.startDate,
+            endDate: task.endDate,
+            workers: {
+              create: tasks[i].workers.map((worker: any, j: number) => ({
+                userId: worker.worker,
+                inputRate: worker.inputRate,
+                startDate: task.startDate,
+                endDate: task.endDate,
+              })),
+            },
+          })),
+        },
+      },
+    });
+    return updateUser;
+  } catch (error) {
+    console.log(error);
+    return { error: "error" };
+  }
 }
 
-export async function getProjectInfo() {
+export async function getProjectInfo(pid: string) {
   try {
-    const project = await prisma.project.findMany();
+    const project = await prisma.project.findUnique({
+      where: {
+        id: pid,
+      },
+    });
     console.log(project);
     return project;
   } catch (error) {
     return { error: error };
+  }
+}
+
+export async function getUserGroup() {
+  const session = await auth();
+  if (!session) {
+    return { error: "no session" };
+  }
+  try {
+    const group = await prisma.user.findUnique({
+      where: { id: session?.user.sub },
+      include: { group: { include: { members: true } } },
+    });
+    return group;
+  } catch (error) {
+    return { error };
   }
 }

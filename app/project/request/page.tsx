@@ -147,8 +147,8 @@ const Page = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {TASKS[`${type}`]?.map((task: Task) => (
-              <TableRow>
+            {TASKS[`${type}`]?.map((task: Task, i: number) => (
+              <TableRow key={i}>
                 <TableCell className="font-medium">{task.taskName}</TableCell>
                 <TableCell>{task.time}</TableCell>
               </TableRow>
@@ -166,17 +166,15 @@ const Page = () => {
       </div>
       <input type="hidden" name="startDate" value={startDate?.toISOString()} />
       <input type="hidden" name="endDate" value={endDate?.toISOString()} />
-      <input
+      {/* <input
         type="hidden"
         name="tasks"
         value={JSON.stringify(TASKS[`${type}`])}
       />
       {TASKS[`${type}`].map((task: Task) => (
         <input type="hidden" name="tasklist" value={JSON.stringify(task)} />
-      ))}
+      ))} */}
       <Button className="w-fit">프로젝트 요청</Button>
-      <div>{JSON.stringify(startDate)}</div>
-      <div>{endDate?.toISOString()}</div>
     </form>
   );
 };

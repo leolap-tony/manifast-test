@@ -34,34 +34,47 @@ import { Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { TASKS, Task } from "@/data/tasks";
-import { checkProject, getProjectInfo } from "../../actions";
+import { checkProject, getUserGroup, getProjectInfo } from "../../actions";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 
-const page = () => {
-  //세션 정보
-  const { data } = useSession();
-  //프로젝트 정보
+const Page = () => {
   const { pid } = useParams();
   const project = useQuery({
-    queryKey: ["project"],
+    queryKey: ["project", pid],
     queryFn: async () => {
-      const data = await getProjectInfo();
+      const data = await getProjectInfo(pid as string);
       return data;
     },
   });
-  //공급 그룹 정보
+  const user = useQuery({
+    queryKey: ["user", pid],
+    queryFn: async () => {
+      const data = await getUserGroup();
+      return data;
+    },
+  });
+
   const [tasks, setTasks] = useState<Task[]>([]);
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [difficulty, setDifficulty] = useState<string>();
+  const [checkAll, setCheckAll] = useState<boolean>(false);
 
   useEffect(() => {
     TASKS[`uiux`].map((task) => {
       setTasks((prev) => [...prev, { ...task }]);
     });
   }, []);
+
+  useEffect(() => {
+    setTasks((prev) => {
+      const newValue = [...prev];
+      newValue.forEach((e) => (e.checked = checkAll));
+      return newValue;
+    });
+  }, [checkAll]);
   const checkProjectWithTasks = checkProject.bind(null, tasks);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, i: number) => {
@@ -95,6 +108,30 @@ const page = () => {
       return newValue;
     });
   };
+  const deleteTaks = () => {
+    setTasks((prev) => {
+      const newValue = [...prev];
+      return newValue.filter((e) => !e.checked);
+    });
+  };
+  const addTask = () => {
+    setTasks((prev) => {
+      return [
+        ...prev,
+        {
+          checked: false,
+          milestone: false,
+          order: 1,
+          taskName: "",
+          description: "",
+          time: "",
+          startDate: undefined,
+          endDate: undefined,
+          workers: [{ worker: "", inputRate: 0 }],
+        },
+      ];
+    });
+  };
 
   return (
     <form
@@ -103,17 +140,13 @@ const page = () => {
     >
       <h1 className="text-3xl font-bold">프로젝트 검토/수정</h1>
       <Separator />
-      <p>{JSON.stringify(tasks)}</p>
-      <p>{JSON.stringify(startDate)}</p>
-      <p>{JSON.stringify(endDate)}</p>
-      <p>session : {JSON.stringify(data)}</p>
-      <p>query:{JSON.stringify(project)}</p>
+      <p>{JSON.stringify(project)}</p>
       <section className="flex flex-col">
         <h2 className="text-xl font-semibold">기본 정보</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-4 p-4">
           <div className="flex items-center">
             <Label className="w-28">프로젝트명</Label>
-            <Input name="projectName" className="" />
+            <Input name="projectName" defaultValue='이름' />
           </div>
           <div className="flex items-center">
             <Label className="w-28">종류</Label>
@@ -190,20 +223,24 @@ const page = () => {
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold">예상 작업 리스트</h2>
           <div className="flex gap-4">
-            <Button type="button" variant={"outline"}>
+            <Button type="button" variant={"outline"} onClick={deleteTaks}>
               삭제
             </Button>
             <Button type="button" variant={"outline"}>
               작업자 일괄 배정
             </Button>
-            <Button type="button">작업 추가</Button>
+            <Button type="button" onClick={addTask}>
+              작업 추가
+            </Button>
           </div>
         </div>
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>
-                <Checkbox />
+                <Checkbox
+                  onCheckedChange={(e: any) => setCheckAll(Boolean(e))}
+                />
               </TableHead>
               <TableHead>작업</TableHead>
               <TableHead>마일스톤</TableHead>
@@ -214,9 +251,18 @@ const page = () => {
           </TableHeader>
           <TableBody>
             {tasks.map((task, i) => (
-              <TableRow>
+              <TableRow key={i}>
                 <TableCell>
-                  <Checkbox />
+                  <Checkbox
+                    checked={tasks[i].checked}
+                    onCheckedChange={(e) => {
+                      setTasks((prev) => {
+                        const newValue = [...prev];
+                        newValue[i].checked = Boolean(e);
+                        return newValue;
+                      });
+                    }}
+                  />
                 </TableCell>
                 <TableCell>
                   <Input
@@ -293,15 +339,27 @@ const page = () => {
                 </TableCell>
                 <TableCell className="flex flex-col gap-1">
                   {tasks[i].workers?.map((worker, j) => (
-                    <div className="flex items-center gap-2">
-                      <Select name="type">
+                    <div key={j} className="flex items-center gap-2">
+                      <Select
+                        name="worker"
+                        onValueChange={(e) => {
+                          setTasks((prev) => {
+                            const newValue = [...prev];
+                            newValue[i].workers![j].worker = e;
+                            return newValue;
+                          });
+                        }}
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="작업자 선택" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="wendy">Wendy</SelectItem>
-                          <SelectItem value="zoey">Zoey</SelectItem>
-                          <SelectItem value="tony">Tony</SelectItem>
+                          {user.data &&
+                            user.data.group!.members.map((member,k) => (
+                              <SelectItem key={k} value={member.id}>
+                                {member.name}
+                              </SelectItem>
+                            ))}
                         </SelectContent>
                       </Select>
                       <Input
@@ -354,8 +412,9 @@ const page = () => {
           프로젝트 취소/중단하기
         </Button>
       </div>
+      <input type="hidden" name="pid" value={pid} />
     </form>
   );
 };
 
-export default page;
+export default Page;

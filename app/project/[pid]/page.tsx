@@ -88,8 +88,8 @@ const page = async ({ params }: { params: { pid: string } }) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {Array.from({ length: 2 }).map(() => (
-                  <TableRow>
+                {Array.from({ length: 2 }).map((e, i) => (
+                  <TableRow key={i}>
                     <TableCell className="font-medium">작업명</TableCell>
                     <TableCell>Zoey</TableCell>
                     <TableCell>2024.06.28</TableCell>

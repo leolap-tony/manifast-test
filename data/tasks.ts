@@ -11,6 +11,7 @@ interface Tasks {
   rendering: Task[];
 }
 export interface Task {
+  checked: boolean;
   taskName: string;
   milestone: boolean;
   order?: number;
@@ -24,6 +25,7 @@ export interface Task {
 export const TASKS: Tasks = {
   uiux: [
     {
+      checked: false,
       milestone: true,
       order: 1,
       taskName: "메뉴 구조도 작성",
@@ -34,6 +36,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 1,
       taskName: "1차 컨셉 디자인",
@@ -44,6 +47,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 1,
       taskName: "2차 상세 디자인",
@@ -54,6 +58,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 1,
       taskName: "3차 최종 디자인",
@@ -64,6 +69,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 1,
       taskName: "스토리보드 제작",
@@ -76,6 +82,7 @@ export const TASKS: Tasks = {
   ],
   branding: [
     {
+      checked: false,
       milestone: true,
       order: 1,
       taskName: "브랜드 요구사항 인터뷰",
@@ -86,6 +93,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 2,
       taskName: "디자인 전략",
@@ -96,6 +104,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 3,
       taskName: "1차 컨셉 시안",
@@ -106,6 +115,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 4,
       taskName: "2차 최종 시안",
@@ -116,6 +126,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 5,
       taskName: "어플리케이션 제작",
@@ -126,6 +137,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 6,
       taskName: "브랜드 가이드북",
@@ -138,6 +150,7 @@ export const TASKS: Tasks = {
   ],
   landingpage: [
     {
+      checked: false,
       milestone: true,
       order: 1,
       taskName: "와이어프레임 확정",
@@ -148,6 +161,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 2,
       taskName: "1차 컨셉 디자인",
@@ -158,6 +172,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 3,
       taskName: "2차 최종 디자인",
@@ -168,6 +183,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 4,
       taskName: "퍼블리싱 진행",
@@ -178,6 +194,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 5,
       taskName: "스토리보드 제작",
@@ -188,6 +205,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 6,
       taskName: "도메인-호스팅 연결",
@@ -200,6 +218,7 @@ export const TASKS: Tasks = {
   ],
   contents: [
     {
+      checked: false,
       milestone: true,
       order: 1,
       taskName: "사전 조율",
@@ -210,6 +229,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 2,
       taskName: "1차 컨셉 디자인",
@@ -220,6 +240,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 3,
       taskName: "최종 디자인",
@@ -230,6 +251,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 4,
       taskName: "디자인 수정",
@@ -242,6 +264,7 @@ export const TASKS: Tasks = {
   ],
   print: [
     {
+      checked: false,
       milestone: true,
       order: 1,
       taskName: "사전 조율",
@@ -252,6 +275,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 2,
       taskName: "1차 컨셉 디자인",
@@ -262,6 +286,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 3,
       taskName: "최종 디자인",
@@ -272,6 +297,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 4,
       taskName: "디자인 수정",
@@ -284,6 +310,7 @@ export const TASKS: Tasks = {
   ],
   ppt: [
     {
+      checked: false,
       milestone: true,
       order: 1,
       taskName: "사전 조율",
@@ -294,6 +321,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 2,
       taskName: "1차 컨셉 디자인",
@@ -304,6 +332,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 3,
       taskName: "최종 디자인",
@@ -314,6 +343,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 4,
       taskName: "디자인 수정",
@@ -324,6 +354,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 5,
       taskName: "추가 디자인",
@@ -336,6 +367,7 @@ export const TASKS: Tasks = {
   ],
   ux: [
     {
+      checked: false,
       milestone: true,
       order: 1,
       taskName: "리서치 요구사항 인터뷰",
@@ -346,6 +378,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 2,
       taskName: "리서치 개요 설정",
@@ -356,6 +389,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 3,
       taskName: "리서치 기획 및 참여자 선정",
@@ -366,6 +400,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 4,
       taskName: "테스트 진행",
@@ -376,6 +411,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 5,
       taskName: "결과 데이터 분석",
@@ -386,6 +422,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 6,
       taskName: "결과 보고서 제작",
@@ -398,6 +435,7 @@ export const TASKS: Tasks = {
   ],
   motiongraphic: [
     {
+      checked: false,
       milestone: true,
       order: 1,
       taskName: "사전 조율",
@@ -408,6 +446,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 2,
       taskName: "씬 구분 및 스타일 프레임",
@@ -418,6 +457,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 3,
       taskName: "프리비즈",
@@ -428,6 +468,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 4,
       taskName: "씬 제작",
@@ -438,6 +479,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 5,
       taskName: "프리뷰",
@@ -448,6 +490,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 6,
       taskName: "렌더링",
@@ -460,6 +503,7 @@ export const TASKS: Tasks = {
   ],
   rendering: [
     {
+      checked: false,
       milestone: true,
       order: 1,
       taskName: "기획 내용 확인, 레퍼런스",
@@ -470,6 +514,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 2,
       taskName: "장면 구성 및 디자인 기획",
@@ -480,6 +525,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 3,
       taskName: "씬 제작 및 디벨롭",
@@ -490,6 +536,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
     {
+      checked: false,
       milestone: true,
       order: 4,
       taskName: "렌더링 및 공유",

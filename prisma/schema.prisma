@@ -27,8 +27,9 @@ model User {
   sessions         Session[]
   managementGroups Group[]          @relation("GroupManager")
   owningGroup      Group?           @relation("GroupOwner")
-  ProjectThread    Project_Thread[]
-  tasks            Task_Worker[]
+  ProjectThread    ProjectThread[]
+  tasks            TaskWorker[]
+  taskReport TaskReport[]
 }
 
 model Account {
@@ -93,8 +94,8 @@ model Project {
   id                String    @id @default(cuid())
   name              String
   message           String?
-  status            Int?
-  difficulty        Int?
+  status            String?
+  difficulty        String?
   groupId           String
   request_startDate DateTime?
   request_endDate   DateTime?
@@ -104,7 +105,7 @@ model Project {
   updatedAt         DateTime  @updatedAt
   group             Group     @relation(fields: [groupId], references: [id])
 
-  threads Project_Thread[]
+  threads ProjectThread[]
   tasks   Task[]
 }
 
@@ -118,32 +119,35 @@ model Task {
   endDate     DateTime?
   project     Project   @relation(fields: [projectId], references: [id])
 
-  workers Task_Worker[]
+  workers TaskWorker[]
 }
 
-model Task_Worker {
+model TaskWorker {
+  id        String    @id @default(cuid())
   taskId    String
   userId    String
   inputRate Int
   startDate DateTime?
   endDate   DateTime?
-  task      Task      @relation(fields: [taskId], references: [id])
-  worker    User      @relation(fields: [userId], references: [id])
+  task      Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  worker    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@id([userId, taskId])
+  taskReport TaskReport[]
+  
 }
 
-model Task_Report {
+model TaskReport {
   id               Int      @id @default(autoincrement())
-  taskId           String
+  taskWorkerId     String
+  taskWorker       TaskWorker @relation(fields:[taskWorkerId], references:[id])
   userId           String
-  plannedInputRate Int
+  user             User    @relation(fields: [userId], references: [id])  
   todayInputRate   Int
   message          String
-  createdAt        DateTime
+  date             DateTime
 }
 
-model Project_Thread {
+model ProjectThread {
   id        Int      @default(autoincrement())
   projectId String
   authorId  String
