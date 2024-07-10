@@ -141,12 +141,13 @@ const Page = () => {
       <h1 className="text-3xl font-bold">프로젝트 검토/수정</h1>
       <Separator />
       <p>{JSON.stringify(project)}</p>
+      <p>{JSON.stringify(tasks)}</p>
       <section className="flex flex-col">
         <h2 className="text-xl font-semibold">기본 정보</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-4 p-4">
           <div className="flex items-center">
             <Label className="w-28">프로젝트명</Label>
-            <Input name="projectName" defaultValue='이름' />
+            <Input name="projectName" defaultValue="이름" />
           </div>
           <div className="flex items-center">
             <Label className="w-28">종류</Label>
@@ -181,6 +182,7 @@ const Page = () => {
                   mode="single"
                   selected={startDate}
                   onSelect={setStartDate}
+                  // onSelect={(e)=>console.log(new Date(e!.toDateString()))}
                   initialFocus
                 />
               </PopoverContent>
@@ -355,7 +357,7 @@ const Page = () => {
                         </SelectTrigger>
                         <SelectContent>
                           {user.data &&
-                            user.data.group!.members.map((member,k) => (
+                            user.data.group!.members.map((member, k) => (
                               <SelectItem key={k} value={member.id}>
                                 {member.name}
                               </SelectItem>

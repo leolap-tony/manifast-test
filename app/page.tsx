@@ -5,6 +5,7 @@ import prisma from "@/db";
 
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -14,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
+import { submitReport } from "./actions";
 
 export default async function Home() {
   const session = await auth();
@@ -24,17 +25,24 @@ export default async function Home() {
       where: {
         id: session.user.sub,
       },
-      include:{
-        tasks:{
-          include:{
-            task:{
-              include:{
-                project:true
-              }
-            }
-          }
-        }
-      }
+      include: {
+        tasks: {
+          include: {
+            task: {
+              include: {
+                project: true,
+              },
+            },
+            taskReport: {
+              where: {
+                date: {
+                  equals: new Date(),
+                },
+              },
+            },
+          },
+        },
+      },
     }));
   if (!user?.role) {
     redirect("/onboarding");
@@ -61,8 +69,8 @@ export default async function Home() {
         <div className="border rounded-lg w-1/3 p-12">진행중인 프로젝트</div>
         <div className="border rounded-lg w-1/3 p-12">진행중인 프로젝트</div>
       </div>
-      {(session?.user.role=='manager' || session?.user.role=='worker') &&
-        <section className="flex flex-col gap-8">
+      {(session?.user.role == "manager" || session?.user.role == "worker") && (
+        <form className="flex flex-col gap-8" action={submitReport}>
           <div className="flex justify-between items-center">
             <h2 className="text-3xl font-semibold">오늘 작업</h2>
             <Button>보고 등룩</Button>
@@ -75,27 +83,43 @@ export default async function Home() {
                 <TableHead>시작일</TableHead>
                 <TableHead>종료일</TableHead>
                 <TableHead>배정 투입률</TableHead>
-                <TableHead className='w-[100px]'>실제 투입률</TableHead>
+                <TableHead className="w-[100px]">실제 투입률</TableHead>
                 <TableHead>메모</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {user.tasks.map((task)=>(
-                <TableRow>
-                  <TableCell className="font-medium">{task.task.name}</TableCell>
-                  <TableCell>{task.task.project.name}</TableCell>
-                  <TableCell>{task.startDate?.toLocaleDateString()}</TableCell>
-                  <TableCell>{task.endDate?.toLocaleDateString()}</TableCell>
-                  <TableCell>{task.inputRate}%</TableCell>
-                  <TableCell className="flex items-center gap-2"><Input/>%</TableCell>
-                  <TableCell><Input/></TableCell>
+              {!user.tasks.some((task) => task.taskReport.length) ? (
+                user.tasks.map((task, i) => (
+                  <TableRow key={i}>
+                    <TableCell className="font-medium">
+                      {task.task.name}
+                    </TableCell>
+                    <TableCell>{task.task.project.name}</TableCell>
+                    <TableCell>
+                      {task.startDate?.toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>{task.endDate?.toLocaleDateString()}</TableCell>
+                    <TableCell>{task.inputRate}%</TableCell>
+                    <TableCell className="flex items-center gap-2">
+                      <Input name="todayInputRate" required />%
+                    </TableCell>
+                    <TableCell>
+                      <Input name="message" />
+                    </TableCell>
+                    <input type="hidden" name="userId" value={task.userId} />
+                    <input type="hidden" name="taskId" value={task.id} />
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow className="text-gray-400 p-4">
+                  <TableCell>보고가 등록되었습니다.</TableCell>
                 </TableRow>
-              ))}              
+              )}
             </TableBody>
           </Table>
-        </section>      
-      }
-      {session?.user.role=='manager' &&
+        </form>
+      )}
+      {session?.user.role == "manager" && (
         <section className="flex flex-col gap-8">
           <h2 className="text-3xl font-semibold">오늘 진행중인 프로젝트</h2>
           <Table>
@@ -134,8 +158,8 @@ export default async function Home() {
               </TableRow>
             </TableBody>
           </Table>
-        </section>      
-      }
+        </section>
+      )}
       {/* <p>{JSON.stringify(session)}</p> */}
     </main>
   );

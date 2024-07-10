@@ -133,7 +133,7 @@ model TaskWorker {
   worker    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   taskReport TaskReport[]
-  
+  @@unique([taskId,userId])
 }
 
 model TaskReport {
@@ -143,8 +143,10 @@ model TaskReport {
   userId           String
   user             User    @relation(fields: [userId], references: [id])  
   todayInputRate   Int
-  message          String
-  date             DateTime
+  message          String?
+  date             DateTime @db.Date
+
+  @@unique([taskWorkerId,userId,date])
 }
 
 model ProjectThread {
@@ -158,4 +160,13 @@ model ProjectThread {
   project   Project  @relation(fields: [projectId], references: [id])
 
   @@id([id, projectId])
+}
+
+enum Role {
+  USER
+  MEMBER
+  OWNER
+  WORKER
+  MANAGER
+  ADMIN
 }
