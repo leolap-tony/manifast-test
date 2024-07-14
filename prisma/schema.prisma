@@ -71,6 +71,7 @@ model VerificationToken {
 model Group {
   id             String   @id @default(cuid())
   name           String
+  company        String?
   ceo            String?
   email          String?
   phone          String?
@@ -94,7 +95,8 @@ model Project {
   id                String    @id @default(cuid())
   name              String
   message           String?
-  status            String?
+  type              ProjectType?
+  status            ProjectStatus?
   difficulty        String?
   groupId           String
   request_startDate DateTime?
@@ -112,14 +114,15 @@ model Project {
 model Task {
   id          String    @id @default(cuid())
   name        String
-  status      Int?
-  isMilestone Boolean?
+  isComplete  Boolean @default(false)
+  isMilestone Boolean
   projectId   String
-  startDate   DateTime?
-  endDate     DateTime?
+  startDate   DateTime
+  endDate     DateTime
   project     Project   @relation(fields: [projectId], references: [id])
 
   workers TaskWorker[]
+  @@unique([name, projectId])
 }
 
 model TaskWorker {
@@ -169,4 +172,23 @@ enum Role {
   WORKER
   MANAGER
   ADMIN
+}
+enum ProjectStatus {
+  REQUESTED
+  STARTED
+  COMPLETED
+  STOPPED
+  CANCELED
+}
+enum ProjectType {
+  UIUX
+  BRANDING
+  LANDINGPAGE
+  CONTENTS
+  PRINT
+  PPT
+  UX
+  MOTIONGRAPHIC
+  RENDERING
+  ETC  
 }

@@ -1,6 +1,5 @@
 import { auth, signOut } from "@/auth";
 import Image from "next/image";
-import { redirect } from "next/navigation";
 import prisma from "@/db";
 
 import { Separator } from "@/components/ui/separator";
@@ -15,9 +14,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { submitReport } from "./actions";
 
-export default async function Home() {
+export default async function DemandDashboard() {
   const session = await auth();
   const user =
     session &&
@@ -26,20 +24,10 @@ export default async function Home() {
         id: session.user.sub,
       },
       include: {
-        tasks: {
+        group: {
           include: {
-            task: {
-              include: {
-                project: true,
-              },
-            },
-            taskReport: {
-              where: {
-                date: {
-                  equals: new Date(),
-                },
-              },
-            },
+            manager: true,
+            projects: true,
           },
         },
       },
@@ -65,70 +53,16 @@ export default async function Home() {
         <div className="border rounded-lg w-1/3 p-6 flex justify-between">
           <div>진행중인 프로젝트</div>
           <div className="pt-6 text-xl font-semibold">
-            {new Set(user?.tasks?.map((task) => task.task.projectId)).size}
+            {user?.group?.projects.length}
           </div>
         </div>
         <div className="border rounded-lg w-1/3 p-6 flex justify-between">
-          <div>오늘 투입률</div>
+          <div>전담 PM</div>
           <div className="pt-6 text-xl font-semibold">
-            {user?.tasks?.reduce((a, c) => a + c.inputRate, 0)}%
+            {user?.group?.manager?.name}
           </div>
-        </div>
-        <div className="border rounded-lg w-1/3 p-6 flex justify-between">
-          <div>오늘 업무 난이도</div>
-          <div className="pt-6 text-xl font-semibold">3</div>
         </div>
       </div>
-      {(session?.user.role == "ADMIN" || session?.user.role == "WORKER") && (
-        <form className="flex flex-col gap-8" action={submitReport}>
-          <div className="flex justify-between items-center">
-            <h2 className="text-3xl font-semibold">오늘 작업</h2>
-            <Button>보고 등룩</Button>
-          </div>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>작업 이름</TableHead>
-                <TableHead>프로젝트 이름</TableHead>
-                <TableHead>시작일</TableHead>
-                <TableHead>종료일</TableHead>
-                <TableHead>배정 투입률</TableHead>
-                <TableHead className="w-[100px]">실제 투입률</TableHead>
-                <TableHead>메모</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {!user?.tasks?.some((task) => task.taskReport.length) ? (
-                user?.tasks?.map((task, i) => (
-                  <TableRow key={i}>
-                    <TableCell className="font-medium">
-                      {task.task.name}
-                    </TableCell>
-                    <TableCell>{task.task.project.name}</TableCell>
-                    <TableCell>
-                      {task.startDate?.toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>{task.endDate?.toLocaleDateString()}</TableCell>
-                    <TableCell>{task.inputRate}%</TableCell>
-                    <TableCell className="flex items-center gap-2">
-                      <Input name="todayInputRate" required />%
-                    </TableCell>
-                    <TableCell>
-                      <Input name="message" />
-                    </TableCell>
-                    <input type="hidden" name="userId" value={task.userId} />
-                    <input type="hidden" name="taskId" value={task.id} />
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow className="text-gray-400 p-4">
-                  <TableCell>보고가 등록되었습니다.</TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </form>
-      )}
       {session?.user.role == "ADMIN" && (
         <section className="flex flex-col gap-8">
           <h2 className="text-3xl font-semibold">오늘 진행중인 프로젝트</h2>
@@ -137,7 +71,7 @@ export default async function Home() {
               <TableRow>
                 <TableHead className="w-[100px]">프로젝트</TableHead>
                 <TableHead>상태</TableHead>
-                <TableHead>담당 디자이너</TableHead>
+                <TableHead>전담 PM</TableHead>
                 <TableHead>시작일</TableHead>
                 <TableHead>종료일</TableHead>
                 <TableHead>진척률</TableHead>

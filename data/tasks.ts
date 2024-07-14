@@ -1,14 +1,15 @@
 interface Tasks {
   [key: string]: any;
-  uiux: Task[];
-  branding: Task[];
-  landingpage: Task[];
-  contents: Task[];
-  print: Task[];
-  ppt: Task[];
-  ux: Task[];
-  motiongraphic: Task[];
-  rendering: Task[];
+  UIUX: Task[];
+  BRANDING: Task[];
+  LANDINGPAGE: Task[];
+  CONTENTS: Task[];
+  PRINT: Task[];
+  PPT: Task[];
+  UX: Task[];
+  MOTIONGRAPHIC: Task[];
+  RENDERING: Task[];
+  ETC: Task[];
 }
 export interface Task {
   checked: boolean;
@@ -23,7 +24,7 @@ export interface Task {
 }
 
 export const TASKS: Tasks = {
-  uiux: [
+  UIUX: [
     {
       checked: false,
       milestone: true,
@@ -80,7 +81,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
   ],
-  branding: [
+  BRANDING: [
     {
       checked: false,
       milestone: true,
@@ -148,7 +149,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
   ],
-  landingpage: [
+  LANDINGPAGE: [
     {
       checked: false,
       milestone: true,
@@ -216,7 +217,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
   ],
-  contents: [
+  CONTENTS: [
     {
       checked: false,
       milestone: true,
@@ -262,7 +263,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
   ],
-  print: [
+  PRINT: [
     {
       checked: false,
       milestone: true,
@@ -308,7 +309,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
   ],
-  ppt: [
+  PPT: [
     {
       checked: false,
       milestone: true,
@@ -365,7 +366,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
   ],
-  ux: [
+  UX: [
     {
       checked: false,
       milestone: true,
@@ -433,7 +434,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
   ],
-  motiongraphic: [
+  MOTIONGRAPHIC: [
     {
       checked: false,
       milestone: true,
@@ -501,7 +502,7 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
   ],
-  rendering: [
+  RENDERING: [
     {
       checked: false,
       milestone: true,
@@ -547,4 +548,5 @@ export const TASKS: Tasks = {
       workers: [{ worker: "", inputRate: 0 }],
     },
   ],
+  ETC: [],
 };

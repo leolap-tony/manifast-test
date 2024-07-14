@@ -15,15 +15,15 @@ const page = () => {
         <div className="flex flex-col gap-4">
           <div>
             <Label>우리 그룹 이름은</Label>
-            <Input name="name" />
+            <Input name="name" required />
           </div>
           <div>
             <Label>상호명은 (선택)</Label>
-            <Input />
+            <Input name="company" />
           </div>
           <div>
             <Label>대표자명은</Label>
-            <Input name="ceo" />
+            <Input name="ceo" required />
           </div>
           <div>
             <Label>사업자등록번호는 (선택)</Label>
@@ -31,11 +31,11 @@ const page = () => {
           </div>
           <div>
             <Label>그룹 이메일은</Label>
-            <Input name="email" />
+            <Input name="email" required />
           </div>
           <div>
             <Label>그룹 연락처는</Label>
-            <Input name="phone" />
+            <Input name="phone" required />
           </div>
           <div>
             <Label>주소는 (선택)</Label>

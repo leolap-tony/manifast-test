@@ -19,38 +19,30 @@ const page = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">작업 이름</TableHead>
-            <TableHead>프로젝트 이름</TableHead>
-            <TableHead>종료일</TableHead>
-            <TableHead>배정 투입률</TableHead>
-            <TableHead>실제 투입률</TableHead>
-            <TableHead>메모</TableHead>
+            <TableHead className="">고객</TableHead>
+            <TableHead>전담 PM</TableHead>
+            <TableHead>플랜</TableHead>
+            <TableHead>계약 시작일</TableHead>
+            <TableHead>계약 종료일</TableHead>
+            <TableHead>프로젝트 수</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           <TableRow>
-            <TableCell className="font-medium">INV001</TableCell>
-            <TableCell>Project name</TableCell>
+            <TableCell className="font-medium">[그룹명]</TableCell>
+            <TableCell>Jane</TableCell>
+            <TableCell>베이직</TableCell>
             <TableCell>2024.06.08</TableCell>
-            <TableCell>40%</TableCell>
-            <TableCell>50%</TableCell>
-            <TableCell>메모</TableCell>
+            <TableCell>2024.06.08</TableCell>
+            <TableCell>3</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell className="font-medium">INV001</TableCell>
-            <TableCell>Project name</TableCell>
+            <TableCell className="font-medium">[그룹명]</TableCell>
+            <TableCell>Jane</TableCell>
+            <TableCell>베이직</TableCell>
             <TableCell>2024.06.08</TableCell>
-            <TableCell>40%</TableCell>
-            <TableCell>50%</TableCell>
-            <TableCell>메모</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium">INV001</TableCell>
-            <TableCell>Project name</TableCell>
             <TableCell>2024.06.08</TableCell>
-            <TableCell>40%</TableCell>
-            <TableCell>50%</TableCell>
-            <TableCell>메모</TableCell>
+            <TableCell>3</TableCell>
           </TableRow>
         </TableBody>
       </Table>

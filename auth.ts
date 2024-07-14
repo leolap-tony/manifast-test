@@ -11,6 +11,7 @@ const prisma = new PrismaClient();
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   // pages: {
+  //   signIn: '/signin',
   //   newUser:'/signup'
   // },
   providers: [
@@ -38,9 +39,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async jwt(props) {
-      if (props) {
-        // console.log(`in jwt2 : ${JSON.stringify(props)}`)
-      }
       if (props.user) {
         props.token.role = props.user.role;
       }
@@ -51,11 +49,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.sub = token ? token.sub : null;
         session.user.role = token.role;
       }
-      // console.log('in session : '+JSON.stringify(session, null, 2))
       return session;
     },
     authorized({ request, auth }) {
-      // console.log('in authorize:',auth)
       return !!auth;
     },
   },

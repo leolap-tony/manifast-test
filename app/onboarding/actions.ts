@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/auth";
+import { auth, signIn, signOut } from "@/auth";
 import prisma from "@/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -14,7 +14,7 @@ export async function onboarding(formData: FormData) {
         id: session?.user.sub,
       },
       data: {
-        role: formData.get("role") as string,
+        job: formData.get("job") as string,
         phone: formData.get("phone") as string,
       },
     });
@@ -46,6 +46,9 @@ export async function joinGroup(formData: FormData) {
             id: formData.get("groupId") as string,
           },
         },
+        role: session?.user.email?.endsWith("@leolap.com")
+          ? "WORKER"
+          : "MEMBER",
       },
     });
     console.log("user :", user);
@@ -53,6 +56,7 @@ export async function joinGroup(formData: FormData) {
     console.error("error in joinGroup :", error);
     return { msg: "error" };
   }
+  await signIn("google", { redirectTo: "/" });
   revalidatePath("/");
   redirect("/");
 }
@@ -61,20 +65,33 @@ export async function createGroup(formData: FormData) {
   const session = await auth();
   if (!session?.user.sub) return;
   try {
-    await prisma.group.create({
+    const group = await prisma.group.create({
       data: {
         name: formData.get("name") as string,
         ownerId: session?.user.sub,
         ceo: formData.get("ceo") as string,
+        company: formData.get("company") as string,
         businessNumber: formData.get("businessNumber") as string,
         email: formData.get("email") as string,
         phone: formData.get("phone") as string,
         address: formData.get("address") as string,
+        // supplyGroupId:
+      },
+    });
+    console.log("group:", group);
+    const user = await prisma.user.update({
+      where: {
+        id: session?.user.sub,
+      },
+      data: {
+        groupId: group.id,
+        role: session?.user.email?.endsWith("@leolap.com") ? "ADMIN" : "OWNER",
       },
     });
   } catch (error) {
     console.error("error in onboarding :", error);
   }
-  revalidatePath("/");
-  redirect("/");
+  await signIn("google", { redirectTo: "/" });
+  // revalidatePath("/");
+  // redirect("/");
 }

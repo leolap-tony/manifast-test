@@ -25,11 +25,11 @@ const page = async () => {
           </div>
           <div>
             <Label>연락처는</Label>
-            <Input type="text" name="phone" />
+            <Input type="text" name="phone" required />
           </div>
           <div>
             <Label>직무는</Label>
-            <Input name="role" />
+            <Input name="job" required />
           </div>
           <div>
             <Label>프로필 이미지 (선택)</Label>

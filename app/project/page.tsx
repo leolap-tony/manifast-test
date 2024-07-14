@@ -12,8 +12,33 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import prisma from "@/db";
+import { auth } from "@/auth";
 
-const page = () => {
+const page = async () => {
+  const session = await auth();
+  const user = await prisma.user.findUnique({
+    where: { id: session?.user.sub },
+    include: {
+      group: {
+        include: {
+          projects: {
+            include: {
+              tasks: {
+                include: {
+                  workers: {
+                    include: { worker: true },
+                  },
+                },
+              },
+            },
+          },
+          owner: true,
+          manager: true,
+        },
+      },
+    },
+  });
   return (
     <div className="w-full flex flex-col gap-8 p-12">
       <div className="flex justify-between items-center">
@@ -26,11 +51,10 @@ const page = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">작업 이름</TableHead>
             <TableHead>프로젝트 이름</TableHead>
             <TableHead>상태</TableHead>
             <TableHead>전담 PM</TableHead>
-            <TableHead>전담 디자이너</TableHead>
+            <TableHead>작업자</TableHead>
             <TableHead>시작일</TableHead>
             <TableHead>종료일</TableHead>
             <TableHead>진척률</TableHead>
@@ -39,42 +63,39 @@ const page = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell className="font-medium">INV001</TableCell>
-            <TableCell>Project name</TableCell>
-            <TableCell>진행중</TableCell>
-            <TableCell>JANE</TableCell>
-            <TableCell>ZOEY</TableCell>
-            <TableCell>2024.06.08</TableCell>
-            <TableCell>2024.06.08</TableCell>
-            <TableCell>40%</TableCell>
-            <TableCell>상</TableCell>
-            <TableCell>(그룹 관리자)</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium">INV001</TableCell>
-            <TableCell>Project name</TableCell>
-            <TableCell>진행중</TableCell>
-            <TableCell>JANE</TableCell>
-            <TableCell>ZOEY</TableCell>
-            <TableCell>2024.06.08</TableCell>
-            <TableCell>2024.06.08</TableCell>
-            <TableCell>40%</TableCell>
-            <TableCell>상</TableCell>
-            <TableCell>(그룹 관리자)</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium">INV001</TableCell>
-            <TableCell>Project name</TableCell>
-            <TableCell>진행중</TableCell>
-            <TableCell>JANE</TableCell>
-            <TableCell>ZOEY</TableCell>
-            <TableCell>2024.06.08</TableCell>
-            <TableCell>2024.06.08</TableCell>
-            <TableCell>40%</TableCell>
-            <TableCell>상</TableCell>
-            <TableCell>(그룹 관리자)</TableCell>
-          </TableRow>
+          {user?.group?.projects.map((project, i) => (
+            <TableRow key={i}>
+              <TableCell className="font-semibold">
+                <Link href={`/project/${project.id}`}>{project.name}</Link>
+              </TableCell>
+              <TableCell>{project.status}</TableCell>
+              <TableCell>{user.group?.manager?.name}</TableCell>
+              <TableCell>
+                {(() => {
+                  const set = new Set();
+                  project.tasks.forEach((task) => {
+                    task.workers.forEach((worker) => {
+                      set.add(worker.worker.name);
+                    });
+                  });
+                  return Array.from(set).map((e, i) => (
+                    <div key={i}>{e as string}</div>
+                  ));
+                })()}
+              </TableCell>
+              <TableCell>
+                {project.startDate?.toLocaleDateString() ||
+                  project.request_startDate?.toLocaleDateString()}
+              </TableCell>
+              <TableCell>
+                {project.endDate?.toLocaleDateString() ||
+                  project.request_endDate?.toLocaleDateString()}
+              </TableCell>
+              <TableCell>40%</TableCell>
+              <TableCell>{project.difficulty}</TableCell>
+              <TableCell>{user.group?.owner.name}</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>

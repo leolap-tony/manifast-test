@@ -57,16 +57,20 @@ const Page = () => {
   });
 
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [startDate, setStartDate] = useState<Date>();
-  const [endDate, setEndDate] = useState<Date>();
+  const [startDate, setStartDate] = useState<Date | undefined>(
+    project.data?.request_startDate!,
+  );
+  const [endDate, setEndDate] = useState<Date | undefined>(
+    project.data?.request_endDate!,
+  );
   const [difficulty, setDifficulty] = useState<string>();
   const [checkAll, setCheckAll] = useState<boolean>(false);
 
   useEffect(() => {
-    TASKS[`uiux`].map((task) => {
+    TASKS[`${project.data?.type}`]?.map((task: Task) => {
       setTasks((prev) => [...prev, { ...task }]);
     });
-  }, []);
+  }, [project.data?.type]);
 
   useEffect(() => {
     setTasks((prev) => {
@@ -75,6 +79,10 @@ const Page = () => {
       return newValue;
     });
   }, [checkAll]);
+  useEffect(() => {
+    setStartDate(project.data?.request_startDate!);
+    setEndDate(project.data?.request_endDate!);
+  }, [project.data]);
   const checkProjectWithTasks = checkProject.bind(null, tasks);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, i: number) => {
@@ -140,18 +148,21 @@ const Page = () => {
     >
       <h1 className="text-3xl font-bold">프로젝트 검토/수정</h1>
       <Separator />
-      <p>{JSON.stringify(project)}</p>
-      <p>{JSON.stringify(tasks)}</p>
       <section className="flex flex-col">
         <h2 className="text-xl font-semibold">기본 정보</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-4 p-4">
           <div className="flex items-center">
             <Label className="w-28">프로젝트명</Label>
-            <Input name="projectName" defaultValue="이름" />
+            <Input name="" defaultValue={project.data?.name} disabled />
           </div>
           <div className="flex items-center">
             <Label className="w-28">종류</Label>
-            <Input name="projectType" className="" />
+            <Input
+              name=""
+              className=""
+              defaultValue={project.data?.type!}
+              disabled
+            />
           </div>
           <div className="flex items-center">
             <Label className="w-28">시작일</Label>

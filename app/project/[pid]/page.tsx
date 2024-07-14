@@ -16,29 +16,43 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import prisma from "@/db";
 
 const page = async ({ params }: { params: { pid: string } }) => {
   const session = await auth();
+  const project = await prisma.project.findUnique({
+    where: {
+      id: params.pid,
+    },
+    include: {
+      group: {
+        include: { manager: true, owner: true },
+      },
+      tasks: true,
+    },
+  });
   return (
     <div className="flex flex-col p-8 w-full gap-8">
       <div className="flex justify-between">
-        <h1 className="text-3xl font-bold">{params.pid}</h1>
-        <Button asChild>
-          <Link href={`/project/${params.pid}/check`}>프로젝트 검토하기</Link>
-        </Button>
+        <h1 className="text-3xl font-bold">{project?.name}</h1>
+        {session?.user.role == "WORKER" && (
+          <Button asChild>
+            <Link href={`/project/${params.pid}/check`}>프로젝트 검토하기</Link>
+          </Button>
+        )}
       </div>
-      <div className="grid grid-cols-3 p-6 bg-slate-50 rounded-lg ">
+      <div className="grid grid-cols-3 gap-4 p-6 bg-slate-50 rounded-lg ">
         <div className="flex gap-8">
           <div className="font-semibold">전담 PM</div>
-          <div>Jane</div>
+          <div>{project?.group.manager?.name}</div>
         </div>
         <div className="flex gap-8">
           <div className="font-semibold">그룹</div>
-          <div>그룹이름</div>
+          <div>{project?.group.name}</div>
         </div>
         <div className="flex gap-8">
           <div className="font-semibold">종류</div>
-          <div>BX 디자인</div>
+          <div>{project?.type}</div>
         </div>
         <div className="flex gap-8">
           <div className="font-semibold">작업자</div>
@@ -46,11 +60,11 @@ const page = async ({ params }: { params: { pid: string } }) => {
         </div>
         <div className="flex gap-8">
           <div className="font-semibold">그룹 관리자</div>
-          <div>그룹 관리자명</div>
+          <div>{project?.group.owner.name}</div>
         </div>
         <div className="flex gap-8">
           <div className="font-semibold">상태</div>
-          <div>요청됨</div>
+          <div>{project?.status}</div>
         </div>
       </div>
       <div className="flex flex-col gap-4">

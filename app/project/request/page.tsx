@@ -50,7 +50,7 @@ const Page = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-4 p-4">
           <div className="flex items-center">
             <Label className="w-28">프로젝트명</Label>
-            <Input name="projectName" className="" />
+            <Input name="projectName" className="" required />
           </div>
           <div className="flex items-center">
             <Label className="w-28">종류</Label>
@@ -59,25 +59,25 @@ const Page = () => {
                 <SelectValue placeholder="UXUI (웹/앱) 디자인" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="uiux">UXUI (웹/앱) 디자인</SelectItem>
-                <SelectItem value="branding">브랜딩 디자인 (BX)</SelectItem>
-                <SelectItem value="landingpage">랜딩페이지 디자인</SelectItem>
-                <SelectItem value="contents">
+                <SelectItem value="UIUX">UXUI (웹/앱) 디자인</SelectItem>
+                <SelectItem value="BRANDING">브랜딩 디자인 (BX)</SelectItem>
+                <SelectItem value="LANDINGPAGE">랜딩페이지 디자인</SelectItem>
+                <SelectItem value="CONTENTS">
                   콘텐츠 디자인 (SNS 피드/카드뉴스)
                 </SelectItem>
-                <SelectItem value="print">
+                <SelectItem value="PRINT">
                   인쇄물 디자인 (명함) / 사이니지 디자인 (디지털 배너)
                 </SelectItem>
-                <SelectItem value="print">
+                <SelectItem value="PRINT">
                   인쇄물 디자인 (리플랫/책자)
                 </SelectItem>
-                <SelectItem value="ppt">PPT 디자인</SelectItem>
-                <SelectItem value="ux">UX 리서치 </SelectItem>
-                <SelectItem value="motiongraphic">
+                <SelectItem value="PPT">PPT 디자인</SelectItem>
+                <SelectItem value="UX">UX 리서치 </SelectItem>
+                <SelectItem value="MOTIONGRAPHIC">
                   2D / 3D 모션 그래픽
                 </SelectItem>
-                <SelectItem value="rendering">3D 렌더링</SelectItem>
-                <SelectItem value="etc">직접 정의</SelectItem>
+                <SelectItem value="RENDERING">3D 렌더링</SelectItem>
+                <SelectItem value="ETC">직접 정의</SelectItem>
               </SelectContent>
             </Select>
           </div>

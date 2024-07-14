@@ -61,7 +61,7 @@ const page = async () => {
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">직무</span>
-                <span>{user?.role}</span>
+                <span>{user?.job}</span>
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">권한</span>
@@ -116,7 +116,7 @@ const page = async () => {
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">플랜</span>
-                <span>{user?.group?.email}</span>
+                <span>프로 플랜</span>
               </div>
             </div>
 
@@ -138,7 +138,7 @@ const page = async () => {
                         <TableCell>{member.name}</TableCell>
                         <TableCell>{member.email}</TableCell>
                         <TableCell>{member.role}</TableCell>
-                        <TableCell>{member.role}</TableCell>
+                        <TableCell>{member.job}</TableCell>
                       </TableRow>
                     ))}
                 </TableBody>

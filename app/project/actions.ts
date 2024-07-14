@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import prisma from "@/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { ProjectType } from "@prisma/client";
 
 export async function createProject(formData: FormData) {
   const session = await auth();
@@ -15,16 +16,19 @@ export async function createProject(formData: FormData) {
       },
     }));
   if (!user?.groupId) return;
-  let tasks = formData.get("tasks") as any;
-  tasks = JSON.parse(tasks);
+  // let tasks = formData.get("tasks") as any;
+  // tasks = JSON.parse(tasks);
   let project;
   try {
     project = await prisma.project.create({
       data: {
         name: formData.get("projectName") as string,
+        type: formData.get("type") as ProjectType,
+        status: "REQUESTED",
         groupId: user.groupId,
         request_startDate: new Date(formData.get("startDate") as string),
         request_endDate: new Date(formData.get("endDate") as string),
+        message: formData.get("message") as string,
         // tasks: {
         //   create: tasks.map((task: any) => {
         //     return { name: task.taskName, isMilestone: task.isMilestone };
@@ -47,14 +51,14 @@ export async function checkProject(tasks: any, formData: FormData) {
     const updateUser = await prisma.project.update({
       where: { id: formData.get("pid") as string },
       data: {
-        status: "1",
+        status: "STARTED",
         startDate: new Date(formData.get("startDate") as string),
         endDate: new Date(formData.get("endDate") as string),
         difficulty: formData.get("difficulty") as string,
         tasks: {
           create: tasks.map((task: any, i: number) => ({
             name: task.taskName,
-            isMilestone: task.isMilestone as boolean,
+            isMilestone: task.milestone,
             startDate: task.startDate,
             endDate: task.endDate,
             workers: {
@@ -69,11 +73,11 @@ export async function checkProject(tasks: any, formData: FormData) {
         },
       },
     });
-    return updateUser;
   } catch (error) {
     console.log(error);
     return { error: "error" };
   }
+  redirect(`/project/${formData.get("pid") as string}`);
 }
 
 export async function getProjectInfo(pid: string) {
@@ -83,17 +87,17 @@ export async function getProjectInfo(pid: string) {
         id: pid,
       },
     });
-    console.log(project);
     return project;
   } catch (error) {
-    return { error: error };
+    console.log(error);
+    return;
   }
 }
 
 export async function getUserGroup() {
   const session = await auth();
   if (!session) {
-    return { error: "no session" };
+    return;
   }
   try {
     const group = await prisma.user.findUnique({
@@ -102,6 +106,7 @@ export async function getUserGroup() {
     });
     return group;
   } catch (error) {
-    return { error };
+    console.log(error);
+    return;
   }
 }
