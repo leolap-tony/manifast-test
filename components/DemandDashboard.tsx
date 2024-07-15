@@ -14,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Link from "next/link";
 
 export default async function DemandDashboard() {
   const session = await auth();
@@ -26,6 +27,7 @@ export default async function DemandDashboard() {
       include: {
         group: {
           include: {
+            owner: true,
             manager: true,
             projects: true,
           },
@@ -48,7 +50,6 @@ export default async function DemandDashboard() {
         </form>
       </div>
       <Separator />
-      <p>{JSON.stringify(user)}</p>
       <div className="flex gap-4">
         <div className="border rounded-lg w-1/3 p-6 flex justify-between">
           <div>진행중인 프로젝트</div>
@@ -63,46 +64,43 @@ export default async function DemandDashboard() {
           </div>
         </div>
       </div>
-      {session?.user.role == "ADMIN" && (
-        <section className="flex flex-col gap-8">
+
+      <section className="flex flex-col gap-8">
+        <div className="flex justify-between items-center">
           <h2 className="text-3xl font-semibold">오늘 진행중인 프로젝트</h2>
-          <Table>
-            <TableHeader>
+          <Button asChild>
+            <Link href={"/project/request"}>프로젝트 요청</Link>
+          </Button>
+        </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>프로젝트</TableHead>
+              <TableHead>상태</TableHead>
+              <TableHead>전담 PM</TableHead>
+              <TableHead>시작일</TableHead>
+              <TableHead>종료일</TableHead>
+              <TableHead>진척률</TableHead>
+              <TableHead>난이도</TableHead>
+              <TableHead>고객</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {user?.group?.projects.map((project) => (
               <TableRow>
-                <TableHead className="w-[100px]">프로젝트</TableHead>
-                <TableHead>상태</TableHead>
-                <TableHead>전담 PM</TableHead>
-                <TableHead>시작일</TableHead>
-                <TableHead>종료일</TableHead>
-                <TableHead>진척률</TableHead>
-                <TableHead>난이도</TableHead>
-                <TableHead>고객</TableHead>
+                <TableCell>{project.name}</TableCell>
+                <TableCell>{project.status}</TableCell>
+                <TableCell>{user.group?.manager?.name}</TableCell>
+                <TableCell>{project.startDate?.toLocaleDateString()}</TableCell>
+                <TableCell>{project.endDate?.toLocaleDateString()}</TableCell>
+                <TableCell>30%</TableCell>
+                <TableCell>{project.difficulty}</TableCell>
+                <TableCell>{user.group?.owner.name}</TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell>Project name</TableCell>
-                <TableCell>2024.06.08</TableCell>
-                <TableCell>40%</TableCell>
-                <TableCell>50%</TableCell>
-                <TableCell>메모</TableCell>
-                <TableCell>상</TableCell>
-                <TableCell>(그룹 관리자)</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Project name</TableCell>
-                <TableCell>2024.06.08</TableCell>
-                <TableCell>40%</TableCell>
-                <TableCell>50%</TableCell>
-                <TableCell>메모</TableCell>
-                <TableCell>상</TableCell>
-                <TableCell>(그룹 관리자)</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </section>
-      )}
-      {/* <p>{JSON.stringify(session)}</p> */}
+            ))}
+          </TableBody>
+        </Table>
+      </section>
     </main>
   );
 }

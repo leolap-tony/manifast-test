@@ -97,7 +97,7 @@ model Project {
   message           String?
   type              ProjectType?
   status            ProjectStatus?
-  difficulty        String?
+  difficulty        Int @default(2)
   groupId           String
   request_startDate DateTime?
   request_endDate   DateTime?

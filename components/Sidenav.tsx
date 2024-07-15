@@ -14,18 +14,21 @@ const Sidenav = async () => {
           <li className="py-2 px-4">
             <Link href="/">홈</Link>
           </li>
-          {session?.user.role == "WORKER" && (
+          {(session?.user.role == "WORKER" ||
+            session?.user.role == "MANAGER") && (
             <li className="py-2 px-4">
               <Link href="/customer">고객</Link>
             </li>
           )}
-
           <li className="py-2 px-4">
             <Link href="/project">프로젝트</Link>
           </li>
-          <li className="py-2 px-4">
-            <Link href="/member">멤버</Link>
-          </li>
+          {(session?.user.role == "WORKER" ||
+            session?.user.role == "MANAGER") && (
+            <li className="py-2 px-4">
+              <Link href="/member">멤버</Link>
+            </li>
+          )}
           <li className="py-2 px-4">
             <Link href="/myinfo">내정보</Link>
           </li>

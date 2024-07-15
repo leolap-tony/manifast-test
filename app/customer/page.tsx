@@ -10,11 +10,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import prisma from "@/db";
+import Link from "next/link";
 
-const page = () => {
+const page = async () => {
+  const customers = await prisma.group.findMany({
+    include: {
+      manager: true,
+      projects: true,
+    },
+  });
   return (
     <div className="w-full flex flex-col gap-8 p-12">
       <h1 className="text-4xl font-bold">고객</h1>
+      {/* <div>{JSON.stringify(customers)}</div> */}
       <Separator></Separator>
       <Table>
         <TableHeader>
@@ -28,22 +37,18 @@ const page = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell className="font-medium">[그룹명]</TableCell>
-            <TableCell>Jane</TableCell>
-            <TableCell>베이직</TableCell>
-            <TableCell>2024.06.08</TableCell>
-            <TableCell>2024.06.08</TableCell>
-            <TableCell>3</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium">[그룹명]</TableCell>
-            <TableCell>Jane</TableCell>
-            <TableCell>베이직</TableCell>
-            <TableCell>2024.06.08</TableCell>
-            <TableCell>2024.06.08</TableCell>
-            <TableCell>3</TableCell>
-          </TableRow>
+          {customers.map((customer) => (
+            <TableRow>
+              <TableCell className="font-medium">
+                <Link href={`/customer/${customer.id}`}>[{customer.name}]</Link>
+              </TableCell>
+              <TableCell>{customer.manager?.name}</TableCell>
+              <TableCell>베이직</TableCell>
+              <TableCell>2024.06.08</TableCell>
+              <TableCell>2024.06.08</TableCell>
+              <TableCell>{customer.projects.length}</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>

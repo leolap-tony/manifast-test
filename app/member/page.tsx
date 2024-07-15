@@ -10,15 +10,57 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import prisma from "@/db";
+import { auth } from "@/auth";
 
-const page = () => {
+const page = async () => {
+  const session = await auth();
+  const user = await prisma.user.findUnique({
+    where :{
+      id:session?.user.sub
+    },
+    include:{
+      group:{
+        include:{
+          members:{
+            include:{
+              tasks:{
+                where:{
+                  startDate:{
+                    lte: new Date()
+                  },
+                  endDate:{
+                    gte: new Date()
+                  }
+                },
+                include:{task:true}
+              },
+              taskReport:{
+                where:{
+                  date:{
+                    equals: new Date()
+                  }
+                }
+              },
+              managementGroups:{
+                include:{
+                  projects:true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  })
   return (
     <div className="w-full flex flex-col gap-8 p-12">
       <h1 className="text-4xl font-bold">멤버</h1>
       <Separator></Separator>
+      {/* <div>{JSON.stringify(user)}</div> */}
       <section className="flex flex-col gap-4">
         <h2 className="text-2xl font-semibold">프로젝트 소유자</h2>
-        <Table>
+        <Table >
           <TableHeader>
             <TableRow>
               <TableHead>이름</TableHead>
@@ -26,34 +68,18 @@ const page = () => {
               <TableHead>오늘 난이도</TableHead>
               <TableHead>프로젝트 수</TableHead>
               <TableHead>오늘 보고</TableHead>
-              <TableHead>메모</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">INV001</TableCell>
-              <TableCell>JANE</TableCell>
-              <TableCell>PM</TableCell>
-              <TableCell>40%</TableCell>
-              <TableCell>3</TableCell>
-              <TableCell>완료</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">INV001</TableCell>
-              <TableCell>JANE</TableCell>
-              <TableCell>PM</TableCell>
-              <TableCell>40%</TableCell>
-              <TableCell>3</TableCell>
-              <TableCell>완료</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">INV001</TableCell>
-              <TableCell>JANE</TableCell>
-              <TableCell>PM</TableCell>
-              <TableCell>40%</TableCell>
-              <TableCell>3</TableCell>
-              <TableCell>완료</TableCell>
-            </TableRow>
+            {user?.group?.members.filter((member)=>(member.managementGroups.length)).map((member)=>(
+              <TableRow>              
+                <TableCell>{member.name}</TableCell>
+                <TableCell>{member.job}</TableCell>
+                <TableCell>{Math.round(member.managementGroups.flatMap((group)=>(group.projects)).reduce((a,c)=>(a+c.difficulty),0)/member.managementGroups.flatMap((group)=>(group.projects)).length/2*100)}%</TableCell>
+                <TableCell>{member.managementGroups.flatMap((group)=>(group.projects)).length}</TableCell>
+                <TableCell>{member.taskReport.length?'완료':'보고 전'}</TableCell>
+              </TableRow>
+            ))}            
           </TableBody>
         </Table>
       </section>
@@ -72,33 +98,19 @@ const page = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">Wendy</TableCell>
-              <TableCell>디자인</TableCell>
-              <TableCell>120%</TableCell>
-              <TableCell>110%</TableCell>
-              <TableCell>3</TableCell>
-              <TableCell>3</TableCell>
-              <TableCell>보고 전</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Wendy</TableCell>
-              <TableCell>디자인</TableCell>
-              <TableCell>120%</TableCell>
-              <TableCell>110%</TableCell>
-              <TableCell>3</TableCell>
-              <TableCell>3</TableCell>
-              <TableCell>보고 전</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Wendy</TableCell>
-              <TableCell>디자인</TableCell>
-              <TableCell>120%</TableCell>
-              <TableCell>110%</TableCell>
-              <TableCell>3</TableCell>
-              <TableCell>3</TableCell>
-              <TableCell>보고 전</TableCell>
-            </TableRow>
+            {
+              user?.group?.members.map((member)=>(
+                <TableRow>
+                  <TableCell className="font-medium">{member.name}</TableCell>
+                  <TableCell>{member.job}</TableCell>
+                  <TableCell>{member.tasks.reduce((a,c)=>(a+c.inputRate),0)}%</TableCell>
+                  <TableCell>{member.taskReport.reduce((a,c)=>(a+c.todayInputRate),0)}%</TableCell>
+                  <TableCell>{new Set(member.tasks.map((task)=>(task.task.projectId))).size}</TableCell>
+                  <TableCell>{member.tasks.length}</TableCell>
+                  <TableCell>{member.taskReport.length?'완료':'보고 전'}</TableCell>
+                </TableRow>
+              ))
+            }
           </TableBody>
         </Table>
       </section>

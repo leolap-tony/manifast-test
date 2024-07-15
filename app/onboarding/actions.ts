@@ -85,7 +85,9 @@ export async function createGroup(formData: FormData) {
       },
       data: {
         groupId: group.id,
-        role: session?.user.email?.endsWith("@leolap.com") ? "ADMIN" : "OWNER",
+        role: session?.user.email?.endsWith("@leolap.com")
+          ? "MANAGER"
+          : "OWNER",
       },
     });
   } catch (error) {
