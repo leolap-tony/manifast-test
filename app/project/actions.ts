@@ -54,7 +54,7 @@ export async function checkProject(tasks: any, formData: FormData) {
         status: "STARTED",
         startDate: new Date(formData.get("startDate") as string),
         endDate: new Date(formData.get("endDate") as string),
-        difficulty: formData.get("difficulty") as string,
+        difficulty: parseInt(formData.get("difficulty") as string),
         tasks: {
           create: tasks.map((task: any, i: number) => ({
             name: task.taskName,

@@ -37,8 +37,8 @@ const page = async () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {customers.map((customer) => (
-            <TableRow>
+          {customers.map((customer,i) => (
+            <TableRow key={i}>
               <TableCell className="font-medium">
                 <Link href={`/customer/${customer.id}`}>[{customer.name}]</Link>
               </TableCell>

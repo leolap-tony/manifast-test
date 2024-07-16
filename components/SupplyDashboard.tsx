@@ -170,8 +170,8 @@ export default async function Home() {
             <TableBody>
               {user?.managementGroups
                 .flatMap((group) => group.projects)
-                .map((project) => (
-                  <TableRow>
+                .map((project,i) => (
+                  <TableRow key={i}>
                     <TableCell>{project.name}</TableCell>
                     <TableCell>{project.status}</TableCell>                   
                     <TableCell>
@@ -181,8 +181,8 @@ export default async function Home() {
                             .flatMap((task) => task.workers)
                             .map((worker) => worker.worker.name),
                         ),
-                      ).map((worker) => (
-                        <div>{worker}</div>
+                      ).map((worker,i) => (
+                        <div key={i}>{worker}</div>
                       ))}
                     </TableCell>
                     <TableCell>

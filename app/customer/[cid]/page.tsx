@@ -93,7 +93,7 @@ const page = async ({ params }: { params: { cid: string } }) => {
                     </SelectTrigger>
                     <SelectContent>
                       {user?.group?.members.map((member, i) => (
-                        <SelectItem value={member.id}>{member.name}</SelectItem>
+                        <SelectItem key={i} value={member.id}>{member.name}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>

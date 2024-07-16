@@ -71,8 +71,8 @@ const page = async () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {user?.group?.members.filter((member)=>(member.managementGroups.length)).map((member)=>(
-              <TableRow>              
+            {user?.group?.members.filter((member)=>(member.managementGroups.length)).map((member,i)=>(
+              <TableRow key={i}>              
                 <TableCell>{member.name}</TableCell>
                 <TableCell>{member.job}</TableCell>
                 <TableCell>{Math.round(member.managementGroups.flatMap((group)=>(group.projects)).reduce((a,c)=>(a+c.difficulty),0)/member.managementGroups.flatMap((group)=>(group.projects)).length/2*100)}%</TableCell>
@@ -99,8 +99,8 @@ const page = async () => {
           </TableHeader>
           <TableBody>
             {
-              user?.group?.members.map((member)=>(
-                <TableRow>
+              user?.group?.members.map((member,i)=>(
+                <TableRow key={i}>
                   <TableCell className="font-medium">{member.name}</TableCell>
                   <TableCell>{member.job}</TableCell>
                   <TableCell>{member.tasks.reduce((a,c)=>(a+c.inputRate),0)}%</TableCell>
