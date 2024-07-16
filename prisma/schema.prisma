@@ -16,7 +16,7 @@ model User {
   image         String?
   phone         String?
   job           String?
-  role          String?
+  role          Role?
   //authority     Int?
   groupId       String?
   group         Group?    @relation(fields: [groupId], references: [id])
@@ -25,11 +25,11 @@ model User {
 
   accounts         Account[]
   sessions         Session[]
-  managementGroups Group[]          @relation("GroupManager")
-  owningGroup      Group?           @relation("GroupOwner")
+  managementGroups Group[]         @relation("GroupManager")
+  owningGroup      Group?          @relation("GroupOwner")
   ProjectThread    ProjectThread[]
   tasks            TaskWorker[]
-  taskReport TaskReport[]
+  taskReport       TaskReport[]
 }
 
 model Account {
@@ -92,36 +92,37 @@ model Group {
 }
 
 model Project {
-  id                String    @id @default(cuid())
+  id                String         @id @default(cuid())
   name              String
   message           String?
   type              ProjectType?
   status            ProjectStatus?
-  difficulty        Int @default(2)
+  difficulty        Int            @default(2)
   groupId           String
   request_startDate DateTime?
   request_endDate   DateTime?
   startDate         DateTime?
   endDate           DateTime?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  group             Group     @relation(fields: [groupId], references: [id])
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  group             Group          @relation(fields: [groupId], references: [id])
 
   threads ProjectThread[]
   tasks   Task[]
 }
 
 model Task {
-  id          String    @id @default(cuid())
+  id          String   @id @default(cuid())
   name        String
-  isComplete  Boolean @default(false)
+  isComplete  Boolean  @default(false)
   isMilestone Boolean
   projectId   String
   startDate   DateTime
   endDate     DateTime
-  project     Project   @relation(fields: [projectId], references: [id])
+  project     Project  @relation(fields: [projectId], references: [id])
 
   workers TaskWorker[]
+
   @@unique([name, projectId])
 }
 
@@ -136,43 +137,41 @@ model TaskWorker {
   worker    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   taskReport TaskReport[]
-  @@unique([taskId,userId])
+
+  @@unique([taskId, userId])
 }
 
 model TaskReport {
-  id               Int      @id @default(autoincrement())
-  taskWorkerId     String
-  taskWorker       TaskWorker @relation(fields:[taskWorkerId], references:[id])
-  userId           String
-  user             User    @relation(fields: [userId], references: [id])  
-  todayInputRate   Int
-  message          String?
-  date             DateTime @db.Date
+  id             Int        @id @default(autoincrement())
+  taskWorkerId   String
+  taskWorker     TaskWorker @relation(fields: [taskWorkerId], references: [id])
+  userId         String
+  user           User       @relation(fields: [userId], references: [id])
+  todayInputRate Int
+  message        String?
+  date           DateTime   @db.Date
 
-  @@unique([taskWorkerId,userId,date])
+  @@unique([taskWorkerId, userId, date])
 }
 
 model ProjectThread {
-  id        Int      @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   projectId String
   authorId  String
-  type      Int
-  body      Json
+  type      String
+  message   String
   createdAt DateTime @default(now())
   author    User     @relation(fields: [authorId], references: [id])
   project   Project  @relation(fields: [projectId], references: [id])
-
-  @@id([id, projectId])
 }
 
 enum Role {
-  USER
   MEMBER
   OWNER
   WORKER
   MANAGER
-  ADMIN
 }
+
 enum ProjectStatus {
   REQUESTED
   STARTED
@@ -180,6 +179,7 @@ enum ProjectStatus {
   STOPPED
   CANCELED
 }
+
 enum ProjectType {
   UIUX
   BRANDING
@@ -190,5 +190,5 @@ enum ProjectType {
   UX
   MOTIONGRAPHIC
   RENDERING
-  ETC  
+  ETC
 }

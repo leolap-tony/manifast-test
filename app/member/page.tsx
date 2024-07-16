@@ -16,43 +16,43 @@ import { auth } from "@/auth";
 const page = async () => {
   const session = await auth();
   const user = await prisma.user.findUnique({
-    where :{
-      id:session?.user.sub
+    where: {
+      id: session?.user.sub,
     },
-    include:{
-      group:{
-        include:{
-          members:{
-            include:{
-              tasks:{
-                where:{
-                  startDate:{
-                    lte: new Date()
+    include: {
+      group: {
+        include: {
+          members: {
+            include: {
+              tasks: {
+                where: {
+                  startDate: {
+                    lte: new Date(),
                   },
-                  endDate:{
-                    gte: new Date()
-                  }
+                  endDate: {
+                    gte: new Date(),
+                  },
                 },
-                include:{task:true}
+                include: { task: true },
               },
-              taskReport:{
-                where:{
-                  date:{
-                    equals: new Date()
-                  }
-                }
+              taskReport: {
+                where: {
+                  date: {
+                    equals: new Date(),
+                  },
+                },
               },
-              managementGroups:{
-                include:{
-                  projects:true
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  })
+              managementGroups: {
+                include: {
+                  projects: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
   return (
     <div className="w-full flex flex-col gap-8 p-12">
       <h1 className="text-4xl font-bold">멤버</h1>
@@ -60,7 +60,7 @@ const page = async () => {
       {/* <div>{JSON.stringify(user)}</div> */}
       <section className="flex flex-col gap-4">
         <h2 className="text-2xl font-semibold">프로젝트 소유자</h2>
-        <Table >
+        <Table>
           <TableHeader>
             <TableRow>
               <TableHead>이름</TableHead>
@@ -71,15 +71,36 @@ const page = async () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {user?.group?.members.filter((member)=>(member.managementGroups.length)).map((member,i)=>(
-              <TableRow key={i}>              
-                <TableCell>{member.name}</TableCell>
-                <TableCell>{member.job}</TableCell>
-                <TableCell>{Math.round(member.managementGroups.flatMap((group)=>(group.projects)).reduce((a,c)=>(a+c.difficulty),0)/member.managementGroups.flatMap((group)=>(group.projects)).length/2*100)}%</TableCell>
-                <TableCell>{member.managementGroups.flatMap((group)=>(group.projects)).length}</TableCell>
-                <TableCell>{member.taskReport.length?'완료':'보고 전'}</TableCell>
-              </TableRow>
-            ))}            
+            {user?.group?.members
+              .filter((member) => member.managementGroups.length)
+              .map((member, i) => (
+                <TableRow key={i}>
+                  <TableCell>{member.name}</TableCell>
+                  <TableCell>{member.job}</TableCell>
+                  <TableCell>
+                    {Math.round(
+                      (member.managementGroups
+                        .flatMap((group) => group.projects)
+                        .reduce((a, c) => a + c.difficulty, 0) /
+                        member.managementGroups.flatMap(
+                          (group) => group.projects,
+                        ).length /
+                        2) *
+                        100,
+                    )}
+                    %
+                  </TableCell>
+                  <TableCell>
+                    {
+                      member.managementGroups.flatMap((group) => group.projects)
+                        .length
+                    }
+                  </TableCell>
+                  <TableCell>
+                    {member.taskReport.length ? "완료" : "보고 전"}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </section>
@@ -98,19 +119,28 @@ const page = async () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {
-              user?.group?.members.map((member,i)=>(
-                <TableRow key={i}>
-                  <TableCell className="font-medium">{member.name}</TableCell>
-                  <TableCell>{member.job}</TableCell>
-                  <TableCell>{member.tasks.reduce((a,c)=>(a+c.inputRate),0)}%</TableCell>
-                  <TableCell>{member.taskReport.reduce((a,c)=>(a+c.todayInputRate),0)}%</TableCell>
-                  <TableCell>{new Set(member.tasks.map((task)=>(task.task.projectId))).size}</TableCell>
-                  <TableCell>{member.tasks.length}</TableCell>
-                  <TableCell>{member.taskReport.length?'완료':'보고 전'}</TableCell>
-                </TableRow>
-              ))
-            }
+            {user?.group?.members.map((member, i) => (
+              <TableRow key={i}>
+                <TableCell className="font-medium">{member.name}</TableCell>
+                <TableCell>{member.job}</TableCell>
+                <TableCell>
+                  {member.tasks.reduce((a, c) => a + c.inputRate, 0)}%
+                </TableCell>
+                <TableCell>
+                  {member.taskReport.reduce((a, c) => a + c.todayInputRate, 0)}%
+                </TableCell>
+                <TableCell>
+                  {
+                    new Set(member.tasks.map((task) => task.task.projectId))
+                      .size
+                  }
+                </TableCell>
+                <TableCell>{member.tasks.length}</TableCell>
+                <TableCell>
+                  {member.taskReport.length ? "완료" : "보고 전"}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </section>

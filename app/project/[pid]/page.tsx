@@ -16,7 +16,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import prisma from "@/db";
+import { Separator } from "@/components/ui/separator";
+import { completeTask, createThread } from "../actions";
+import Image from "next/image";
 
 const page = async ({ params }: { params: { pid: string } }) => {
   const session = await auth();
@@ -29,17 +42,29 @@ const page = async ({ params }: { params: { pid: string } }) => {
         include: { manager: true, owner: true },
       },
       tasks: true,
+      threads: {
+        include: {
+          author: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
     },
   });
   return (
     <div className="flex flex-col p-8 w-full gap-8">
+      {/* <div>{JSON.stringify(project)}</div> */}
       <div className="flex justify-between">
         <h1 className="text-3xl font-bold">{project?.name}</h1>
-        {session?.user.role == "WORKER" && (
-          <Button asChild>
-            <Link href={`/project/${params.pid}/check`}>프로젝트 검토하기</Link>
-          </Button>
-        )}
+        {session?.user.role == "WORKER" ||
+          (session?.user.role == "MANAGER" && (
+            <Button asChild>
+              <Link href={`/project/${params.pid}/check`}>
+                프로젝트 검토하기
+              </Link>
+            </Button>
+          ))}
       </div>
       <div className="grid grid-cols-3 gap-4 p-6 bg-slate-50 rounded-lg ">
         <div className="flex gap-8">
@@ -69,10 +94,31 @@ const page = async ({ params }: { params: { pid: string } }) => {
       </div>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between">
-          <div className="text-lg">30% 요청됨</div>
-          <div className="text-lg">2024.06.08 - 2024.06.18 (예정)</div>
+          <div className="text-lg">
+            {Math.round(
+              (project!.tasks?.filter(
+                (task) => task.isComplete && task.isMilestone,
+              ).length /
+                project!.tasks.filter((task) => task.isMilestone).length) *
+                100,
+            )}
+            % 요청됨
+          </div>
+          <div className="text-lg">
+            {project?.startDate?.toLocaleDateString()} -{" "}
+            {project?.endDate?.toLocaleDateString()} (예정)
+          </div>
         </div>
-        <Progress value={30} className="[&>*]:bg-red-500" />
+        <Progress
+          value={Math.round(
+            (project!.tasks?.filter(
+              (task) => task.isComplete && task.isMilestone,
+            ).length /
+              project!.tasks.filter((task) => task.isMilestone).length) *
+              100,
+          )}
+          className="[&>*]:bg-red-500"
+        />
       </div>
 
       <Tabs defaultValue="thread" className="">
@@ -80,13 +126,43 @@ const page = async ({ params }: { params: { pid: string } }) => {
           <TabsTrigger value="thread">스레드</TabsTrigger>
           <TabsTrigger value="wbs">WBS</TabsTrigger>
         </TabsList>
-        <TabsContent value="thread">
-          <div className="flex flex-col gap-8 w-full p-4">
-            <ToggleGroup type="single">
+        <TabsContent value="thread" className="flex flex-col gap-4">
+          <form
+            action={createThread}
+            className="flex flex-col gap-6 w-full p-4 items-start"
+          >
+            <ToggleGroup type="single" className="">
               <ToggleGroupItem value="normal">일반 메시지</ToggleGroupItem>
               <ToggleGroupItem value="complete">프로젝트 완료</ToggleGroupItem>
             </ToggleGroup>
-            <Textarea placeholder="Type your message here." id="message-2" />
+            <Textarea placeholder="Type your message here." name="message" />
+            <Button variant={"default"}>제출</Button>
+            <input type="hidden" name="projectId" value={params.pid} />
+          </form>
+          <Separator />
+          <div>
+            {project?.threads.map((thread, i) => (
+              <div className="p-4">
+                <div className="flex items-center">
+                  <div className="flex items-center gap-2 text-lg font-semibold">
+                    {thread.author?.image && (
+                      <Image
+                        src={thread.author?.image}
+                        alt="profile"
+                        height={32}
+                        width={32}
+                        className="rounded-full"
+                      />
+                    )}
+                    <span>{thread.author.name}</span>
+                  </div>
+                  <div className="font-light text-slate-500 text-sm ml-4">
+                    {thread.createdAt.toLocaleString()}
+                  </div>
+                </div>
+                <div className="py-4 px-10 font-light">{thread.message}</div>
+              </div>
+            ))}
           </div>
         </TabsContent>
         <TabsContent value="wbs">
@@ -102,13 +178,59 @@ const page = async ({ params }: { params: { pid: string } }) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {Array.from({ length: 2 }).map((e, i) => (
+                {project?.tasks.map((task, i) => (
                   <TableRow key={i}>
-                    <TableCell className="font-medium">작업명</TableCell>
+                    <TableCell className="font-medium">
+                      <Sheet>
+                        <SheetTrigger>{task.name}</SheetTrigger>
+                        <SheetContent className="w-[400px] sm:w-[540px] px-0">
+                          <form
+                            className="flex flex-col gap-8"
+                            action={completeTask}
+                          >
+                            <SheetHeader className="p-4">
+                              <SheetTitle className="">{task.name}</SheetTitle>
+                            </SheetHeader>
+                            <div className="bg-slate-200 flex flex-col w-full">
+                              <div className="flex">
+                                <div>작업자</div>
+                                <div>ZOEY</div>
+                              </div>
+                              <div className="flex">
+                                <div>시작일</div>
+                                <div>ZOEY</div>
+                              </div>
+                              <div className="flex">
+                                <div>종료일</div>
+                                <div>ZOEY</div>
+                              </div>
+                              <div className="flex">
+                                <div>완료 여부</div>
+                                <div>ZOEY</div>
+                              </div>
+                            </div>
+                            <div>
+                              <h2>작업물</h2>
+                              <Textarea></Textarea>
+                            </div>
+                            <SheetFooter>
+                              <SheetClose asChild>
+                                <Button type="submit">작업 완료하기</Button>
+                              </SheetClose>
+                            </SheetFooter>
+                            <input
+                              type="hidden"
+                              name="taskId"
+                              value={task.id}
+                            />
+                          </form>
+                        </SheetContent>
+                      </Sheet>
+                    </TableCell>
                     <TableCell>Zoey</TableCell>
-                    <TableCell>2024.06.28</TableCell>
-                    <TableCell>2024.06.29</TableCell>
-                    <TableCell>완료</TableCell>
+                    <TableCell>{task.startDate.toLocaleDateString()}</TableCell>
+                    <TableCell>{task.endDate.toLocaleDateString()}</TableCell>
+                    <TableCell>{task.isComplete ? "완료" : "미완료"}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

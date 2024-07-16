@@ -86,7 +86,7 @@ export default async function DemandDashboard() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {user?.group?.projects.map((project,i) => (
+            {user?.group?.projects.map((project, i) => (
               <TableRow key={i}>
                 <TableCell>{project.name}</TableCell>
                 <TableCell>{project.status}</TableCell>

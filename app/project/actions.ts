@@ -110,3 +110,42 @@ export async function getUserGroup() {
     return;
   }
 }
+
+export async function createThread(formData: FormData) {
+  const session = await auth();
+  if (!session?.user.sub) return;
+  try {
+    const thread = await prisma.projectThread.create({
+      data: {
+        projectId: formData.get("projectId") as string,
+        authorId: session?.user.sub,
+        type: "NORMAL",
+        message: formData.get("message") as string,
+      },
+    });
+  } catch (e) {
+    console.log(e);
+    return;
+  }
+  revalidatePath("/project");
+}
+
+export async function completeTask(formData: FormData) {
+  const session = await auth();
+  if (!session) {
+    return;
+  }
+  try {
+    await prisma.task.update({
+      where: {
+        id: formData.get("taskId") as string,
+      },
+      data: {
+        isComplete: true,
+      },
+    });
+  } catch (e) {
+    console.log(e);
+  }
+  revalidatePath("/project");
+}

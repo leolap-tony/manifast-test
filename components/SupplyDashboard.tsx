@@ -96,10 +96,23 @@ export default async function Home() {
             {user?.tasks?.reduce((a, c) => a + c.inputRate, 0)}%
           </div>
         </div>
-        <div className="border rounded-lg w-1/3 p-6 flex justify-between">
-          <div>오늘 업무 난이도</div>
-          <div className="pt-6 text-xl font-semibold">3</div>
-        </div>
+        {session?.user.role == "MANAGER" && (
+          <div className="border rounded-lg w-1/3 p-6 flex justify-between">
+            <div>오늘 업무 난이도</div>
+            <div className="pt-6 text-xl font-semibold">
+              {Math.round(
+                (user?.managementGroups
+                  .flatMap((group) => group.projects)
+                  .reduce((a, c) => a + c.difficulty, 0)! /
+                  user?.managementGroups.flatMap((group) => group.projects)
+                    .length! /
+                  2) *
+                  100,
+              )}
+              %
+            </div>
+          </div>
+        )}
       </div>
       {(session?.user.role == "MANAGER" || session?.user.role == "WORKER") && (
         <form className="flex flex-col gap-8" action={submitReport}>
@@ -144,7 +157,7 @@ export default async function Home() {
                 ))
               ) : (
                 <TableRow className="text-gray-400 p-4">
-                  <TableCell>보고가 등록되었습니다.</TableCell>
+                  <TableCell>등록할 보고가 없습니다.</TableCell>
                 </TableRow>
               )}
             </TableBody>
@@ -170,10 +183,10 @@ export default async function Home() {
             <TableBody>
               {user?.managementGroups
                 .flatMap((group) => group.projects)
-                .map((project,i) => (
+                .map((project, i) => (
                   <TableRow key={i}>
                     <TableCell>{project.name}</TableCell>
-                    <TableCell>{project.status}</TableCell>                   
+                    <TableCell>{project.status}</TableCell>
                     <TableCell>
                       {Array.from(
                         new Set(
@@ -181,7 +194,7 @@ export default async function Home() {
                             .flatMap((task) => task.workers)
                             .map((worker) => worker.worker.name),
                         ),
-                      ).map((worker,i) => (
+                      ).map((worker, i) => (
                         <div key={i}>{worker}</div>
                       ))}
                     </TableCell>

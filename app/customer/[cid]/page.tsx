@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { updatePM } from "../actions";
+import Link from "next/link";
 
 const page = async ({ params }: { params: { cid: string } }) => {
   const session = await auth();
@@ -93,7 +94,9 @@ const page = async ({ params }: { params: { cid: string } }) => {
                     </SelectTrigger>
                     <SelectContent>
                       {user?.group?.members.map((member, i) => (
-                        <SelectItem key={i} value={member.id}>{member.name}</SelectItem>
+                        <SelectItem key={i} value={member.id}>
+                          {member.name}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -167,7 +170,9 @@ const page = async ({ params }: { params: { cid: string } }) => {
             <TableBody>
               {group?.projects.map((project, i) => (
                 <TableRow key={i}>
-                  <TableCell className="font-medium">{project.name}</TableCell>
+                  <TableCell className="font-medium">
+                    <Link href={`/project/${project.id}`}>{project.name}</Link>
+                  </TableCell>
                   <TableCell>{project.status}</TableCell>
                   <TableCell>{group.manager?.name}</TableCell>
                   <TableCell>{}</TableCell>
@@ -185,9 +190,9 @@ const page = async ({ params }: { params: { cid: string } }) => {
         </TabsContent>
         <TabsContent value="wbs">
           <div className="flex flex-col gap-8 p-4">
-            {Array.from({ length: 3 }).map((e, i) => (
+            {group?.projects.map((project, i) => (
               <div key={i} className="flex flex-col">
-                <h2>프로젝트명</h2>
+                <h2 className="text-lg font-semibold">{project.name}</h2>
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -199,13 +204,21 @@ const page = async ({ params }: { params: { cid: string } }) => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {Array.from({ length: 2 }).map((e, i) => (
+                    {project.tasks.map((task, i) => (
                       <TableRow key={i}>
-                        <TableCell className="font-medium">작업명</TableCell>
+                        <TableCell className="font-medium">
+                          {task.name}
+                        </TableCell>
                         <TableCell>Zoey</TableCell>
-                        <TableCell>2024.06.28</TableCell>
-                        <TableCell>2024.06.29</TableCell>
-                        <TableCell>완료</TableCell>
+                        <TableCell>
+                          {task.startDate.toLocaleDateString()}
+                        </TableCell>
+                        <TableCell>
+                          {task.endDate.toLocaleDateString()}
+                        </TableCell>
+                        <TableCell>
+                          {task.isComplete ? "완료" : "미완료"}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

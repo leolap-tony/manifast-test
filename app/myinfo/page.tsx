@@ -46,30 +46,32 @@ const page = async () => {
         <TabsContent value="myinfo">
           <div className="flex flex-col gap-10 w-full p-4">
             <div className="flex flex-col gap-4">
-              <h1 className="text-3xl font-bold">{session?.user.name}</h1>
+              <h1 className="text-3xl font-bold">{user?.name}</h1>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">이메일</span>
-                <span>{user?.email}</span>
+                <span className="font-light">{user?.email}</span>
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">연락처</span>
-                <span>{user?.phone}</span>
+                <span className="font-light">{user?.phone}</span>
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">가입일</span>
-                <span>{JSON.stringify(user?.createdAt)}</span>
+                <span className="font-light">
+                  {JSON.stringify(user?.createdAt)}
+                </span>
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">직무</span>
-                <span>{user?.job}</span>
+                <span className="font-light">{user?.job}</span>
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">권한</span>
-                <span>{user?.role}</span>
+                <span className="font-light">{user?.role}</span>
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">역활</span>
-                <span>{user?.email}</span>
+                <span className="font-light">{user?.email}</span>
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">이미지</span>
@@ -96,27 +98,29 @@ const page = async () => {
               <h1 className="text-3xl font-bold">{user?.group?.name}</h1>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">그룹 관리자</span>
-                <span>{user?.group?.ceo}</span>
+                <span className="font-light">{user?.group?.ceo}</span>
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">그룹 이메일</span>
-                <span>{user?.group?.email}</span>
+                <span className="font-light">{user?.group?.email}</span>
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">그룹 연락처</span>
-                <span>{user?.group?.phone}</span>
+                <span className="font-light">{user?.group?.phone}</span>
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">생성일</span>
-                <span>{JSON.stringify(user?.group?.createdAt)}</span>
+                <span className="font-light">
+                  {JSON.stringify(user?.group?.createdAt)}
+                </span>
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">그룹ID</span>
-                <span>{user?.group?.id}</span>
+                <span className="font-light">{user?.group?.id}</span>
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">플랜</span>
-                <span>프로 플랜</span>
+                <span className="font-light">프로 플랜</span>
               </div>
             </div>
 
@@ -149,27 +153,29 @@ const page = async () => {
               <h1 className="text-2xl font-semibold">비즈니스 정보</h1>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">상호명</span>
-                <span>{user?.group?.name}</span>
+                <span className="font-light">{user?.group?.name}</span>
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">대표자명</span>
-                <span>{user?.group?.ceo}</span>
+                <span className="font-light">{user?.group?.ceo}</span>
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">사업자등록번호</span>
-                <span>{user?.group?.businessNumber}</span>
+                <span className="font-light">
+                  {user?.group?.businessNumber}
+                </span>
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">주소</span>
-                <span>{user?.group?.address}</span>
+                <span className="font-light">{user?.group?.address}</span>
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">규모</span>
-                <span>스타트업</span>
+                <span className="font-light">스타트업</span>
               </div>
               <div className="flex gap-4">
                 <span className="w-36 font-semibold">사업 카테고리</span>
-                <span>디자인, 소프트웨어</span>
+                <span className="font-light">디자인, 소프트웨어</span>
               </div>
             </div>
           </div>
