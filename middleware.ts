@@ -1,6 +1,8 @@
 import { auth } from "@/auth";
+import NextAuth from "next-auth";
+import authConfig from "./auth.config";
 
-export default auth((req) => {
+export default NextAuth(authConfig).auth((req) => {
   if (!req.auth) {
     const newUrl = new URL("/api/auth/signin", req.nextUrl.origin);
     return Response.redirect(newUrl);
@@ -10,6 +12,7 @@ export default auth((req) => {
     return Response.redirect(newUrl);
   }
 });
+// export default NextAuth(authConfig).auth
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
