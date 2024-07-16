@@ -30,6 +30,7 @@ import prisma from "@/db";
 import { Separator } from "@/components/ui/separator";
 import { completeTask, createThread } from "../actions";
 import Image from "next/image";
+import { Label } from "@/components/ui/label";
 
 const page = async ({ params }: { params: { pid: string } }) => {
   const session = await auth();
@@ -185,35 +186,35 @@ const page = async ({ params }: { params: { pid: string } }) => {
                         <SheetTrigger>{task.name}</SheetTrigger>
                         <SheetContent className="w-[400px] sm:w-[540px] px-0">
                           <form
-                            className="flex flex-col gap-8"
+                            className="flex flex-col gap-4"
                             action={completeTask}
                           >
                             <SheetHeader className="p-4">
-                              <SheetTitle className="">{task.name}</SheetTitle>
+                              <SheetTitle className="font-semibold text-2xl">{task.name}</SheetTitle>
                             </SheetHeader>
-                            <div className="bg-slate-200 flex flex-col w-full">
+                            <div className="bg-slate-100 flex flex-col w-full p-6 gap-2">
                               <div className="flex">
-                                <div>작업자</div>
-                                <div>ZOEY</div>
+                                <div className="w-24">작업자</div>
+                                <div className="font-light">ZOEY</div>
                               </div>
                               <div className="flex">
-                                <div>시작일</div>
-                                <div>ZOEY</div>
+                                <div className="w-24">시작일</div>
+                                <div className="font-light">{task.startDate.toLocaleDateString()}</div>
                               </div>
                               <div className="flex">
-                                <div>종료일</div>
-                                <div>ZOEY</div>
+                                <div className="w-24">종료일</div>
+                                <div className="font-light">{task.endDate.toLocaleDateString()}</div>
                               </div>
                               <div className="flex">
-                                <div>완료 여부</div>
-                                <div>ZOEY</div>
+                                <div className="w-24">완료 여부</div>
+                                <div className="font-light">{task.isComplete?'완료':'미완료'}</div>
                               </div>
                             </div>
-                            <div>
-                              <h2>작업물</h2>
+                            <div className="flex flex-col gap-4 p-4">
+                              <Label className="text-xl font-semibold">작업물</Label>
                               <Textarea></Textarea>
                             </div>
-                            <SheetFooter>
+                            <SheetFooter className="p-4">
                               <SheetClose asChild>
                                 <Button type="submit">작업 완료하기</Button>
                               </SheetClose>
