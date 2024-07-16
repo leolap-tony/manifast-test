@@ -42,7 +42,15 @@ const page = async ({ params }: { params: { pid: string } }) => {
       group: {
         include: { manager: true, owner: true },
       },
-      tasks: true,
+      tasks: {
+        include:{
+          workers:{
+            include:{
+              worker:true
+            }
+          }
+        }
+      },
       threads: {
         include: {
           author: true,
@@ -82,7 +90,9 @@ const page = async ({ params }: { params: { pid: string } }) => {
         </div>
         <div className="flex gap-8">
           <div className="font-semibold">작업자</div>
-          <div>Jane</div>
+          <div className="flex gap-4">
+            {Array.from(new Set(project?.tasks.flatMap((task)=>task.workers).map((worker)=>worker.worker.name))).map((worker)=>(<div>{worker}</div>))}
+          </div>
         </div>
         <div className="flex gap-8">
           <div className="font-semibold">그룹 관리자</div>
@@ -103,7 +113,7 @@ const page = async ({ params }: { params: { pid: string } }) => {
                 project!.tasks.filter((task) => task.isMilestone).length) *
                 100,
             )}
-            % 요청됨
+            % 완료 됨
           </div>
           <div className="text-lg">
             {project?.startDate?.toLocaleDateString()} -{" "}
@@ -195,7 +205,9 @@ const page = async ({ params }: { params: { pid: string } }) => {
                             <div className="bg-slate-100 flex flex-col w-full p-6 gap-2">
                               <div className="flex">
                                 <div className="w-24">작업자</div>
-                                <div className="font-light">ZOEY</div>
+                                <div className="font-light flex flex-col">
+                                  {task.workers.map((worker)=>(<div>{worker.worker.name}</div>))}
+                                </div>
                               </div>
                               <div className="flex">
                                 <div className="w-24">시작일</div>
@@ -228,7 +240,7 @@ const page = async ({ params }: { params: { pid: string } }) => {
                         </SheetContent>
                       </Sheet>
                     </TableCell>
-                    <TableCell>Zoey</TableCell>
+                    <TableCell>{task.workers.map((worker)=>(<div>{worker.worker.name}</div>))}</TableCell>
                     <TableCell>{task.startDate.toLocaleDateString()}</TableCell>
                     <TableCell>{task.endDate.toLocaleDateString()}</TableCell>
                     <TableCell>{task.isComplete ? "완료" : "미완료"}</TableCell>

@@ -175,7 +175,11 @@ const page = async ({ params }: { params: { cid: string } }) => {
                   </TableCell>
                   <TableCell>{project.status}</TableCell>
                   <TableCell>{group.manager?.name}</TableCell>
-                  <TableCell>{}</TableCell>
+                  <TableCell>
+                    <div className="flex gap-4">
+                      {Array.from(new Set(project.tasks.flatMap((task)=>(task.workers)).map((worker)=>(worker.worker.name)))).map((worker)=>(<div>{worker}</div>))}
+                    </div>
+                    </TableCell>
                   <TableCell>
                     {project.startDate?.toLocaleDateString()}
                   </TableCell>
@@ -209,7 +213,11 @@ const page = async ({ params }: { params: { cid: string } }) => {
                         <TableCell className="font-medium">
                           {task.name}
                         </TableCell>
-                        <TableCell>Zoey</TableCell>
+                        <TableCell>
+                          <div className="flex gap-4">
+                            {Array.from(new Set(project.tasks.flatMap((task)=>(task.workers)).map((worker)=>(worker.worker.name)))).map((worker)=>(<div>{worker}</div>))}
+                          </div>
+                        </TableCell>
                         <TableCell>
                           {task.startDate.toLocaleDateString()}
                         </TableCell>
