@@ -177,7 +177,7 @@ const page = async ({ params }: { params: { cid: string } }) => {
                   <TableCell>{group.manager?.name}</TableCell>
                   <TableCell>
                     <div className="flex gap-4">
-                      {Array.from(new Set(project.tasks.flatMap((task)=>(task.workers)).map((worker)=>(worker.worker.name)))).map((worker)=>(<div>{worker}</div>))}
+                      {Array.from(new Set(project.tasks.flatMap((task)=>(task.workers)).map((worker)=>(worker.worker.name)))).map((worker,i)=>(<div key={i}>{worker}</div>))}
                     </div>
                     </TableCell>
                   <TableCell>
@@ -215,7 +215,7 @@ const page = async ({ params }: { params: { cid: string } }) => {
                         </TableCell>
                         <TableCell>
                           <div className="flex gap-4">
-                            {Array.from(new Set(project.tasks.flatMap((task)=>(task.workers)).map((worker)=>(worker.worker.name)))).map((worker)=>(<div>{worker}</div>))}
+                            {Array.from(new Set(project.tasks.flatMap((task)=>(task.workers)).map((worker)=>(worker.worker.name)))).map((worker,i)=>(<div key={i}>{worker}</div>))}
                           </div>
                         </TableCell>
                         <TableCell>
