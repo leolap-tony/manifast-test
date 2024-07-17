@@ -67,7 +67,7 @@ const page = async ({ params }: { params: { pid: string } }) => {
       <div className="flex justify-between">
         <h1 className="text-3xl font-bold">{project?.name}</h1>
         {(session?.user.role == "WORKER" ||
-          session?.user.role == "MANAGER") && (
+          session?.user.role == "MANAGER") && (project?.status=='REQUESTED')&&(
             <Button asChild>
               <Link href={`/project/${params.pid}/check`}>
                 프로젝트 검토하기
