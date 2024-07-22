@@ -75,7 +75,7 @@ const page = async ({ params }: { params: { cid: string } }) => {
     <div className="flex flex-col p-8 w-full gap-8">
       <div className="flex justify-between">
         <h1 className="text-3xl font-bold">{group?.name}</h1>
-        {(session?.user.role == "WORKER" ??
+        {(session?.user.role == "WORKER" ||
           session?.user.role == "MANAGER") && (
           <Dialog>
             <DialogTrigger asChild>
