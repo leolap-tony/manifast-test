@@ -376,6 +376,7 @@ const Page = () => {
                         </SelectContent>
                       </Select>
                       <Input
+                        name='inputRate'
                         type="number"
                         min="0"
                         max="100"

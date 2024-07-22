@@ -5,6 +5,7 @@ import prisma from "@/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { ProjectType } from "@prisma/client";
+import { NextResponse } from "next/server";
 
 export async function createProject(formData: FormData) {
   const session = await auth();
@@ -45,8 +46,8 @@ export async function createProject(formData: FormData) {
 
 export async function checkProject(tasks: any, formData: FormData) {
   const session = await auth();
-  console.log(tasks);
-  console.log(formData);
+  // console.log(tasks);
+  // console.log(formData);
   try {
     const updateUser = await prisma.project.update({
       where: { id: formData.get("pid") as string },
@@ -75,8 +76,9 @@ export async function checkProject(tasks: any, formData: FormData) {
     });
   } catch (error) {
     console.log(error);
-    return { error: "error" };
+    return
   }
+  revalidatePath('/project')
   redirect(`/project/${formData.get("pid") as string}`);
 }
 
