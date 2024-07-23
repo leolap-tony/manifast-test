@@ -34,7 +34,13 @@ import { Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { TASKS, Task } from "@/data/tasks";
-import { checkProject, getUserGroup, getProjectInfo, cancelProject } from "../../actions";
+import {
+  checkProject,
+  getUserGroup,
+  getProjectInfo,
+  updateProject,
+  stopProject,
+} from "../../actions";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -66,11 +72,11 @@ const Page = () => {
   const [difficulty, setDifficulty] = useState<string>();
   const [checkAll, setCheckAll] = useState<boolean>(false);
 
-  useEffect(() => {
-    TASKS[`${project.data?.type}`]?.map((task: Task) => {
-      setTasks((prev) => [...prev, { ...task }]);
-    });
-  }, [project.data?.type]);
+  // useEffect(() => {
+  //   TASKS[`${project.data?.type}`]?.map((task: Task) => {
+  //     setTasks((prev) => [...prev, { ...task }]);
+  //   });
+  // }, [project.data?.type]);
 
   useEffect(() => {
     setTasks((prev) => {
@@ -82,8 +88,17 @@ const Page = () => {
   useEffect(() => {
     setStartDate(project.data?.request_startDate!);
     setEndDate(project.data?.request_endDate!);
+    setDifficulty(project.data?.difficulty.toString())
   }, [project.data]);
-  const checkProjectWithTasks = checkProject.bind(null, tasks);
+  useEffect(()=>{
+    const tasks = project.data?.tasks.map((task)=>{
+      return {checked:false, milestone:task.isMilestone, taskName:task.name,startDate:task.startDate,endDate:task.endDate,workers:task.workers.map((worker)=>({worker:worker.worker.id,workerName:worker.worker.name,inputRate:worker.inputRate}))}
+    })
+    console.log('tasks:',tasks)
+    tasks && setTasks(tasks as Task[])
+  },[project.data?.tasks])
+
+  const updateProjectWithTasks = updateProject.bind(null, tasks);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, i: number) => {
     const { name, value } = e.target;
@@ -105,7 +120,7 @@ const Page = () => {
   const handleDate = (date: Date, i: number, name: string) => {
     setTasks((prev) => {
       const newValue = [...prev];
-      newValue[i] = { ...newValue[i], [name]: date };
+      newValue[i] = { ...newValue[i], [name]: date.toLocaleDateString() };
       return newValue;
     });
   };
@@ -144,9 +159,9 @@ const Page = () => {
   return (
     <form
       className="flex flex-col gap-8 p-8 w-full"
-      action={checkProjectWithTasks}
+      action={updateProjectWithTasks}
     >
-      <h1 className="text-3xl font-bold">프로젝트 검토/수정</h1>
+      <h1 className="text-3xl font-bold">프로젝트 수정</h1>
       <Separator />
       <section className="flex flex-col">
         <h2 className="text-xl font-semibold">기본 정보</h2>
@@ -169,7 +184,7 @@ const Page = () => {
             <input
               type="hidden"
               name="startDate"
-              value={startDate?.toISOString()}
+              value={startDate?.toLocaleDateString()}
             />
             <Popover>
               <PopoverTrigger asChild>
@@ -204,7 +219,7 @@ const Page = () => {
             <input
               type="hidden"
               name="endDate"
-              value={endDate?.toISOString()}
+              value={endDate?.toLocaleDateString()}
             />
             <Popover>
               <PopoverTrigger asChild>
@@ -364,9 +379,9 @@ const Page = () => {
                         }}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="작업자 선택" />
+                          <SelectValue placeholder={worker.workerName}/>
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent defaultValue={worker.worker}>
                           {user.data &&
                             user.data.group!.members.map((member, k) => (
                               <SelectItem key={k} value={member.id}>
@@ -381,6 +396,7 @@ const Page = () => {
                         min="0"
                         max="100"
                         className="w-16"
+                        value={worker.inputRate}
                         onChange={(e) =>
                           setTasks((prev) => {
                             const newValue = [...prev];
@@ -421,16 +437,17 @@ const Page = () => {
         <input type="hidden" name="difficulty" value={difficulty} />
       </section>
       <div className="flex justify-between items-center">
-        <Button>검토 완료</Button>
-        <Button 
-          type='button'
-          variant={"outline"} 
-          className="text-red-500" 
+        <Button>수정 완료</Button>
+
+        <Button
+          type="button"
+          variant={"outline"}
+          className="text-red-500"
           onClick={async () => {
-            await cancelProject(pid as string)
+            await stopProject(pid as string);
           }}
         >
-          프로젝트 취소하기
+          프로젝트 중단하기
         </Button>
       </div>
       <input type="hidden" name="pid" value={pid} />

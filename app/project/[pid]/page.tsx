@@ -43,13 +43,13 @@ const page = async ({ params }: { params: { pid: string } }) => {
         include: { manager: true, owner: true },
       },
       tasks: {
-        include:{
-          workers:{
-            include:{
-              worker:true
-            }
-          }
-        }
+        include: {
+          workers: {
+            include: {
+              worker: true,
+            },
+          },
+        },
       },
       threads: {
         include: {
@@ -66,14 +66,21 @@ const page = async ({ params }: { params: { pid: string } }) => {
       {/* <div>{JSON.stringify(project)}</div> */}
       <div className="flex justify-between">
         <h1 className="text-3xl font-bold">{project?.name}</h1>
-        {(session?.user.role == "WORKER" ||
-          session?.user.role == "MANAGER") && (project?.status=='REQUESTED')&&(
+        {(session?.user.role == "WORKER" || session?.user.role == "MANAGER") &&
+          project?.status == "REQUESTED" ? (
             <Button asChild>
               <Link href={`/project/${params.pid}/check`}>
                 프로젝트 검토하기
               </Link>
             </Button>
-          )}
+          ) : (
+            <Button asChild>
+              <Link href={`/project/${params.pid}/update`}>
+                프로젝트 수정하기
+              </Link>
+            </Button>
+          )
+          }
       </div>
       <div className="grid grid-cols-3 gap-4 p-6 bg-slate-50 rounded-lg ">
         <div className="flex gap-8">
@@ -91,7 +98,15 @@ const page = async ({ params }: { params: { pid: string } }) => {
         <div className="flex gap-8">
           <div className="font-semibold">작업자</div>
           <div className="flex gap-4">
-            {Array.from(new Set(project?.tasks.flatMap((task)=>task.workers).map((worker)=>worker.worker.name))).map((worker,i)=>(<div key={i}>{worker}</div>))}
+            {Array.from(
+              new Set(
+                project?.tasks
+                  .flatMap((task) => task.workers)
+                  .map((worker) => worker.worker.name),
+              ),
+            ).map((worker, i) => (
+              <div key={i}>{worker}</div>
+            ))}
           </div>
         </div>
         <div className="flex gap-8">
@@ -200,30 +215,42 @@ const page = async ({ params }: { params: { pid: string } }) => {
                             action={completeTask}
                           >
                             <SheetHeader className="p-4">
-                              <SheetTitle className="font-semibold text-2xl">{task.name}</SheetTitle>
+                              <SheetTitle className="font-semibold text-2xl">
+                                {task.name}
+                              </SheetTitle>
                             </SheetHeader>
                             <div className="bg-slate-100 flex flex-col w-full p-6 gap-2">
                               <div className="flex">
                                 <div className="w-24">작업자</div>
                                 <div className="font-light flex flex-col">
-                                  {task.workers.map((worker,i)=>(<div key={i}>{worker.worker.name}</div>))}
+                                  {task.workers.map((worker, i) => (
+                                    <div key={i}>{worker.worker.name}</div>
+                                  ))}
                                 </div>
                               </div>
                               <div className="flex">
                                 <div className="w-24">시작일</div>
-                                <div className="font-light">{task.startDate.toLocaleDateString()}</div>
+                                <div className="font-light">
+                                  {task.startDate.toLocaleDateString()}
+                                </div>
                               </div>
                               <div className="flex">
                                 <div className="w-24">종료일</div>
-                                <div className="font-light">{task.endDate.toLocaleDateString()}</div>
+                                <div className="font-light">
+                                  {task.endDate.toLocaleDateString()}
+                                </div>
                               </div>
                               <div className="flex">
                                 <div className="w-24">완료 여부</div>
-                                <div className="font-light">{task.isComplete?'완료':'미완료'}</div>
+                                <div className="font-light">
+                                  {task.isComplete ? "완료" : "미완료"}
+                                </div>
                               </div>
                             </div>
                             <div className="flex flex-col gap-4 p-4">
-                              <Label className="text-xl font-semibold">작업물</Label>
+                              <Label className="text-xl font-semibold">
+                                작업물
+                              </Label>
                               <Textarea></Textarea>
                             </div>
                             <SheetFooter className="p-4">
@@ -240,7 +267,11 @@ const page = async ({ params }: { params: { pid: string } }) => {
                         </SheetContent>
                       </Sheet>
                     </TableCell>
-                    <TableCell>{task.workers.map((worker,i)=>(<div key={i}>{worker.worker.name}</div>))}</TableCell>
+                    <TableCell>
+                      {task.workers.map((worker, i) => (
+                        <div key={i}>{worker.worker.name}</div>
+                      ))}
+                    </TableCell>
                     <TableCell>{task.startDate.toLocaleDateString()}</TableCell>
                     <TableCell>{task.endDate.toLocaleDateString()}</TableCell>
                     <TableCell>{task.isComplete ? "완료" : "미완료"}</TableCell>

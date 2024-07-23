@@ -20,7 +20,7 @@ export interface Task {
   time?: string;
   startDate?: Date | undefined;
   endDate?: Date | undefined;
-  workers?: [{ worker: string; inputRate: number }];
+  workers?: [{ worker: string; workerName?: string; inputRate: number }];
 }
 
 export const TASKS: Tasks = {
