@@ -31,6 +31,7 @@ import { Separator } from "@/components/ui/separator";
 import { completeTask, createThread } from "../actions";
 import Image from "next/image";
 import { Label } from "@/components/ui/label";
+import { MilestoneIcon } from "lucide-react";
 
 const page = async ({ params }: { params: { pid: string } }) => {
   const session = await auth();
@@ -213,15 +214,19 @@ const page = async ({ params }: { params: { pid: string } }) => {
                   <TableRow key={i}>
                     <TableCell className="font-medium">
                       <Sheet>
-                        <SheetTrigger>{task.name}</SheetTrigger>
+                        <SheetTrigger className="font-semibold flex gap-2 items-center">
+                          {task.isMilestone && <MilestoneIcon size={16} color='red'/>}
+                          <div>{task.name}</div>
+                        </SheetTrigger>
                         <SheetContent className="w-[400px] sm:w-[540px] px-0">
                           <form
                             className="flex flex-col gap-4"
                             action={completeTask}
                           >
                             <SheetHeader className="p-4">
-                              <SheetTitle className="font-semibold text-2xl">
-                                {task.name}
+                              <SheetTitle className="font-semibold text-2xl flex gap-2 items-center">
+                                {task.isMilestone && <MilestoneIcon size={24} color="red"/>}
+                                <div>{task.name}</div>                                
                               </SheetTitle>
                             </SheetHeader>
                             <div className="bg-slate-100 flex flex-col w-full p-6 gap-2">
