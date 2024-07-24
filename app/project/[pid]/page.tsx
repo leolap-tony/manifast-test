@@ -252,13 +252,18 @@ const page = async ({ params }: { params: { pid: string } }) => {
                             </div>
                             <SheetFooter className="p-4">
                               <SheetClose asChild>
-                                <Button type="submit">작업 완료하기</Button>
+                                <Button type="submit">{task.isComplete?"작업 미완료":"작업 완료하기"}</Button>
                               </SheetClose>
                             </SheetFooter>
                             <input
                               type="hidden"
                               name="taskId"
                               value={task.id}
+                            />
+                            <input
+                              type="hidden"
+                              name="isComplete"
+                              value={task.isComplete.toString()}
                             />
                           </form>
                         </SheetContent>
