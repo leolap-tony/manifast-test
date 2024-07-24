@@ -88,15 +88,26 @@ const Page = () => {
   useEffect(() => {
     setStartDate(project.data?.request_startDate!);
     setEndDate(project.data?.request_endDate!);
-    setDifficulty(project.data?.difficulty.toString())
+    setDifficulty(project.data?.difficulty.toString());
   }, [project.data]);
-  useEffect(()=>{
-    const tasks = project.data?.tasks.map((task)=>{
-      return {checked:false, milestone:task.isMilestone, taskName:task.name,startDate:task.startDate,endDate:task.endDate,workers:task.workers.map((worker)=>({worker:worker.worker.id,workerName:worker.worker.name,inputRate:worker.inputRate}))}
-    })
-    console.log('tasks:',tasks)
-    tasks && setTasks(tasks as Task[])
-  },[project.data?.tasks])
+  useEffect(() => {
+    const tasks = project.data?.tasks.map((task) => {
+      return {
+        checked: false,
+        milestone: task.isMilestone,
+        taskName: task.name,
+        startDate: task.startDate,
+        endDate: task.endDate,
+        workers: task.workers.map((worker) => ({
+          worker: worker.worker.id,
+          workerName: worker.worker.name,
+          inputRate: worker.inputRate,
+        })),
+      };
+    });
+    console.log("tasks:", tasks);
+    tasks && setTasks(tasks as Task[]);
+  }, [project.data?.tasks]);
 
   const updateProjectWithTasks = updateProject.bind(null, tasks);
 
@@ -379,7 +390,7 @@ const Page = () => {
                         }}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder={worker.workerName}/>
+                          <SelectValue placeholder={worker.workerName} />
                         </SelectTrigger>
                         <SelectContent defaultValue={worker.worker}>
                           {user.data &&

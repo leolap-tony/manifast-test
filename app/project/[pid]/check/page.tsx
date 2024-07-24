@@ -34,7 +34,12 @@ import { Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { TASKS, Task } from "@/data/tasks";
-import { checkProject, getUserGroup, getProjectInfo, cancelProject } from "../../actions";
+import {
+  checkProject,
+  getUserGroup,
+  getProjectInfo,
+  cancelProject,
+} from "../../actions";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -422,12 +427,12 @@ const Page = () => {
       </section>
       <div className="flex justify-between items-center">
         <Button>검토 완료</Button>
-        <Button 
-          type='button'
-          variant={"outline"} 
-          className="text-red-500" 
+        <Button
+          type="button"
+          variant={"outline"}
+          className="text-red-500"
           onClick={async () => {
-            await cancelProject(pid as string)
+            await cancelProject(pid as string);
           }}
         >
           프로젝트 취소하기

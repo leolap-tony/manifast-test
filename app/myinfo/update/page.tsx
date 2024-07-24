@@ -13,15 +13,15 @@ const page = () => {
         <div className="flex flex-col gap-4">
           <div>
             <Label>나의 이름은</Label>
-            <Input name='name'/>
+            <Input name="name" />
           </div>
           <div>
             <Label>전화번호는</Label>
-            <Input name='phone'/>
+            <Input name="phone" />
           </div>
           <div>
             <Label>직무는</Label>
-            <Input name='job'/>
+            <Input name="job" />
           </div>
           {/* <div>
             <Label>프로필 이미지 (선택)</Label>
@@ -32,9 +32,7 @@ const page = () => {
           <Button asChild variant="outline">
             <Link href="/myinfo">이전</Link>
           </Button>
-          <Button>
-            수정 완료
-          </Button>
+          <Button>수정 완료</Button>
         </div>
       </form>
     </div>

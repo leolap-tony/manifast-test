@@ -83,11 +83,11 @@ export async function checkProject(tasks: any, formData: FormData) {
 }
 
 export async function updateProject(tasks: any, formData: FormData) {
-  const session = await auth(); 
+  const session = await auth();
   try {
     await prisma.$transaction([
       prisma.task.deleteMany({
-        where:{projectId: formData.get('pid') as string}
+        where: { projectId: formData.get("pid") as string },
       }),
       prisma.project.update({
         where: { id: formData.get("pid") as string },
@@ -112,8 +112,8 @@ export async function updateProject(tasks: any, formData: FormData) {
             })),
           },
         },
-      })      
-    ])
+      }),
+    ]);
   } catch (error) {
     console.log(error);
     return;

@@ -67,20 +67,17 @@ const page = async ({ params }: { params: { pid: string } }) => {
       <div className="flex justify-between">
         <h1 className="text-3xl font-bold">{project?.name}</h1>
         {(session?.user.role == "WORKER" || session?.user.role == "MANAGER") &&
-          project?.status == "REQUESTED" ? (
-            <Button asChild>
-              <Link href={`/project/${params.pid}/check`}>
-                프로젝트 검토하기
-              </Link>
-            </Button>
-          ) : (
-            <Button asChild>
-              <Link href={`/project/${params.pid}/update`}>
-                프로젝트 수정하기
-              </Link>
-            </Button>
-          )
-          }
+        project?.status == "REQUESTED" ? (
+          <Button asChild>
+            <Link href={`/project/${params.pid}/check`}>프로젝트 검토하기</Link>
+          </Button>
+        ) : (
+          <Button asChild>
+            <Link href={`/project/${params.pid}/update`}>
+              프로젝트 수정하기
+            </Link>
+          </Button>
+        )}
       </div>
       <div className="grid grid-cols-3 gap-4 p-6 bg-slate-50 rounded-lg ">
         <div className="flex gap-8">

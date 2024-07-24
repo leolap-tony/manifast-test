@@ -5,7 +5,7 @@ import credentials from "next-auth/providers/credentials";
 import google from "next-auth/providers/google";
 import naver from "next-auth/providers/naver";
 import kakao from "next-auth/providers/kakao";
-import authConfig from "./auth.config"
+import authConfig from "./auth.config";
 
 const prisma = new PrismaClient();
 
@@ -15,16 +15,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   //   signIn: '/signin',
   //   newUser:'/signup'
   // },
-  // providers: [   
+  // providers: [
   //   google({
   //     clientId: process.env.GOOGLE_CLIENT_ID,
   //     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  //   }),   
+  //   }),
   // ],
   session: {
     strategy: "jwt",
     maxAge: 60 * 60, // in seconds
     updateAge: 0,
-  },  
-  ...authConfig
+  },
+  ...authConfig,
 } satisfies NextAuthConfig);

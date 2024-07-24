@@ -1,4 +1,4 @@
-import type { NextAuthConfig, Session } from 'next-auth'
+import type { NextAuthConfig, Session } from "next-auth";
 import google from "next-auth/providers/google";
 
 export default {
@@ -43,4 +43,4 @@ export default {
 
     // })
   ],
-} satisfies NextAuthConfig
+} satisfies NextAuthConfig;
