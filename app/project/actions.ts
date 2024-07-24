@@ -234,12 +234,12 @@ export async function completeTask(formData: FormData) {
         id: formData.get("taskId") as string,
       },
       data: {
-        isComplete: !(formData.get("isComplete")==='true'?true:false),
+        isComplete: !(formData.get("isComplete") === "true" ? true : false),
       },
     });
   } catch (e) {
     console.log(e);
-    return
+    return;
   }
   revalidatePath("/project");
 }

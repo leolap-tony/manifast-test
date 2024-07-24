@@ -158,8 +158,16 @@ const page = async ({ params }: { params: { pid: string } }) => {
               <ToggleGroupItem value="normal">일반 메시지</ToggleGroupItem>
               <ToggleGroupItem value="complete">프로젝트 완료</ToggleGroupItem>
             </ToggleGroup>
-            <Textarea placeholder="Type your message here." name="message" />
-            <Button variant={"default"}>제출</Button>
+            <div className="relative w-full">
+              <Textarea
+                placeholder="Type your message here."
+                name="message"
+                className="h-28"
+              />
+              <Button variant={"outline"} className="absolute right-2 top-2/4">
+                제출
+              </Button>
+            </div>
             <input type="hidden" name="projectId" value={params.pid} />
           </form>
           <Separator />
@@ -252,7 +260,11 @@ const page = async ({ params }: { params: { pid: string } }) => {
                             </div>
                             <SheetFooter className="p-4">
                               <SheetClose asChild>
-                                <Button type="submit">{task.isComplete?"작업 미완료":"작업 완료하기"}</Button>
+                                <Button type="submit">
+                                  {task.isComplete
+                                    ? "작업 미완료"
+                                    : "작업 완료하기"}
+                                </Button>
                               </SheetClose>
                             </SheetFooter>
                             <input
