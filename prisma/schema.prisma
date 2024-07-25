@@ -144,7 +144,7 @@ model TaskWorker {
 model TaskReport {
   id             Int        @id @default(autoincrement())
   taskWorkerId   String
-  taskWorker     TaskWorker @relation(fields: [taskWorkerId], references: [id])
+  taskWorker     TaskWorker @relation(fields: [taskWorkerId], references: [id], onDelete: Cascade)
   userId         String
   user           User       @relation(fields: [userId], references: [id])
   todayInputRate Int
