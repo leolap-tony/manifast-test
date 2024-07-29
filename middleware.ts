@@ -15,5 +15,5 @@ export default NextAuth(authConfig).auth((req) => {
 // export default NextAuth(authConfig).auth
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|signin|.*\\.png$).*)"],
 };

@@ -22,10 +22,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <SessionProvider>
           <QueryClientProvider>
-            <main className="flex">
-              <Sidenav />
-              {children}
-            </main>
+            <main className="flex">{children}</main>
           </QueryClientProvider>
         </SessionProvider>
       </body>

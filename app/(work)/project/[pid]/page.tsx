@@ -215,7 +215,9 @@ const page = async ({ params }: { params: { pid: string } }) => {
                     <TableCell className="font-medium">
                       <Sheet>
                         <SheetTrigger className="font-semibold flex gap-2 items-center">
-                          {task.isMilestone && <MilestoneIcon size={16} color='red'/>}
+                          {task.isMilestone && (
+                            <MilestoneIcon size={16} color="red" />
+                          )}
                           <div>{task.name}</div>
                         </SheetTrigger>
                         <SheetContent className="w-[400px] sm:w-[540px] px-0">
@@ -225,8 +227,10 @@ const page = async ({ params }: { params: { pid: string } }) => {
                           >
                             <SheetHeader className="p-4">
                               <SheetTitle className="font-semibold text-2xl flex gap-2 items-center">
-                                {task.isMilestone && <MilestoneIcon size={24} color="red"/>}
-                                <div>{task.name}</div>                                
+                                {task.isMilestone && (
+                                  <MilestoneIcon size={24} color="red" />
+                                )}
+                                <div>{task.name}</div>
                               </SheetTitle>
                             </SheetHeader>
                             <div className="bg-slate-100 flex flex-col w-full p-6 gap-2">

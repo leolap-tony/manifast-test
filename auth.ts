@@ -11,10 +11,9 @@ const prisma = new PrismaClient();
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  // pages: {
-  //   signIn: '/signin',
-  //   newUser:'/signup'
-  // },
+  pages: {
+    signIn: "/signin",
+  },
   // providers: [
   //   google({
   //     clientId: process.env.GOOGLE_CLIENT_ID,
