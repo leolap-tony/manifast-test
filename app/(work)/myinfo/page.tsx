@@ -6,8 +6,13 @@ import { auth } from "@/auth";
 import prisma from "@/db";
 
 import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/elements/Tabs";
+import { Button } from "@/components/elements/Button";
 import {
   Table,
   TableBody,
@@ -18,8 +23,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Header from "@/components/navigation/Header";
+import KeyValueLabel from "@/components/elements/KeyValueLabel";
+import UserAvatar from "@/components/elements/UserAvatar";
 
-const page = async () => {
+export default async function Page() {
   const session = await auth();
   const user =
     session &&
@@ -38,7 +45,7 @@ const page = async () => {
     }));
   return (
     <main className="page-contents">
-      <Header type="Default" title="내 정보" />
+      <Header type="Default" title="마이페이지" />
       <section className="page-section">
         <Tabs defaultValue="myinfo" className="">
           <TabsList>
@@ -46,88 +53,151 @@ const page = async () => {
             <TabsTrigger value="groupinfo">내 그룹 정보</TabsTrigger>
           </TabsList>
           <TabsContent value="myinfo">
-            <div className="flex flex-col gap-10 w-full p-4">
-              <div className="flex flex-col gap-4">
-                <h1 className="text-3xl font-bold">{user?.name}</h1>
-                <div className="flex gap-4">
-                  <span className="w-36 font-semibold">이메일</span>
-                  <span className="font-light">{user?.email}</span>
-                </div>
-                <div className="flex gap-4">
-                  <span className="w-36 font-semibold">연락처</span>
-                  <span className="font-light">{user?.phone}</span>
-                </div>
-                <div className="flex gap-4">
-                  <span className="w-36 font-semibold">가입일</span>
-                  <span className="font-light">
-                    {JSON.stringify(user?.createdAt)}
-                  </span>
-                </div>
-                <div className="flex gap-4">
-                  <span className="w-36 font-semibold">직무</span>
-                  <span className="font-light">{user?.job}</span>
-                </div>
-                <div className="flex gap-4">
-                  <span className="w-36 font-semibold">권한</span>
-                  <span className="font-light">{user?.role}</span>
-                </div>
-                <div className="flex gap-4">
-                  <span className="w-36 font-semibold">역활</span>
-                  <span className="font-light">{user?.email}</span>
-                </div>
-                <div className="flex gap-4">
-                  <span className="w-36 font-semibold">이미지</span>
-                  {user?.image && (
-                    <Image
-                      src={user.image}
-                      alt="profile"
-                      height={32}
-                      width={32}
-                      className="rounded-full"
-                    />
-                  )}
-                </div>
-              </div>
+            <div className="flex flex-col gap-10 w-full p-6">
+              <ul className="flex flex-col gap-3">
+                <h2 className="text-title-sm text-text-title">{user?.name}</h2>
+                <li>
+                  <KeyValueLabel
+                    direction="horizontal"
+                    label="이메일"
+                    labelWidth={86}
+                  >
+                    {user?.email}
+                  </KeyValueLabel>
+                </li>
+                <li>
+                  <KeyValueLabel
+                    direction="horizontal"
+                    label="연락처"
+                    labelWidth={86}
+                  >
+                    {user?.phone}
+                  </KeyValueLabel>
+                </li>
+                <li>
+                  <KeyValueLabel
+                    direction="horizontal"
+                    label="가입일"
+                    labelWidth={86}
+                  >
+                    {user?.createdAt.toLocaleDateString()}
+                  </KeyValueLabel>
+                </li>
+                <li>
+                  <KeyValueLabel
+                    direction="horizontal"
+                    label="직무"
+                    labelWidth={86}
+                  >
+                    {user?.job}
+                  </KeyValueLabel>
+                </li>
+                <li>
+                  <KeyValueLabel
+                    direction="horizontal"
+                    label="권한"
+                    labelWidth={86}
+                  >
+                    authority
+                  </KeyValueLabel>
+                </li>
+                <li>
+                  <KeyValueLabel
+                    direction="horizontal"
+                    label="역할"
+                    labelWidth={86}
+                  >
+                    {user?.role}
+                  </KeyValueLabel>
+                </li>
+                <li>
+                  <KeyValueLabel
+                    direction="horizontal"
+                    label="프로필 이미지"
+                    labelWidth={86}
+                  >
+                    {user?.image && (
+                      <Image
+                        src={user.image}
+                        alt="profile"
+                        height={32}
+                        width={32}
+                        className="rounded-full"
+                      />
+                    )}
+                  </KeyValueLabel>
+                </li>
+              </ul>
 
-              <Button variant="outline" asChild className="w-20">
+              <Button variant="outline" asChild className="w-fit">
                 <Link href="/myinfo/update">수정</Link>
               </Button>
             </div>
           </TabsContent>
           <TabsContent value="groupinfo">
             <div className="flex flex-col gap-10 w-full p-4">
-              <div className="flex flex-col gap-4">
-                <h1 className="text-3xl font-bold">{user?.group?.name}</h1>
-                <div className="flex gap-4">
-                  <span className="w-36 font-semibold">그룹 관리자</span>
-                  <span className="font-light">{user?.group?.ceo}</span>
-                </div>
-                <div className="flex gap-4">
-                  <span className="w-36 font-semibold">그룹 이메일</span>
-                  <span className="font-light">{user?.group?.email}</span>
-                </div>
-                <div className="flex gap-4">
-                  <span className="w-36 font-semibold">그룹 연락처</span>
-                  <span className="font-light">{user?.group?.phone}</span>
-                </div>
-                <div className="flex gap-4">
-                  <span className="w-36 font-semibold">생성일</span>
-                  <span className="font-light">
-                    {JSON.stringify(user?.group?.createdAt)}
-                  </span>
-                </div>
-                <div className="flex gap-4">
-                  <span className="w-36 font-semibold">그룹ID</span>
-                  <span className="font-light">{user?.group?.id}</span>
-                </div>
-                <div className="flex gap-4">
-                  <span className="w-36 font-semibold">플랜</span>
-                  <span className="font-light">프로 플랜</span>
-                </div>
-              </div>
+              <ul className="flex flex-col gap-4">
+                <h2 className="text-title-sm text-text-title">
+                  {user?.group?.name}
+                </h2>
+                <li>
+                  <KeyValueLabel
+                    direction="horizontal"
+                    label="그룹 관리자"
+                    labelWidth={86}
+                  >
+                    {/*<UserAvatar size="md" user={user?.group?.owner}>*/}오너
+                  </KeyValueLabel>
+                </li>
+                <li>
+                  <KeyValueLabel
+                    direction="horizontal"
+                    label="그룹 이메일"
+                    labelWidth={86}
+                  >
+                    {user?.group?.email}
+                  </KeyValueLabel>
+                </li>
+                <li>
+                  <KeyValueLabel
+                    direction="horizontal"
+                    label="그룹 연락처"
+                    labelWidth={86}
+                  >
+                    {user?.group?.phone}
+                  </KeyValueLabel>
+                </li>
+                <li>
+                  <KeyValueLabel
+                    direction="horizontal"
+                    label="생성일"
+                    labelWidth={86}
+                  >
+                    {user?.group?.createdAt.toLocaleDateString()}
+                  </KeyValueLabel>
+                </li>
+                <li>
+                  <KeyValueLabel
+                    direction="horizontal"
+                    label="그룹 ID"
+                    labelWidth={86}
+                  >
+                    {user?.group?.id}
+                  </KeyValueLabel>
+                </li>
+                <li>
+                  <KeyValueLabel
+                    direction="horizontal"
+                    label="플랜"
+                    labelWidth={86}
+                  >
+                    플랜
+                  </KeyValueLabel>
+                </li>
+              </ul>
 
               <div>
-                <h1 className="text-2xl font-semibold">멤버 정보</h1>
+                <h2 className="text-title-sm text-text-title">멤버 정보</h2>
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -152,7 +222,7 @@ const page = async () => {
               </div>
 
               <div className="flex flex-col gap-4">
-                <h1 className="text-2xl font-semibold">비즈니스 정보</h1>
+                <h2 className="text-title-sm text-text-title">비즈니스 정보</h2>
                 <div className="flex gap-4">
                   <span className="w-36 font-semibold">상호명</span>
                   <span className="font-light">{user?.group?.name}</span>
@@ -186,6 +256,4 @@ const page = async () => {
       </section>
     </main>
   );
-};
-
-export default page;
+}

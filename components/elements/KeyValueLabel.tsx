@@ -67,7 +67,7 @@ export default function KeyValueLabel({
       >
         {label}
       </span>
-      <div className="w-full">{children}</div>
+      <div className="w-full text-text-body text-body-md-n">{children}</div>
       {direction === "vertical" && hint && <div>{hint}</div>}
     </div>
   );

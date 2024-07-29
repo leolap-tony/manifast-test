@@ -2,7 +2,7 @@ import React from "react";
 import { auth } from "@/auth";
 import Link from "next/link";
 
-import { Progress } from "@/components/elements/progress";
+import { Progress } from "@/components/elements/Progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Textarea } from "@/components/ui/textarea";
