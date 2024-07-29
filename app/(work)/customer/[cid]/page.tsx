@@ -2,9 +2,9 @@ import React from "react";
 import { auth } from "@/auth";
 import prisma from "@/db";
 
-import { Progress } from "@/components/ui/progress";
+import { Progress } from "@/components/elements/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/elements/Button";
 import {
   Table,
   TableBody,
@@ -34,8 +34,11 @@ import {
 import { Label } from "@/components/ui/label";
 import { updatePM } from "../actions";
 import Link from "next/link";
+import Header from "@/components/navigation/Header";
+import KeyValueLabel from "@/components/elements/KeyValueLabel";
+import UserAvatar from "@/components/elements/UserAvatar";
 
-const page = async ({ params }: { params: { cid: string } }) => {
+export default async function Page({ params }: { params: { cid: string } }) {
   const session = await auth();
   const user = await prisma.user.findUnique({
     where: {
@@ -72,9 +75,8 @@ const page = async ({ params }: { params: { cid: string } }) => {
     },
   });
   return (
-    <div className="flex flex-col p-8 w-full gap-8">
-      <div className="flex justify-between">
-        <h1 className="text-3xl font-bold">{group?.name}</h1>
+    <main className="page-contents">
+      <Header type="Default" title={group?.name}>
         {(session?.user.role == "WORKER" ||
           session?.user.role == "MANAGER") && (
           <Dialog>
@@ -117,34 +119,40 @@ const page = async ({ params }: { params: { cid: string } }) => {
             </DialogContent>
           </Dialog>
         )}
-      </div>
+      </Header>
       {/* <div>{JSON.stringify(group)}</div> */}
       {/* <div>{JSON.stringify(user)}</div> */}
-      <div className="grid grid-cols-3 p-6 gap-4 bg-slate-50 rounded-lg ">
-        <div className="flex gap-8">
-          <div className="font-semibold">그룹 관리자</div>
-          <div>{group?.owner.name}</div>
-        </div>
-        <div className="flex gap-8">
-          <div className="font-semibold">그룹 이메일</div>
+      <div className="grid grid-cols-3 p-6 gap-4 bg-background-light rounded-lg text-body-md-n text-body">
+        <KeyValueLabel
+          direction="horizontal"
+          label="그룹 관리자"
+          labelWidth={86}
+        >
+          <UserAvatar size="md" user={group?.owner as any} label />
+        </KeyValueLabel>
+        <KeyValueLabel
+          direction="horizontal"
+          label="그룹 이메일"
+          labelWidth={86}
+        >
           <div>{group?.email}</div>
-        </div>
-        <div className="flex gap-8">
-          <div className="font-semibold">플랜</div>
+        </KeyValueLabel>
+        <KeyValueLabel direction="horizontal" label="플랜" labelWidth={86}>
           <div>프로</div>
-        </div>
-        <div className="flex gap-8">
-          <div className="font-semibold">전담 PM</div>
-          <div>{group?.manager?.name}</div>
-        </div>
-        <div className="flex gap-8">
-          <div className="font-semibold">그룹 연락처</div>
+        </KeyValueLabel>
+        <KeyValueLabel direction="horizontal" label="전담 PM" labelWidth={86}>
+          <UserAvatar size="md" user={group?.manager as any} label />
+        </KeyValueLabel>
+        <KeyValueLabel
+          direction="horizontal"
+          label="그룹 연락처"
+          labelWidth={86}
+        >
           <div>{group?.phone}</div>
-        </div>
-        <div className="flex gap-8">
-          <div className="font-semibold">플랜 기간</div>
+        </KeyValueLabel>
+        <KeyValueLabel direction="horizontal" label="플랜 기간" labelWidth={86}>
           <div>2024.05.20~2024.08.20</div>
-        </div>
+        </KeyValueLabel>
       </div>
 
       <Tabs defaultValue="thread" className="">
@@ -153,8 +161,8 @@ const page = async ({ params }: { params: { cid: string } }) => {
           <TabsTrigger value="wbs">WBS</TabsTrigger>
         </TabsList>
         <TabsContent value="thread">
-          <Table className="border">
-            <TableHeader className="bg-neutral-50">
+          <Table>
+            <TableHeader>
               <TableRow>
                 <TableHead className="">작업 이름</TableHead>
                 <TableHead>상태</TableHead>
@@ -181,8 +189,8 @@ const page = async ({ params }: { params: { cid: string } }) => {
                         new Set(
                           project.tasks
                             .flatMap((task) => task.workers)
-                            .map((worker) => worker.worker.name),
-                        ),
+                            .map((worker) => worker.worker.name)
+                        )
                       ).map((worker, i) => (
                         <div key={i}>{worker}</div>
                       ))}
@@ -227,8 +235,8 @@ const page = async ({ params }: { params: { cid: string } }) => {
                               new Set(
                                 project.tasks
                                   .flatMap((task) => task.workers)
-                                  .map((worker) => worker.worker.name),
-                              ),
+                                  .map((worker) => worker.worker.name)
+                              )
                             ).map((worker, i) => (
                               <div key={i}>{worker}</div>
                             ))}
@@ -252,8 +260,6 @@ const page = async ({ params }: { params: { cid: string } }) => {
           </div>
         </TabsContent>
       </Tabs>
-    </div>
+    </main>
   );
-};
-
-export default page;
+}

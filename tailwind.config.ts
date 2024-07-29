@@ -12,25 +12,33 @@ const config = {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "0",
       screens: {
-        "2xl": "1400px",
+        xl: "1200px",
       },
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
+        border: "rgb(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+
+        background: {
+          DEFAULT: "rgb(var(--background))",
+          primary: "rgb(var(--background-primary))",
+          light: "rgb(var(--background-light))",
+          gray: "rgb(var(--background-gray))",
+        },
+
+        foreground: "rgb(var(--foreground))",
+
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "rgb(var(--primary))",
+          foreground: "rgb(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "rgb(var(--secondary))",
+          foreground: "rgb(var(--secondary-foreground))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -52,11 +60,13 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-      },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        text: {
+          DEFAULT: "rgb(var(--text))",
+          title: "rgb(var(--text-title))",
+          body: "rgb(var(--text-body))",
+          sub: "rgb(var(--text-sub))",
+          foreground: "rgb(var(--text-foreground))",
+        },
       },
       keyframes: {
         "accordion-down": {

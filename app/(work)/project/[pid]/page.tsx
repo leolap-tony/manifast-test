@@ -2,11 +2,11 @@ import React from "react";
 import { auth } from "@/auth";
 import Link from "next/link";
 
-import { Progress } from "@/components/ui/progress";
+import { Progress } from "@/components/elements/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/elements/Button";
 import {
   Table,
   TableBody,
@@ -32,8 +32,9 @@ import { completeTask, createThread } from "../actions";
 import Image from "next/image";
 import { Label } from "@/components/ui/label";
 import { MilestoneIcon } from "lucide-react";
+import Header from "@/components/navigation/Header";
 
-const page = async ({ params }: { params: { pid: string } }) => {
+export default async function page({ params }: { params: { pid: string } }) {
   const session = await auth();
   const project = await prisma.project.findUnique({
     where: {
@@ -63,10 +64,9 @@ const page = async ({ params }: { params: { pid: string } }) => {
     },
   });
   return (
-    <div className="flex flex-col p-8 w-full gap-8">
+    <main className="page-contents">
       {/* <div>{JSON.stringify(project)}</div> */}
-      <div className="flex justify-between">
-        <h1 className="text-3xl font-bold">{project?.name}</h1>
+      <Header type="ProjectDetail" title={project?.name}>
         {(session?.user.role == "WORKER" || session?.user.role == "MANAGER") &&
         project?.status == "REQUESTED" ? (
           <Button asChild>
@@ -79,56 +79,61 @@ const page = async ({ params }: { params: { pid: string } }) => {
             </Link>
           </Button>
         )}
-      </div>
-      <div className="grid grid-cols-3 gap-4 p-6 bg-slate-50 rounded-lg ">
+      </Header>
+      <div className="grid grid-cols-3 gap-4 p-6 bg-background-light">
         <div className="flex gap-8">
-          <div className="font-semibold">전담 PM</div>
+          <div className="text-text-title text-body-md-m">전담 PM</div>
           <div>{project?.group.manager?.name}</div>
         </div>
         <div className="flex gap-8">
-          <div className="font-semibold">그룹</div>
+          <div className="text-text-title text-body-md-m">그룹</div>
           <div>{project?.group.name}</div>
         </div>
         <div className="flex gap-8">
-          <div className="font-semibold">종류</div>
+          <div className="text-text-title text-body-md-m">종류</div>
           <div>{project?.type}</div>
         </div>
         <div className="flex gap-8">
-          <div className="font-semibold">작업자</div>
+          <div className="text-text-title text-body-md-m">작업자</div>
           <div className="flex gap-4">
             {Array.from(
               new Set(
                 project?.tasks
                   .flatMap((task) => task.workers)
-                  .map((worker) => worker.worker.name),
-              ),
+                  .map((worker) => worker.worker.name)
+              )
             ).map((worker, i) => (
               <div key={i}>{worker}</div>
             ))}
           </div>
         </div>
         <div className="flex gap-8">
-          <div className="font-semibold">그룹 관리자</div>
+          <div className="text-text-title text-body-md-m">그룹 관리자</div>
           <div>{project?.group.owner.name}</div>
         </div>
         <div className="flex gap-8">
-          <div className="font-semibold">상태</div>
+          <div className="text-text-title text-body-md-m">상태</div>
           <div>{project?.status}</div>
         </div>
       </div>
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between">
-          <div className="text-lg">
-            {Math.round(
-              (project!.tasks?.filter(
-                (task) => task.isComplete && task.isMilestone,
-              ).length /
-                project!.tasks.filter((task) => task.isMilestone).length) *
-                100,
-            )}
-            % 완료 됨
+      <div className="px-6 pt-4 pb-2.5 flex flex-col gap-2">
+        <div className="flex justify-between items-baseline">
+          <div className="flex flex-row items-baseline gap-2">
+            <div className="text-title-lg text-text-title">
+              {Math.round(
+                (project!.tasks?.filter(
+                  (task) => task.isComplete && task.isMilestone
+                ).length /
+                  project!.tasks.filter((task) => task.isMilestone).length) *
+                  100
+              )}
+              %
+            </div>
+            <div className="text-body-sm-m text-text-sub">
+              {project?.status}
+            </div>
           </div>
-          <div className="text-lg">
+          <div className="text-body-sm-m text-text-sub">
             {project?.startDate?.toLocaleDateString()} -{" "}
             {project?.endDate?.toLocaleDateString()} (예정)
           </div>
@@ -136,12 +141,12 @@ const page = async ({ params }: { params: { pid: string } }) => {
         <Progress
           value={Math.round(
             (project!.tasks?.filter(
-              (task) => task.isComplete && task.isMilestone,
+              (task) => task.isComplete && task.isMilestone
             ).length /
               project!.tasks.filter((task) => task.isMilestone).length) *
-              100,
+              100
           )}
-          className="[&>*]:bg-red-500"
+          className="h-2 [&>*]:bg-red-500"
         />
       </div>
 
@@ -305,8 +310,6 @@ const page = async ({ params }: { params: { pid: string } }) => {
           </div>
         </TabsContent>
       </Tabs>
-    </div>
+    </main>
   );
-};
-
-export default page;
+}
