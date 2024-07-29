@@ -155,10 +155,10 @@ const page = async ({ params }: { params: { pid: string } }) => {
             action={createThread}
             className="flex flex-col gap-6 w-full p-4 items-start"
           >
-            <ToggleGroup type="single" className="">
+            {/* <ToggleGroup type="single" className="">
               <ToggleGroupItem value="normal">일반 메시지</ToggleGroupItem>
               <ToggleGroupItem value="complete">프로젝트 완료</ToggleGroupItem>
-            </ToggleGroup>
+            </ToggleGroup> */}
             <div className="relative w-full">
               <Textarea
                 placeholder="Type your message here."
@@ -199,8 +199,8 @@ const page = async ({ params }: { params: { pid: string } }) => {
         </TabsContent>
         <TabsContent value="wbs">
           <div className="flex flex-col">
-            <Table>
-              <TableHeader>
+            <Table className="border">
+              <TableHeader className="bg-neutral-50">
                 <TableRow>
                   <TableHead className="w-[200px]">작업</TableHead>
                   <TableHead>작업자</TableHead>

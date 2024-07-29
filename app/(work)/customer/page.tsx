@@ -25,8 +25,8 @@ const page = async () => {
       <h1 className="text-4xl font-bold">고객</h1>
       {/* <div>{JSON.stringify(customers)}</div> */}
       <Separator></Separator>
-      <Table>
-        <TableHeader>
+      <Table className="border">
+        <TableHeader className="bg-neutral-50">
           <TableRow>
             <TableHead className="">고객</TableHead>
             <TableHead>전담 PM</TableHead>

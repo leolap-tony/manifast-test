@@ -72,7 +72,7 @@ export default async function DemandDashboard() {
             <Link href={"/project/request"}>프로젝트 요청</Link>
           </Button>
         </div>
-        <Table>
+        <Table className="border">
           <TableHeader>
             <TableRow>
               <TableHead>프로젝트</TableHead>

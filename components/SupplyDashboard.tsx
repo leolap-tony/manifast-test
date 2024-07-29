@@ -120,8 +120,8 @@ export default async function Home() {
             <h2 className="text-3xl font-semibold">오늘 작업</h2>
             <Button>보고 등룩</Button>
           </div>
-          <Table>
-            <TableHeader>
+          <Table className="border">
+            <TableHeader className="bg-neutral-50">
               <TableRow>
                 <TableHead>작업 이름</TableHead>
                 <TableHead>프로젝트 이름</TableHead>
@@ -167,8 +167,8 @@ export default async function Home() {
       {session?.user.role == "MANAGER" && (
         <section className="flex flex-col gap-8">
           <h2 className="text-3xl font-semibold">오늘 진행중인 프로젝트</h2>
-          <Table>
-            <TableHeader>
+          <Table className="border">
+            <TableHeader className="bg-neutral-50">
               <TableRow>
                 <TableHead className="">프로젝트</TableHead>
                 <TableHead>상태</TableHead>

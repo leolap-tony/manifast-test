@@ -48,8 +48,8 @@ const page = async () => {
         </Button>
       </div>
       <Separator></Separator>
-      <Table>
-        <TableHeader>
+      <Table className="border">
+        <TableHeader className="bg-neutral-50">
           <TableRow>
             <TableHead>프로젝트 이름</TableHead>
             <TableHead>상태</TableHead>

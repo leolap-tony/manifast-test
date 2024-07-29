@@ -60,8 +60,8 @@ const page = async () => {
       {/* <div>{JSON.stringify(user)}</div> */}
       <section className="flex flex-col gap-4">
         <h2 className="text-2xl font-semibold">프로젝트 소유자</h2>
-        <Table>
-          <TableHeader>
+        <Table className="border">
+          <TableHeader className="bg-neutral-50">
             <TableRow>
               <TableHead>이름</TableHead>
               <TableHead>직무</TableHead>
@@ -106,8 +106,8 @@ const page = async () => {
       </section>
       <section className="flex flex-col gap-4">
         <h2 className="text-2xl font-semibold">작업 소유자</h2>
-        <Table>
-          <TableHeader>
+        <Table className="border">
+          <TableHeader className="bg-neutral-50">
             <TableRow>
               <TableHead className="">이름</TableHead>
               <TableHead>직무</TableHead>

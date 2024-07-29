@@ -273,8 +273,8 @@ const Page = () => {
             </Button>
           </div>
         </div>
-        <Table>
-          <TableHeader>
+        <Table className="border">
+          <TableHeader className="bg-neutral-50">
             <TableRow>
               <TableHead>
                 <Checkbox

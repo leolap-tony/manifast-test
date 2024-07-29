@@ -153,8 +153,8 @@ const page = async ({ params }: { params: { cid: string } }) => {
           <TabsTrigger value="wbs">WBS</TabsTrigger>
         </TabsList>
         <TabsContent value="thread">
-          <Table>
-            <TableHeader>
+          <Table className="border">
+            <TableHeader className="bg-neutral-50">
               <TableRow>
                 <TableHead className="">작업 이름</TableHead>
                 <TableHead>상태</TableHead>
