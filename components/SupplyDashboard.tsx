@@ -69,15 +69,23 @@ export default async function Home() {
             task: {
               include: {
                 project: true,
+                taskReport:{
+                  where: {
+                    userId:session.user.sub,
+                    date: {
+                      equals: new Date()
+                    }
+                  }
+                }
               },
             },
-            taskReport: {
-              where: {
-                date: {
-                  equals: new Date(),
-                },
-              },
-            },
+            // taskReport: {
+            //   where: {
+            //     date: {
+            //       equals: new Date(),
+            //     },
+            //   },
+            // },
           },
         },
       },
@@ -149,7 +157,7 @@ export default async function Home() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {!user?.tasks?.some((task) => task.taskReport.length) ? (
+              {!user?.tasks?.some((task) => task.task.taskReport.length) ? (
                 user?.tasks?.map((task, i) => (
                   <TableRow key={i}>
                     <TableCell className="font-medium">
@@ -168,7 +176,7 @@ export default async function Home() {
                       <Input name="message" />
                     </TableCell>
                     <input type="hidden" name="userId" value={task.userId} />
-                    <input type="hidden" name="taskId" value={task.id} />
+                    <input type="hidden" name="taskId" value={task.task.id} />
                   </TableRow>
                 ))
               ) : (

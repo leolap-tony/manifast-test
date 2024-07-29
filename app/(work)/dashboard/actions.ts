@@ -24,23 +24,23 @@ export async function getTasks() {
   }
 }
 
-export async function createReport() {
-  try {
-    const report = await prisma.taskReport.create({
-      data: {
-        taskWorkerId: "clye9gn7r0004khu0awh7ekq2",
-        userId: "cly2ruy3s0000jz23rlk4edc4",
-        todayInputRate: 30,
-        message: "hi",
-        date: new Date("December 17, 2030 04:24:00"),
-      },
-    });
-    console.log(report);
-  } catch (e) {
-    console.log(e);
-  }
-  revalidatePath("/dashboard");
-}
+// export async function createReport() {
+//   try {
+//     const report = await prisma.taskReport.create({
+//       data: {
+//         taskId: "clye9gn7r0004khu0awh7ekq2",
+//         userId: "cly2ruy3s0000jz23rlk4edc4",
+//         todayInputRate: 30,
+//         message: "hi",
+//         date: new Date("December 17, 2030 04:24:00"),
+//       },
+//     });
+//     console.log(report);
+//   } catch (e) {
+//     console.log(e);
+//   }
+//   revalidatePath("/dashboard");
+// }
 
 export async function getReports() {
   try {

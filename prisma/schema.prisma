@@ -121,7 +121,8 @@ model Task {
   endDate     DateTime
   project     Project  @relation(fields: [projectId], references: [id])
 
-  workers TaskWorker[]
+  workers    TaskWorker[]
+  taskReport TaskReport[]
 
   @@unique([name, projectId])
 }
@@ -136,22 +137,21 @@ model TaskWorker {
   task      Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
   worker    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  taskReport TaskReport[]
-
   @@unique([taskId, userId])
 }
 
 model TaskReport {
-  id             Int        @id @default(autoincrement())
-  taskWorkerId   String
-  taskWorker     TaskWorker @relation(fields: [taskWorkerId], references: [id], onDelete: Cascade)
+  id Int @id @default(autoincrement())
+
+  taskId         String
+  task           Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
   userId         String
-  user           User       @relation(fields: [userId], references: [id])
+  user           User     @relation(fields: [userId], references: [id])
   todayInputRate Int
   message        String?
-  date           DateTime   @db.Date
+  date           DateTime @db.Date
 
-  @@unique([taskWorkerId, userId, date])
+  @@unique([taskId, userId, date])
 }
 
 model ProjectThread {
