@@ -44,7 +44,16 @@ const page = async () => {
               },
               managementGroups: {
                 include: {
-                  projects: true,
+                  projects: {
+                    where: {
+                      startDate: {
+                        lte: new Date(),
+                      },
+                      endDate: {
+                        gte: new Date(),
+                      },
+                    }
+                  },
                 },
               },
             },

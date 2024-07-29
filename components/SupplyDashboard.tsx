@@ -29,6 +29,14 @@ export default async function Home() {
         managementGroups: {
           include: {
             projects: {
+              where:{
+                startDate:{
+                  lte: new Date()
+                },
+                endDate:{
+                  gte: new Date()
+                }
+              },
               include: {
                 group: {
                   include: {
@@ -49,6 +57,14 @@ export default async function Home() {
           },
         },
         tasks: {
+          where:{
+            startDate:{
+              lte: new Date()
+            },
+            endDate:{
+              gte: new Date()
+            }
+          },
           include: {
             task: {
               include: {
