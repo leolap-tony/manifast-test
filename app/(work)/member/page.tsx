@@ -63,15 +63,15 @@ const page = async () => {
       },
     },
   });
+
   return (
     <main className="page-contents">
       <Header type="page" title="멤버" />
-      {/* <div>{JSON.stringify(user)}</div> */}
       <section className="page-section">
-        <div className="p-5">
-          <h2 className="text-2xl font-semibold">프로젝트 소유자</h2>
-          <Table className="border">
-            <TableHeader className="bg-neutral-50">
+        <Header type="section" title="책임자" />
+        <div className="px-6 pb-6">
+          <Table>
+            <TableHeader>
               <TableRow>
                 <TableHead>이름</TableHead>
                 <TableHead>직무</TableHead>
@@ -115,13 +115,13 @@ const page = async () => {
             </TableBody>
           </Table>
         </div>
-        <div className="p-5">
-          {" "}
-          <h2 className="text-2xl font-semibold">작업 소유자</h2>
-          <Table className="border">
-            <TableHeader className="bg-neutral-50">
+
+        <Header type="section" title="작업자" />
+        <div className="px-6">
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableHead className="">이름</TableHead>
+                <TableHead>이름</TableHead>
                 <TableHead>직무</TableHead>
                 <TableHead>배정 투입률</TableHead>
                 <TableHead>실제 투입률</TableHead>
@@ -133,7 +133,7 @@ const page = async () => {
             <TableBody>
               {user?.group?.members.map((member, i) => (
                 <TableRow key={i}>
-                  <TableCell className="font-medium">{member.name}</TableCell>
+                  <TableCell>{member.name}</TableCell>
                   <TableCell>{member.job}</TableCell>
                   <TableCell>
                     {member.tasks.reduce((a, c) => a + c.inputRate, 0)}%
