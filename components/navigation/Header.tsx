@@ -36,7 +36,7 @@ const headerContentVariants = cva(
         dashboard: "text-title-lg",
         projectdetail: "gap-3",
         page: "gap-3",
-        section: "gap-3",
+        section: "gap-3 h-10",
       },
     },
     defaultVariants: {

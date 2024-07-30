@@ -6,7 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 interface AvatarProps {
   size?: "xl" | "lg" | "md";
   label?: boolean;
-  user: Partial<User>;
+  user: Pick<User, "image" | "name">;
 }
 
 const avatarVariants = cva(
@@ -25,7 +25,7 @@ const avatarVariants = cva(
   }
 );
 
-const labelVariants = cva("", {
+const labelVariants = cva("h-full", {
   variants: {
     size: {
       xl: "text-title-sm",
@@ -47,9 +47,9 @@ export default function UserAvatar({
     <div className="flex flex-row items-center gap-2">
       <Avatar.Root className={avatarVariants({ size })}>
         <Avatar.AvatarImage
-          src={user?.image as string}
+          src={user.image as string}
           className="w-full h-full object-cover"
-          alt={user?.name as string}
+          alt={user.name as string}
         />
         <Avatar.AvatarFallback>ER</Avatar.AvatarFallback>
       </Avatar.Root>

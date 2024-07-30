@@ -103,7 +103,7 @@
 @layer components {
 
   .text-title-lg{
-    @apply font-semibold text-2xl leading-8
+    @apply font-semibold text-2xl leading-8 
   }
   .text-title-md{
     @apply font-semibold text-xl leading-7
