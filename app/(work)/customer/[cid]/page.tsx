@@ -44,6 +44,7 @@ import KeyValueLabel from "@/components/elements/KeyValueLabel";
 import UserAvatar from "@/components/elements/UserAvatar";
 import Chips from "@/components/elements/Chips";
 import { User } from "@prisma/client";
+import { getUniqueWorkers, TaskWithWorkers } from "@/lib/getUniqueWorkers";
 
 export default async function Page({ params }: { params: { cid: string } }) {
   const session = await auth();
@@ -81,6 +82,7 @@ export default async function Page({ params }: { params: { cid: string } }) {
       },
     },
   });
+
   return (
     <main className="page-contents">
       <Header type="page" title={group?.name}>
@@ -196,24 +198,26 @@ export default async function Page({ params }: { params: { cid: string } }) {
                       <Chips type="status" value={project.status} />
                     </TableCell>
                     <TableCell>
-                      <div className="flex gap-4">
-                        {Array.from(
-                          new Set(
-                            project.tasks
-                              .flatMap((task) => task.workers)
-                              .map((worker, index) => {
-                                return (
-                                  <UserAvatar
-                                    key={index}
-                                    user={worker.worker}
-                                    label
-                                  />
-                                );
-                              })
-                          )
-                        ).map((worker, i) => (
-                          <div key={i}>{worker}</div>
-                        ))}
+                      <div
+                        className={`flex flex-row items-center ${
+                          getUniqueWorkers(project.tasks).length >= 3
+                            ? "-space-x-2"
+                            : "gap-3"
+                        }`}
+                      >
+                        {getUniqueWorkers(
+                          project.tasks as TaskWithWorkers[]
+                        ).map((worker, index) => {
+                          return (
+                            <UserAvatar
+                              key={index}
+                              user={worker}
+                              label={
+                                getUniqueWorkers(project.tasks).length <= 3
+                              }
+                            />
+                          );
+                        })}
                       </div>
                     </TableCell>
                     <TableCell>
@@ -252,16 +256,26 @@ export default async function Page({ params }: { params: { cid: string } }) {
                           {task.name}
                         </TableCell>
                         <TableCell>
-                          <div className="flex gap-4">
-                            {Array.from(
-                              new Set(
-                                project.tasks
-                                  .flatMap((task) => task.workers)
-                                  .map((worker) => worker.worker.name)
-                              )
-                            ).map((worker, i) => (
-                              <div key={i}>{worker}</div>
-                            ))}
+                          <div
+                            className={`flex flex-row items-center ${
+                              getUniqueWorkers(project.tasks).length >= 3
+                                ? "-space-x-2"
+                                : "gap-3"
+                            }`}
+                          >
+                            {getUniqueWorkers(
+                              project.tasks as TaskWithWorkers[]
+                            ).map((worker, index) => {
+                              return (
+                                <UserAvatar
+                                  key={index}
+                                  user={worker}
+                                  label={
+                                    getUniqueWorkers(project.tasks).length <= 3
+                                  }
+                                />
+                              );
+                            })}
                           </div>
                         </TableCell>
                         <TableCell>

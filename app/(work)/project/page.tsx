@@ -18,6 +18,7 @@ import Header from "@/components/navigation/Header";
 import Chips from "@/components/elements/Chips";
 import UserAvatar from "@/components/elements/UserAvatar";
 import { User } from "@prisma/client";
+import { getUniqueWorkers, TaskWithWorkers } from "@/lib/getUniqueWorkers";
 
 export default async function page() {
   const session = await auth();
@@ -69,7 +70,6 @@ export default async function page() {
               <TableRow key={i}>
                 <TableCell className="font-semibold">
                   <Link href={`/project/${project.id}`}>
-                    {" "}
                     <div className="flex flex-row items-center gap-1">
                       <span>{project.name}</span>
                       <Chips type="difficulty" value={project.difficulty} />
@@ -87,19 +87,25 @@ export default async function page() {
                   />
                 </TableCell>
                 <TableCell>
-                  {(() => {
-                    const set = new Set();
-                    project.tasks.forEach((task) => {
-                      task.workers.forEach((worker) => {
-                        set.add(worker.worker);
-                      });
-                    });
-                    return Array.from(set).map((e, i) => {
-                      return (
-                        <UserAvatar key={i} size="md" user={e as User} label />
-                      );
-                    });
-                  })()}
+                  <div
+                    className={`flex flex-row items-center ${
+                      getUniqueWorkers(project.tasks).length >= 3
+                        ? "-space-x-2"
+                        : "gap-3"
+                    }`}
+                  >
+                    {getUniqueWorkers(project.tasks as TaskWithWorkers[]).map(
+                      (worker, index) => {
+                        return (
+                          <UserAvatar
+                            key={index}
+                            user={worker}
+                            label={getUniqueWorkers(project.tasks).length < 3}
+                          />
+                        );
+                      }
+                    )}
+                  </div>
                 </TableCell>
                 <TableCell>
                   {project.startDate?.toLocaleDateString() ||

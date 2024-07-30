@@ -41,6 +41,7 @@ import { Project, ProjectThread, Task, User } from "@prisma/client";
 import Chips from "@/components/elements/Chips";
 import ThreadDailyList from "@/components/ThreadDailyList";
 import ProjectProgress from "@/components/ProjectProgress";
+import { getUniqueWorkers, TaskWithWorkers } from "@/lib/getUniqueWorkers";
 
 export default async function page({ params }: { params: { pid: string } }) {
   const session = await auth();
@@ -92,13 +93,7 @@ export default async function page({ params }: { params: { pid: string } }) {
   if (project?.threads && project.threads.length > 0) {
     groupedThreads = groupByDate(project.threads);
   }
-  const uniqueWorkers = Array.from(
-    new Set(
-      project?.tasks
-        .flatMap((task) => task.workers)
-        .map((worker) => worker.worker)
-    )
-  );
+  const uniqueWorkers = getUniqueWorkers(project?.tasks as TaskWithWorkers[]);
   const isManyWorkers = uniqueWorkers.length >= 3;
 
   return (
