@@ -66,7 +66,7 @@ export default async function page({ params }: { params: { pid: string } }) {
   return (
     <main className="page-contents">
       {/* <div>{JSON.stringify(project)}</div> */}
-      <Header type="ProjectDetail" title={project?.name}>
+      <Header type="projectdetail" title={project?.name}>
         {(session?.user.role == "WORKER" || session?.user.role == "MANAGER") &&
         project?.status == "REQUESTED" ? (
           <Button asChild>

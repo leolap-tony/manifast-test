@@ -10,7 +10,7 @@ export default async function page() {
   // const reports = await getReports();
   return (
     <main className="page-contents">
-      <Header type="Dashboard" />
+      <Header type="dashboard" />
       <section className="page-section">
         <p>{JSON.stringify(session)}</p>
         <p>test page for dashboard</p>

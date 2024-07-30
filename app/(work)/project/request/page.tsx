@@ -43,7 +43,7 @@ export default function Page() {
 
   return (
     <main className="page-contents">
-      <Header type="Default" title="프로젝트 요청" />
+      <Header type="page" title="프로젝트 요청" />
       <form action={createProject} className="page-section">
         <div className="px-6 py-5 flex flex-col gap-4">
           <h2 className="text-title-sm text-text-title">

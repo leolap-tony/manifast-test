@@ -45,7 +45,7 @@ export default async function Page() {
     }));
   return (
     <main className="page-contents">
-      <Header type="Default" title="마이페이지" />
+      <Header type="page" title="마이페이지" />
       <section className="page-section">
         <Tabs defaultValue="myinfo" className="">
           <TabsList>
@@ -53,6 +53,7 @@ export default async function Page() {
             <TabsTrigger value="groupinfo">내 그룹 정보</TabsTrigger>
           </TabsList>
           <TabsContent value="myinfo">
+            <Header type="section" title={user?.name as string}></Header>
             <div className="flex flex-col gap-10 w-full p-6">
               <ul className="flex flex-col gap-3">
                 <h2 className="text-title-sm text-text-title">{user?.name}</h2>

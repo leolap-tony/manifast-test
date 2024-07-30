@@ -76,7 +76,7 @@ export default async function Page({ params }: { params: { cid: string } }) {
   });
   return (
     <main className="page-contents">
-      <Header type="Default" title={group?.name}>
+      <Header type="page" title={group?.name}>
         {(session?.user.role == "WORKER" ||
           session?.user.role == "MANAGER") && (
           <Dialog>

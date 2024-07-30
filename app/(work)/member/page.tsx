@@ -65,7 +65,7 @@ const page = async () => {
   });
   return (
     <main className="page-contents">
-      <Header type="Default" title="멤버" />
+      <Header type="page" title="멤버" />
       {/* <div>{JSON.stringify(user)}</div> */}
       <section className="page-section">
         <div className="p-5">

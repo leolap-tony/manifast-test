@@ -42,7 +42,7 @@ export default async function page() {
   });
   return (
     <main className="page-contents">
-      <Header type="Default" title="프로젝트">
+      <Header type="page" title="프로젝트">
         <Button asChild>
           <Link href="/project/request">프로젝트 요청</Link>
         </Button>
