@@ -15,6 +15,9 @@ import { Button } from "@/components/elements/Button";
 import prisma from "@/db";
 import { auth } from "@/auth";
 import Header from "@/components/navigation/Header";
+import Chips from "@/components/elements/Chips";
+import UserAvatar from "@/components/elements/UserAvatar";
+import { User } from "@prisma/client";
 
 export default async function page() {
   const session = await auth();
@@ -47,7 +50,7 @@ export default async function page() {
           <Link href="/project/request">프로젝트 요청</Link>
         </Button>
       </Header>
-      <section className="page-section p-5">
+      <section className="page-section p-6">
         <Table>
           <TableHeader>
             <TableRow>
@@ -58,7 +61,6 @@ export default async function page() {
               <TableHead>시작일</TableHead>
               <TableHead>종료일</TableHead>
               <TableHead>진척률</TableHead>
-              <TableHead>난이도</TableHead>
               <TableHead>고객</TableHead>
             </TableRow>
           </TableHeader>
@@ -66,21 +68,37 @@ export default async function page() {
             {user?.group?.projects.map((project, i) => (
               <TableRow key={i}>
                 <TableCell className="font-semibold">
-                  <Link href={`/project/${project.id}`}>{project.name}</Link>
+                  <Link href={`/project/${project.id}`}>
+                    {" "}
+                    <div className="flex flex-row items-center gap-1">
+                      <span>{project.name}</span>
+                      <Chips type="difficulty" value={project.difficulty} />
+                    </div>
+                  </Link>
                 </TableCell>
-                <TableCell>{project.status}</TableCell>
-                <TableCell>{user.group?.manager?.name}</TableCell>
+                <TableCell>
+                  <Chips type="status" value={project.status as string} />
+                </TableCell>
+                <TableCell>
+                  <UserAvatar
+                    size="md"
+                    user={user.group?.manager as User}
+                    label
+                  />
+                </TableCell>
                 <TableCell>
                   {(() => {
                     const set = new Set();
                     project.tasks.forEach((task) => {
                       task.workers.forEach((worker) => {
-                        set.add(worker.worker.name);
+                        set.add(worker.worker);
                       });
                     });
-                    return Array.from(set).map((e, i) => (
-                      <div key={i}>{e as string}</div>
-                    ));
+                    return Array.from(set).map((e, i) => {
+                      return (
+                        <UserAvatar key={i} size="md" user={e as User} label />
+                      );
+                    });
                   })()}
                 </TableCell>
                 <TableCell>
@@ -92,8 +110,7 @@ export default async function page() {
                     project.request_endDate?.toLocaleDateString()}
                 </TableCell>
                 <TableCell>40%</TableCell>
-                <TableCell>{project.difficulty}</TableCell>
-                <TableCell>{user.group?.owner.name}</TableCell>
+                <TableCell>{user.group?.name}</TableCell>
               </TableRow>
             ))}
           </TableBody>

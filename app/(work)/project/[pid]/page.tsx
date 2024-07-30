@@ -2,10 +2,13 @@ import React from "react";
 import { auth } from "@/auth";
 import Link from "next/link";
 
-import { Progress } from "@/components/elements/Progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Textarea } from "@/components/ui/textarea";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/elements/Tabs";
+import { Textarea } from "@/components/elements/Textarea";
 import { Button } from "@/components/elements/Button";
 import {
   Table,
@@ -29,10 +32,15 @@ import {
 import prisma from "@/db";
 import { Separator } from "@/components/ui/separator";
 import { completeTask, createThread } from "../actions";
-import Image from "next/image";
 import { Label } from "@/components/ui/label";
 import { MilestoneIcon } from "lucide-react";
 import Header from "@/components/navigation/Header";
+import KeyValueLabel from "@/components/elements/KeyValueLabel";
+import UserAvatar from "@/components/elements/UserAvatar";
+import { Project, ProjectThread, Task, User } from "@prisma/client";
+import Chips from "@/components/elements/Chips";
+import ThreadDailyList from "@/components/ThreadDailyList";
+import ProjectProgress from "@/components/ProjectProgress";
 
 export default async function page({ params }: { params: { pid: string } }) {
   const session = await auth();
@@ -63,9 +71,39 @@ export default async function page({ params }: { params: { pid: string } }) {
       },
     },
   });
+
+  const groupByDate = (threads: Array<ProjectThread & { author: User }>) => {
+    return threads.reduce(
+      (groups, thread) => {
+        const date = thread.createdAt.toISOString().split("T")[0];
+        if (!groups[date]) {
+          groups[date] = [];
+        }
+        groups[date].push(thread);
+        return groups;
+      },
+      {} as { [key: string]: Array<ProjectThread & { author: User }> }
+    );
+  };
+  let groupedThreads: {
+    [key: string]: Array<ProjectThread & { author: User }>;
+  } = {};
+
+  if (project?.threads && project.threads.length > 0) {
+    groupedThreads = groupByDate(project.threads);
+  }
+  const uniqueWorkers = Array.from(
+    new Set(
+      project?.tasks
+        .flatMap((task) => task.workers)
+        .map((worker) => worker.worker)
+    )
+  );
+  const isManyWorkers = uniqueWorkers.length >= 3;
+
   return (
     <main className="page-contents">
-      {/* <div>{JSON.stringify(project)}</div> */}
+      {/*<pre>{JSON.stringify(groupedThreads, null, 2)}</pre>*/}
       <Header type="projectdetail" title={project?.name}>
         {(session?.user.role == "WORKER" || session?.user.role == "MANAGER") &&
         project?.status == "REQUESTED" ? (
@@ -80,75 +118,46 @@ export default async function page({ params }: { params: { pid: string } }) {
           </Button>
         )}
       </Header>
-      <div className="grid grid-cols-3 gap-4 p-6 bg-background-light">
-        <div className="flex gap-8">
-          <div className="text-text-title text-body-md-m">전담 PM</div>
-          <div>{project?.group.manager?.name}</div>
-        </div>
-        <div className="flex gap-8">
-          <div className="text-text-title text-body-md-m">그룹</div>
-          <div>{project?.group.name}</div>
-        </div>
-        <div className="flex gap-8">
-          <div className="text-text-title text-body-md-m">종류</div>
-          <div>{project?.type}</div>
-        </div>
-        <div className="flex gap-8">
-          <div className="text-text-title text-body-md-m">작업자</div>
-          <div className="flex gap-4">
-            {Array.from(
-              new Set(
-                project?.tasks
-                  .flatMap((task) => task.workers)
-                  .map((worker) => worker.worker.name)
-              )
-            ).map((worker, i) => (
-              <div key={i}>{worker}</div>
-            ))}
+      <div className="grid grid-cols-3 gap-4 px-6 py-4 bg-background-light">
+        <KeyValueLabel direction="horizontal" label="전담 PM" labelWidth={86}>
+          <UserAvatar size="md" user={project?.group.manager as User} label />
+        </KeyValueLabel>
+        <KeyValueLabel direction="horizontal" label="그룹" labelWidth={86}>
+          {project?.group.name}
+        </KeyValueLabel>
+        <KeyValueLabel direction="horizontal" label="종류" labelWidth={86}>
+          {project?.type}
+        </KeyValueLabel>
+        <KeyValueLabel direction="horizontal" label="작업자" labelWidth={86}>
+          <div
+            className={`flex flex-row items-center ${
+              isManyWorkers ? "-space-x-2" : "gap-3"
+            }`}
+          >
+            {uniqueWorkers.map((worker, i) => {
+              return (
+                <UserAvatar
+                  key={i}
+                  size="md"
+                  user={worker as User}
+                  label={!isManyWorkers}
+                />
+              );
+            })}
           </div>
-        </div>
-        <div className="flex gap-8">
-          <div className="text-text-title text-body-md-m">그룹 관리자</div>
-          <div>{project?.group.owner.name}</div>
-        </div>
-        <div className="flex gap-8">
-          <div className="text-text-title text-body-md-m">상태</div>
-          <div>{project?.status}</div>
-        </div>
+        </KeyValueLabel>
+        <KeyValueLabel
+          direction="horizontal"
+          label="그룹 관리자"
+          labelWidth={86}
+        >
+          <UserAvatar size="md" user={project?.group.owner as User} label />
+        </KeyValueLabel>
+        <KeyValueLabel direction="horizontal" label="상태" labelWidth={86}>
+          <Chips type="status" value={project?.status as string} />
+        </KeyValueLabel>
       </div>
-      <div className="px-6 pt-4 pb-2.5 flex flex-col gap-2">
-        <div className="flex justify-between items-baseline">
-          <div className="flex flex-row items-baseline gap-2">
-            <div className="text-title-lg text-text-title">
-              {Math.round(
-                (project!.tasks?.filter(
-                  (task) => task.isComplete && task.isMilestone
-                ).length /
-                  project!.tasks.filter((task) => task.isMilestone).length) *
-                  100
-              )}
-              %
-            </div>
-            <div className="text-body-sm-m text-text-sub">
-              {project?.status}
-            </div>
-          </div>
-          <div className="text-body-sm-m text-text-sub">
-            {project?.startDate?.toLocaleDateString()} -{" "}
-            {project?.endDate?.toLocaleDateString()} (예정)
-          </div>
-        </div>
-        <Progress
-          value={Math.round(
-            (project!.tasks?.filter(
-              (task) => task.isComplete && task.isMilestone
-            ).length /
-              project!.tasks.filter((task) => task.isMilestone).length) *
-              100
-          )}
-          className="h-2 [&>*]:bg-red-500"
-        />
-      </div>
+      <ProjectProgress project={project as Project & { tasks: Task[] }} />
 
       <Tabs defaultValue="thread" className="">
         <TabsList>
@@ -166,46 +175,24 @@ export default async function page({ params }: { params: { pid: string } }) {
             </ToggleGroup> */}
             <div className="relative w-full">
               <Textarea
-                placeholder="Type your message here."
+                placeholder="메시지를 입력하세요."
                 name="message"
-                className="h-28"
+                submitButton
               />
-              <Button variant={"outline"} className="absolute right-2 top-2/4">
-                제출
-              </Button>
             </div>
             <input type="hidden" name="projectId" value={params.pid} />
           </form>
           <Separator />
-          <div>
-            {project?.threads.map((thread, i) => (
-              <div key={i} className="p-4">
-                <div className="flex items-center">
-                  <div className="flex items-center gap-2 text-lg font-semibold">
-                    {thread.author?.image && (
-                      <Image
-                        src={thread.author?.image}
-                        alt="profile"
-                        height={32}
-                        width={32}
-                        className="rounded-full"
-                      />
-                    )}
-                    <span>{thread.author.name}</span>
-                  </div>
-                  <div className="font-light text-slate-500 text-sm ml-4">
-                    {thread.createdAt.toLocaleString()}
-                  </div>
-                </div>
-                <div className="py-4 px-10 font-light">{thread.message}</div>
-              </div>
+          <div className="w-full flex flex-col gap-6 px-6">
+            {Object.entries(groupedThreads).map(([date, threads]) => (
+              <ThreadDailyList key={date} date={date} threads={threads} />
             ))}
           </div>
         </TabsContent>
         <TabsContent value="wbs">
-          <div className="flex flex-col">
-            <Table className="border">
-              <TableHeader className="bg-neutral-50">
+          <div className="flex flex-col p-6">
+            <Table>
+              <TableHeader>
                 <TableRow>
                   <TableHead className="w-[200px]">작업</TableHead>
                   <TableHead>작업자</TableHead>

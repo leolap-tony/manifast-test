@@ -32,7 +32,7 @@ export default function SideNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex-shrink-0 flex flex-col gap-5 w-[200px] h-full py-8 border-r">
+    <nav className="flex-shrink-0 flex flex-col gap-5 w-[200px] py-8 border-r">
       <div className="w-full h-fit flex justify-center items-center">
         <Logo />
       </div>
@@ -45,22 +45,22 @@ export default function SideNav() {
         <SideNavItem
           page="고객"
           href="/customer"
-          isSelected={pathname === "/customer"}
+          isSelected={pathname.startsWith("/customer")}
         />
         <SideNavItem
           page="프로젝트"
           href="/project"
-          isSelected={pathname === "/project"}
+          isSelected={pathname.startsWith("/project")}
         />
         <SideNavItem
           page="멤버"
           href="/member"
-          isSelected={pathname === "/member"}
+          isSelected={pathname.startsWith("/member")}
         />
         <SideNavItem
           page="내 정보"
           href="/myinfo"
-          isSelected={pathname === "/myinfo"}
+          isSelected={pathname.startsWith("/myinfo")}
         />
       </ul>
     </nav>

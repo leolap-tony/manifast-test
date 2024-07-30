@@ -3,7 +3,12 @@ import { auth } from "@/auth";
 import prisma from "@/db";
 
 import { Progress } from "@/components/elements/Progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/elements/Tabs";
 import { Button } from "@/components/elements/Button";
 import {
   Table,
@@ -37,6 +42,8 @@ import Link from "next/link";
 import Header from "@/components/navigation/Header";
 import KeyValueLabel from "@/components/elements/KeyValueLabel";
 import UserAvatar from "@/components/elements/UserAvatar";
+import Chips from "@/components/elements/Chips";
+import { User } from "@prisma/client";
 
 export default async function Page({ params }: { params: { cid: string } }) {
   const session = await auth();
@@ -122,23 +129,23 @@ export default async function Page({ params }: { params: { cid: string } }) {
       </Header>
       {/* <div>{JSON.stringify(group)}</div> */}
       {/* <div>{JSON.stringify(user)}</div> */}
-      <div className="grid grid-cols-3 p-6 gap-4 bg-background-light rounded-lg text-body-md-n text-body">
+      <div className="grid grid-cols-3 px-6 py-4 gap-4 bg-background-light">
         <KeyValueLabel
           direction="horizontal"
           label="그룹 관리자"
           labelWidth={86}
         >
-          <UserAvatar size="md" user={group?.owner as any} label />
+          <UserAvatar size="md" user={group?.owner as User} label />
         </KeyValueLabel>
         <KeyValueLabel
           direction="horizontal"
           label="그룹 이메일"
           labelWidth={86}
         >
-          <div>{group?.email}</div>
+          {group?.email}
         </KeyValueLabel>
         <KeyValueLabel direction="horizontal" label="플랜" labelWidth={86}>
-          <div>프로</div>
+          프로
         </KeyValueLabel>
         <KeyValueLabel direction="horizontal" label="전담 PM" labelWidth={86}>
           <UserAvatar size="md" user={group?.manager as any} label />
@@ -148,65 +155,80 @@ export default async function Page({ params }: { params: { cid: string } }) {
           label="그룹 연락처"
           labelWidth={86}
         >
-          <div>{group?.phone}</div>
+          {group?.phone}
         </KeyValueLabel>
         <KeyValueLabel direction="horizontal" label="플랜 기간" labelWidth={86}>
-          <div>2024.05.20~2024.08.20</div>
+          2024.05.20~2024.08.20
         </KeyValueLabel>
       </div>
 
-      <Tabs defaultValue="thread" className="">
+      <Tabs defaultValue="thread">
         <TabsList>
           <TabsTrigger value="thread">프로젝트</TabsTrigger>
           <TabsTrigger value="wbs">WBS</TabsTrigger>
         </TabsList>
         <TabsContent value="thread">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="">작업 이름</TableHead>
-                <TableHead>상태</TableHead>
-                <TableHead>전담 PM</TableHead>
-                <TableHead>작업자</TableHead>
-                <TableHead>시작일</TableHead>
-                <TableHead>종료일</TableHead>
-                <TableHead>진척률</TableHead>
-                <TableHead>난이도</TableHead>
-                <TableHead>고객</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {group?.projects.map((project, i) => (
-                <TableRow key={i}>
-                  <TableCell className="font-medium">
-                    <Link href={`/project/${project.id}`}>{project.name}</Link>
-                  </TableCell>
-                  <TableCell>{project.status}</TableCell>
-                  <TableCell>{group.manager?.name}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-4">
-                      {Array.from(
-                        new Set(
-                          project.tasks
-                            .flatMap((task) => task.workers)
-                            .map((worker) => worker.worker.name)
-                        )
-                      ).map((worker, i) => (
-                        <div key={i}>{worker}</div>
-                      ))}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {project.startDate?.toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>{project.endDate?.toLocaleDateString()}</TableCell>
-                  <TableCell>40%</TableCell>
-                  <TableCell>{project.difficulty}</TableCell>
-                  <TableCell>{group.name}</TableCell>
+          <section className="p-6">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="">작업 이름</TableHead>
+                  <TableHead>상태</TableHead>
+                  <TableHead>작업자</TableHead>
+                  <TableHead>시작일</TableHead>
+                  <TableHead>종료일</TableHead>
+                  <TableHead>진척률</TableHead>
+                  <TableHead>고객</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {group?.projects.map((project, i) => (
+                  <TableRow key={i}>
+                    <TableCell>
+                      <Link href={`/project/${project.id}`}>
+                        <div className="flex flex-row items-center gap-1">
+                          <span>{project.name}</span>
+                          <Chips type="difficulty" value={project.difficulty} />
+                        </div>
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <Chips type="status" value={project.status} />
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-4">
+                        {Array.from(
+                          new Set(
+                            project.tasks
+                              .flatMap((task) => task.workers)
+                              .map((worker, index) => {
+                                return (
+                                  <UserAvatar
+                                    key={index}
+                                    user={worker.worker}
+                                    label
+                                  />
+                                );
+                              })
+                          )
+                        ).map((worker, i) => (
+                          <div key={i}>{worker}</div>
+                        ))}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      {project.startDate?.toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>
+                      {project.endDate?.toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>40%</TableCell>
+                    <TableCell>{group.name}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </section>
         </TabsContent>
         <TabsContent value="wbs">
           <div className="flex flex-col gap-8 p-4">

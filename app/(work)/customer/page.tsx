@@ -47,7 +47,11 @@ const page = async () => {
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <UserAvatar size="md" user={customer?.manager as any} label />
+                  {customer.manager ? (
+                    <UserAvatar size="md" user={customer.manager} label />
+                  ) : (
+                    <span>[없음]</span>
+                  )}
                 </TableCell>
                 <TableCell>베이직</TableCell>
                 <TableCell>2024.06.08</TableCell>

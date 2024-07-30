@@ -44,16 +44,18 @@ export default function UserAvatar({
   user,
 }: AvatarProps) {
   return (
-    <div className="flex flex-row items-center gap-2">
-      <Avatar.Root className={avatarVariants({ size })}>
-        <Avatar.AvatarImage
-          src={user.image as string}
-          className="w-full h-full object-cover"
-          alt={user.name as string}
-        />
-        <Avatar.AvatarFallback>ER</Avatar.AvatarFallback>
-      </Avatar.Root>
-      {label && <div className={labelVariants({ size })}>{user?.name}</div>}
-    </div>
+    user && (
+      <div className="flex flex-row items-center gap-2">
+        <Avatar.Root className={avatarVariants({ size })}>
+          <Avatar.AvatarImage
+            src={user.image as string}
+            className="w-full h-full object-cover"
+            alt={user.name as string}
+          />
+          <Avatar.AvatarFallback>ER</Avatar.AvatarFallback>
+        </Avatar.Root>
+        {label && <div className={labelVariants({ size })}>{user?.name}</div>}
+      </div>
+    )
   );
 }

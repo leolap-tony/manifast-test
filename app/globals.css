@@ -89,8 +89,6 @@
 @layer base {
   html {
     font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-    width: 100vw;
-    height: 100vh;
 }
   * {
     @apply border-border;
@@ -129,7 +127,7 @@
 
 
 .page-frame {
-  @apply container w-full h-full flex flex-row gap-0 border-x
+  @apply container w-full h-full min-h-screen flex flex-row gap-0 border-x
 }
 
 .page-contents {
