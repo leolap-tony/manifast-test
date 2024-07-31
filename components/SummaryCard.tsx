@@ -55,6 +55,8 @@ export default function SummaryCard({ type, value }: CardProps) {
       icon = "😵";
     } else if (1.5 <= difficultyRate) {
       icon = "☠️";
+    } else {
+      icon = "🤔";
     }
     return (
       <div className="flex flex-row items-baseline gap-4">

@@ -35,7 +35,7 @@ export default async function DemandDashboard() {
       },
     }));
   return (
-    <main className="flex flex-col gap-12 p-12 w-full">
+    <main className="flex flex-col p-6">
       <div className="flex justify-between">
         <h1 className="text-4xl font-bold">
           {session?.user.name}님, 안녕하세요

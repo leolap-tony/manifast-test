@@ -1,11 +1,9 @@
-import { auth, signOut } from "@/auth";
-import Image from "next/image";
-import { redirect } from "next/navigation";
+import { auth } from "@/auth";
+
 import prisma from "@/db";
 
-import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/elements/Button";
+import { Input } from "@/components/elements/Input";
 import {
   Table,
   TableBody,
@@ -16,8 +14,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { submitReport } from "@/app/actions";
+import Header from "./navigation/Header";
+import { getUniqueWorkers } from "@/lib/getUniqueWorkers";
+import UserArray from "./UserArray";
+import Chips from "./elements/Chips";
+import SummaryCard from "./SummaryCard";
 
-export default async function Home() {
+export default async function SupplyDashboard() {
   const session = await auth();
   const user =
     session &&
@@ -29,13 +32,13 @@ export default async function Home() {
         managementGroups: {
           include: {
             projects: {
-              where:{
-                startDate:{
-                  lte: new Date()
+              where: {
+                startDate: {
+                  lte: new Date(),
                 },
-                endDate:{
-                  gte: new Date()
-                }
+                endDate: {
+                  gte: new Date(),
+                },
               },
               include: {
                 group: {
@@ -57,26 +60,26 @@ export default async function Home() {
           },
         },
         tasks: {
-          where:{
-            startDate:{
-              lte: new Date()
+          where: {
+            startDate: {
+              lte: new Date(),
             },
-            endDate:{
-              gte: new Date()
-            }
+            endDate: {
+              gte: new Date(),
+            },
           },
           include: {
             task: {
               include: {
                 project: true,
-                taskReport:{
+                taskReport: {
                   where: {
-                    userId:session.user.sub,
+                    userId: session.user.sub,
                     date: {
-                      equals: new Date()
-                    }
-                  }
-                }
+                      equals: new Date(),
+                    },
+                  },
+                },
               },
             },
             // taskReport: {
@@ -90,151 +93,124 @@ export default async function Home() {
         },
       },
     }));
+
   return (
-    <div className="flex flex-col gap-12 p-12 w-full">
-      <div className="flex justify-between">
-        <h1 className="text-4xl font-bold">
-          {session?.user.name}님, 안녕하세요
-        </h1>
-        <form
-          action={async () => {
-            "use server";
-            await signOut();
-          }}
-        >
-          <Button variant="outline">로그 아웃</Button>
-        </form>
-      </div>
-      <Separator />
-      {/* <p>{JSON.stringify(user)}</p> */}
-      <div className="flex gap-4">
-        <div className="border rounded-lg w-1/3 p-6 flex justify-between">
-          <div>진행중인 프로젝트</div>
-          <div className="pt-6 text-xl font-semibold">
-            {new Set(user?.tasks?.map((task) => task.task.projectId)).size}
-          </div>
-        </div>
-        <div className="border rounded-lg w-1/3 p-6 flex justify-between">
-          <div>오늘 투입률</div>
-          <div className="pt-6 text-xl font-semibold">
-            {user?.tasks?.reduce((a, c) => a + c.inputRate, 0)}%
-          </div>
-        </div>
-        {session?.user.role == "MANAGER" && (
-          <div className="border rounded-lg w-1/3 p-6 flex justify-between">
-            <div>오늘 업무 난이도</div>
-            <div className="pt-6 text-xl font-semibold">
-              {Math.round(
-                (user?.managementGroups
-                  .flatMap((group) => group.projects)
-                  .reduce((a, c) => a + c.difficulty, 0)! /
-                  user?.managementGroups.flatMap((group) => group.projects)
-                    .length! /
-                  2) *
-                  100,
-              )}
-              %
-            </div>
-          </div>
-        )}
+    <div className="flex flex-col">
+      {/*<pre>{JSON.stringify(user, null, 2)}</pre>*/}
+      <div className="grid grid-cols-3 gap-4 p-6">
+        <SummaryCard type="project" value={0} />
+        <SummaryCard type="inputRate" value={[0, 0]} />
+        <SummaryCard type="difficulty" value={[0, 0]} />
       </div>
       {(session?.user.role == "MANAGER" || session?.user.role == "WORKER") && (
-        <form className="flex flex-col gap-8" action={submitReport}>
-          <div className="flex justify-between items-center">
-            <h2 className="text-3xl font-semibold">오늘 작업</h2>
+        <form className="flex flex-col" action={submitReport}>
+          <Header type="section" title="오늘 작업">
             <Button>보고 등룩</Button>
-          </div>
-          <Table className="border">
-            <TableHeader className="bg-neutral-50">
-              <TableRow>
-                <TableHead>작업 이름</TableHead>
-                <TableHead>프로젝트 이름</TableHead>
-                <TableHead>시작일</TableHead>
-                <TableHead>종료일</TableHead>
-                <TableHead>배정 투입률</TableHead>
-                <TableHead className="w-[100px]">실제 투입률</TableHead>
-                <TableHead>메모</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {!user?.tasks?.some((task) => task.task.taskReport.length) ? (
-                user?.tasks?.map((task, i) => (
-                  <TableRow key={i}>
-                    <TableCell className="font-medium">
-                      {task.task.name}
-                    </TableCell>
-                    <TableCell>{task.task.project.name}</TableCell>
-                    <TableCell>
-                      {task.startDate?.toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>{task.endDate?.toLocaleDateString()}</TableCell>
-                    <TableCell>{task.inputRate}%</TableCell>
-                    <TableCell className="flex items-center gap-2">
-                      <Input name="todayInputRate" required />%
-                    </TableCell>
-                    <TableCell>
-                      <Input name="message" />
-                    </TableCell>
-                    <input type="hidden" name="userId" value={task.userId} />
-                    <input type="hidden" name="taskId" value={task.task.id} />
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow className="text-gray-400 p-4">
-                  <TableCell>등록할 보고가 없습니다.</TableCell>
+          </Header>
+          <div className="px-6 pb-6">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>작업 이름</TableHead>
+                  <TableHead>프로젝트 이름</TableHead>
+                  <TableHead>시작일</TableHead>
+                  <TableHead>종료일</TableHead>
+                  <TableHead>배정 투입률</TableHead>
+                  <TableHead>실제 투입률</TableHead>
+                  <TableHead>메모</TableHead>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {!user?.tasks?.some((task) => task.task.taskReport.length) ? (
+                  user?.tasks?.map((task, i) => (
+                    <TableRow key={i}>
+                      <TableCell className="font-medium">
+                        {task.task.name}
+                      </TableCell>
+                      <TableCell>{task.task.project.name}</TableCell>
+                      <TableCell>
+                        {task.startDate?.toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        {task.endDate?.toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>{task.inputRate}%</TableCell>
+                      <TableCell className="flex items-center gap-2">
+                        <Input name="todayInputRate" required />%
+                      </TableCell>
+                      <TableCell>
+                        <Input name="message" />
+                      </TableCell>
+                      <input type="hidden" name="userId" value={task.userId} />
+                      <input type="hidden" name="taskId" value={task.task.id} />
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow className="text-gray-400 p-4">
+                    <TableCell>등록할 보고가 없습니다.</TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </form>
       )}
       {session?.user.role == "MANAGER" && (
-        <section className="flex flex-col gap-8">
-          <h2 className="text-3xl font-semibold">오늘 진행중인 프로젝트</h2>
-          <Table className="border">
-            <TableHeader className="bg-neutral-50">
-              <TableRow>
-                <TableHead className="">프로젝트</TableHead>
-                <TableHead>상태</TableHead>
-                <TableHead>담당 디자이너</TableHead>
-                <TableHead>시작일</TableHead>
-                <TableHead>종료일</TableHead>
-                <TableHead>진척률</TableHead>
-                <TableHead>난이도</TableHead>
-                <TableHead>고객</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {user?.managementGroups
-                .flatMap((group) => group.projects)
-                .map((project, i) => (
-                  <TableRow key={i}>
-                    <TableCell>{project.name}</TableCell>
-                    <TableCell>{project.status}</TableCell>
-                    <TableCell>
-                      {Array.from(
-                        new Set(
-                          project.tasks
-                            .flatMap((task) => task.workers)
-                            .map((worker) => worker.worker.name),
-                        ),
-                      ).map((worker, i) => (
-                        <div key={i}>{worker}</div>
-                      ))}
-                    </TableCell>
-                    <TableCell>
-                      {project.startDate?.toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>
-                      {project.endDate?.toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>40%</TableCell>
-                    <TableCell>{project.difficulty}</TableCell>
-                    <TableCell>{project.group?.owner.name}</TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
+        <section className="flex flex-col">
+          <Header type="section" title="오늘 진행 중인 프로젝트" />
+          <div className="px-6 pb-6">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="">프로젝트</TableHead>
+                  <TableHead>상태</TableHead>
+                  <TableHead>담당 디자이너</TableHead>
+                  <TableHead>시작일</TableHead>
+                  <TableHead>종료일</TableHead>
+                  <TableHead>진척률</TableHead>
+                  <TableHead>고객</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {user?.managementGroups
+                  .flatMap((group) => group.projects)
+                  .map((project, i) => {
+                    const worker = getUniqueWorkers(project.tasks);
+                    return (
+                      <TableRow key={i}>
+                        <TableCell>
+                          <div className="w-full flex flex-row gap-2">
+                            <div>{project.name}</div>
+                            <Chips
+                              type="difficulty"
+                              value={project.difficulty}
+                            />
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Chips type="status" value={project.status} />
+                        </TableCell>
+                        <TableCell>
+                          <UserArray
+                            users={worker}
+                            orientation="col"
+                            maxAmount={2}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          {project.startDate?.toLocaleDateString()}
+                        </TableCell>
+                        <TableCell>
+                          {project.endDate?.toLocaleDateString()}
+                        </TableCell>
+                        <TableCell>40%</TableCell>
+                        <TableCell>{project.group?.name}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </div>
         </section>
       )}
     </div>
