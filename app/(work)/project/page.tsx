@@ -106,7 +106,17 @@ export default async function page() {
                     {project.endDate?.toLocaleDateString() ||
                       project.request_endDate?.toLocaleDateString()}
                   </TableCell>
-                  <TableCell>40%</TableCell>
+                  <TableCell>
+                    {Math.round(
+                      (project.tasks.filter(
+                        (task) => task.isComplete && task.isMilestone,
+                      ).length /
+                        project.tasks.filter((task) => task.isMilestone)
+                          .length) *
+                        100,
+                    ) || 0}
+                    %
+                  </TableCell>
                   <TableCell>{user.group?.name}</TableCell>
                 </TableRow>
               );
