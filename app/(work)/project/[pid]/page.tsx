@@ -32,7 +32,6 @@ import {
 import prisma from "@/db";
 import { Separator } from "@/components/ui/separator";
 import { completeTask, createThread } from "../actions";
-import { Label } from "@/components/ui/label";
 import { MilestoneIcon } from "lucide-react";
 import Header from "@/components/navigation/Header";
 import KeyValueLabel from "@/components/elements/KeyValueLabel";
@@ -96,8 +95,6 @@ export default async function page({ params }: { params: { pid: string } }) {
     groupedThreads = groupByDate(project.threads);
   }
   const uniqueWorkers = getUniqueWorkers(project?.tasks as TaskWithWorkers[]);
-  const isManyWorkers = uniqueWorkers.length >= 3;
-
   return (
     <main className="page-contents">
       {/*<pre>{JSON.stringify(groupedThreads, null, 2)}</pre>*/}
@@ -184,96 +181,111 @@ export default async function page({ params }: { params: { pid: string } }) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {project?.tasks.map((task, i) => (
-                  <TableRow key={i}>
-                    <TableCell className="font-medium">
-                      <Sheet>
-                        <SheetTrigger className="font-semibold flex gap-2 items-center">
-                          {task.isMilestone && (
-                            <MilestoneIcon size={16} color="red" />
-                          )}
-                          <div>{task.name}</div>
-                        </SheetTrigger>
-                        <SheetContent className="w-[400px] sm:w-[540px] px-0">
-                          <form
-                            className="flex flex-col gap-4"
-                            action={completeTask}
-                          >
-                            <SheetHeader className="p-4">
-                              <SheetTitle className="font-semibold text-2xl flex gap-2 items-center">
-                                {task.isMilestone && (
-                                  <MilestoneIcon size={24} color="red" />
-                                )}
-                                <div>{task.name}</div>
-                              </SheetTitle>
-                            </SheetHeader>
-                            <div className="bg-slate-100 flex flex-col w-full p-6 gap-2">
-                              <div className="flex">
-                                <div className="w-24">작업자</div>
-                                <div className="font-light flex flex-col">
-                                  {task.workers.map((worker, i) => (
-                                    <div key={i}>{worker.worker.name}</div>
-                                  ))}
-                                </div>
-                              </div>
-                              <div className="flex">
-                                <div className="w-24">시작일</div>
-                                <div className="font-light">
+                {project?.tasks.map((task, i) => {
+                  return (
+                    <TableRow key={i}>
+                      <TableCell className="font-medium">
+                        <Sheet>
+                          <SheetTrigger className="flex gap-2 items-center">
+                            {task.isMilestone && (
+                              <MilestoneIcon size={16} color="red" />
+                            )}
+                            <div>{task.name}</div>
+                          </SheetTrigger>
+                          <SheetContent className="w-[400px] sm:w-[540px] p-0">
+                            <form action={completeTask}>
+                              <SheetHeader className="px-6 pt-8 pb-5 border-b">
+                                <SheetTitle className="text-title-lg text-text-title flex gap-2 items-center">
+                                  {task.isMilestone && (
+                                    <MilestoneIcon size={24} color="red" />
+                                  )}
+                                  <div className="w-full overflow-hidden text-ellipsis">
+                                    {task.name}
+                                  </div>
+                                </SheetTitle>
+                              </SheetHeader>
+                              <div className="bg-background-light flex flex-col gap-3 w-full px-6 py-4">
+                                <KeyValueLabel
+                                  direction="horizontal"
+                                  label="작업자"
+                                  labelWidth={86}
+                                >
+                                  <UserArray
+                                    users={task.workers.flatMap(
+                                      (worker) => worker.worker
+                                    )}
+                                    orientation="row"
+                                    maxAmount={2}
+                                  />
+                                </KeyValueLabel>
+                                <KeyValueLabel
+                                  direction="horizontal"
+                                  label="시작일"
+                                  labelWidth={86}
+                                >
                                   {task.startDate.toLocaleDateString()}
-                                </div>
-                              </div>
-                              <div className="flex">
-                                <div className="w-24">종료일</div>
-                                <div className="font-light">
+                                </KeyValueLabel>
+                                <KeyValueLabel
+                                  direction="horizontal"
+                                  label="종료일"
+                                  labelWidth={86}
+                                >
                                   {task.endDate.toLocaleDateString()}
-                                </div>
-                              </div>
-                              <div className="flex">
-                                <div className="w-24">완료 여부</div>
-                                <div className="font-light">
+                                </KeyValueLabel>
+                                <KeyValueLabel
+                                  direction="horizontal"
+                                  label="상태"
+                                  labelWidth={86}
+                                >
                                   {task.isComplete ? "완료" : "미완료"}
-                                </div>
+                                </KeyValueLabel>
                               </div>
-                            </div>
-                            <div className="flex flex-col gap-4 p-4">
-                              <Label className="text-xl font-semibold">
-                                작업물
-                              </Label>
-                              <Textarea></Textarea>
-                            </div>
-                            <SheetFooter className="p-4">
-                              <SheetClose asChild>
-                                <Button type="submit">
-                                  {task.isComplete
-                                    ? "작업 미완료"
-                                    : "작업 완료하기"}
-                                </Button>
-                              </SheetClose>
-                            </SheetFooter>
-                            <input
-                              type="hidden"
-                              name="taskId"
-                              value={task.id}
-                            />
-                            <input
-                              type="hidden"
-                              name="isComplete"
-                              value={task.isComplete.toString()}
-                            />
-                          </form>
-                        </SheetContent>
-                      </Sheet>
-                    </TableCell>
-                    <TableCell>
-                      {task.workers.map((worker, i) => (
-                        <div key={i}>{worker.worker.name}</div>
-                      ))}
-                    </TableCell>
-                    <TableCell>{task.startDate.toLocaleDateString()}</TableCell>
-                    <TableCell>{task.endDate.toLocaleDateString()}</TableCell>
-                    <TableCell>{task.isComplete ? "완료" : "미완료"}</TableCell>
-                  </TableRow>
-                ))}
+                              <Header type="section" title="작업물" />
+                              <div className="px-6">
+                                <Textarea></Textarea>
+                              </div>
+                              <SheetFooter className="absolute bottom-0 right-0 p-4">
+                                <SheetClose asChild>
+                                  <Button type="submit">
+                                    {task.isComplete
+                                      ? "작업 미완료"
+                                      : "작업 완료하기"}
+                                  </Button>
+                                </SheetClose>
+                              </SheetFooter>
+                              <input
+                                type="hidden"
+                                name="taskId"
+                                value={task.id}
+                              />
+                              <input
+                                type="hidden"
+                                name="isComplete"
+                                value={task.isComplete.toString()}
+                              />
+                            </form>
+                          </SheetContent>
+                        </Sheet>
+                      </TableCell>
+                      <TableCell>
+                        <UserArray
+                          users={task.workers.flatMap(
+                            (worker) => worker.worker
+                          )}
+                          orientation="col"
+                          maxAmount={3}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        {task.startDate.toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>{task.endDate.toLocaleDateString()}</TableCell>
+                      <TableCell>
+                        {task.isComplete ? "완료" : "미완료"}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </div>
