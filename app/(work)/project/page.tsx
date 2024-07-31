@@ -18,7 +18,9 @@ import Header from "@/components/navigation/Header";
 import Chips from "@/components/elements/Chips";
 import UserAvatar from "@/components/elements/UserAvatar";
 import { User } from "@prisma/client";
-import { getUniqueWorkers, TaskWithWorkers } from "@/lib/getUniqueWorkers";
+import { getUniqueWorkers } from "@/lib/getUniqueWorkers";
+import { TaskWithWorkers } from "@/types/queryInterface";
+import UserArray from "@/components/UserArray";
 
 export default async function page() {
   const session = await auth();
@@ -44,6 +46,7 @@ export default async function page() {
       },
     },
   });
+
   return (
     <main className="page-contents">
       <Header type="page" title="프로젝트">
@@ -66,59 +69,48 @@ export default async function page() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {user?.group?.projects.map((project, i) => (
-              <TableRow key={i}>
-                <TableCell className="font-semibold">
-                  <Link href={`/project/${project.id}`}>
-                    <div className="flex flex-row items-center gap-1">
-                      <span>{project.name}</span>
-                      <Chips type="difficulty" value={project.difficulty} />
-                    </div>
-                  </Link>
-                </TableCell>
-                <TableCell>
-                  <Chips type="status" value={project.status as string} />
-                </TableCell>
-                <TableCell>
-                  <UserAvatar
-                    size="md"
-                    user={user.group?.manager as User}
-                    label
-                  />
-                </TableCell>
-                <TableCell>
-                  <div
-                    className={`flex flex-row items-center ${
-                      getUniqueWorkers(project.tasks).length >= 3
-                        ? "-space-x-2"
-                        : "gap-3"
-                    }`}
-                  >
-                    {getUniqueWorkers(project.tasks as TaskWithWorkers[]).map(
-                      (worker, index) => {
-                        return (
-                          <UserAvatar
-                            key={index}
-                            user={worker}
-                            label={getUniqueWorkers(project.tasks).length < 3}
-                          />
-                        );
-                      }
-                    )}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  {project.startDate?.toLocaleDateString() ||
-                    project.request_startDate?.toLocaleDateString()}
-                </TableCell>
-                <TableCell>
-                  {project.endDate?.toLocaleDateString() ||
-                    project.request_endDate?.toLocaleDateString()}
-                </TableCell>
-                <TableCell>40%</TableCell>
-                <TableCell>{user.group?.name}</TableCell>
-              </TableRow>
-            ))}
+            {user?.group?.projects.map((project, i) => {
+              const uniqueWorkers = getUniqueWorkers(project.tasks);
+              return (
+                <TableRow key={i}>
+                  <TableCell className="font-semibold">
+                    <Link href={`/project/${project.id}`}>
+                      <div className="flex flex-row items-center gap-1">
+                        <span>{project.name}</span>
+                        <Chips type="difficulty" value={project.difficulty} />
+                      </div>
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    <Chips type="status" value={project.status as string} />
+                  </TableCell>
+                  <TableCell>
+                    <UserAvatar
+                      size="md"
+                      user={user.group?.manager as User}
+                      label
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <UserArray
+                      users={uniqueWorkers}
+                      orientation="col"
+                      maxAmount={3}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    {project.startDate?.toLocaleDateString() ||
+                      project.request_startDate?.toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>
+                    {project.endDate?.toLocaleDateString() ||
+                      project.request_endDate?.toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>40%</TableCell>
+                  <TableCell>{user.group?.name}</TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </section>

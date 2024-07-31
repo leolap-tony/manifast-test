@@ -41,7 +41,9 @@ import { Project, ProjectThread, Task, User } from "@prisma/client";
 import Chips from "@/components/elements/Chips";
 import ThreadDailyList from "@/components/ThreadDailyList";
 import ProjectProgress from "@/components/ProjectProgress";
-import { getUniqueWorkers, TaskWithWorkers } from "@/lib/getUniqueWorkers";
+import { getUniqueWorkers } from "@/lib/getUniqueWorkers";
+import { TaskWithWorkers } from "@/types/queryInterface";
+import UserArray from "@/components/UserArray";
 
 export default async function page({ params }: { params: { pid: string } }) {
   const session = await auth();
@@ -124,22 +126,7 @@ export default async function page({ params }: { params: { pid: string } }) {
           {project?.type}
         </KeyValueLabel>
         <KeyValueLabel direction="horizontal" label="작업자" labelWidth={86}>
-          <div
-            className={`flex flex-row items-center ${
-              isManyWorkers ? "-space-x-2" : "gap-3"
-            }`}
-          >
-            {uniqueWorkers.map((worker, i) => {
-              return (
-                <UserAvatar
-                  key={i}
-                  size="md"
-                  user={worker as User}
-                  label={!isManyWorkers}
-                />
-              );
-            })}
-          </div>
+          <UserArray users={uniqueWorkers} orientation="row" maxAmount={3} />
         </KeyValueLabel>
         <KeyValueLabel
           direction="horizontal"

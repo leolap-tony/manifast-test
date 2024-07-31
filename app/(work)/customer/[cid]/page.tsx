@@ -44,7 +44,9 @@ import KeyValueLabel from "@/components/elements/KeyValueLabel";
 import UserAvatar from "@/components/elements/UserAvatar";
 import Chips from "@/components/elements/Chips";
 import { User } from "@prisma/client";
-import { getUniqueWorkers, TaskWithWorkers } from "@/lib/getUniqueWorkers";
+import { getUniqueWorkers } from "@/lib/getUniqueWorkers";
+import { TaskWithWorkers } from "@/types/queryInterface";
+import UserArray from "@/components/UserArray";
 
 export default async function Page({ params }: { params: { cid: string } }) {
   const session = await auth();
@@ -184,115 +186,94 @@ export default async function Page({ params }: { params: { cid: string } }) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {group?.projects.map((project, i) => (
-                  <TableRow key={i}>
-                    <TableCell>
-                      <Link href={`/project/${project.id}`}>
-                        <div className="flex flex-row items-center gap-1">
-                          <span>{project.name}</span>
-                          <Chips type="difficulty" value={project.difficulty} />
-                        </div>
-                      </Link>
-                    </TableCell>
-                    <TableCell>
-                      <Chips type="status" value={project.status} />
-                    </TableCell>
-                    <TableCell>
-                      <div
-                        className={`flex flex-row items-center ${
-                          getUniqueWorkers(project.tasks).length >= 3
-                            ? "-space-x-2"
-                            : "gap-3"
-                        }`}
-                      >
-                        {getUniqueWorkers(
-                          project.tasks as TaskWithWorkers[]
-                        ).map((worker, index) => {
-                          return (
-                            <UserAvatar
-                              key={index}
-                              user={worker}
-                              label={
-                                getUniqueWorkers(project.tasks).length <= 3
-                              }
+                {group?.projects.map((project, i) => {
+                  const worker = getUniqueWorkers(project.tasks);
+                  return (
+                    <TableRow key={i}>
+                      <TableCell>
+                        <Link href={`/project/${project.id}`}>
+                          <div className="flex flex-row items-center gap-1">
+                            <span>{project.name}</span>
+                            <Chips
+                              type="difficulty"
+                              value={project.difficulty}
                             />
-                          );
-                        })}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {project.startDate?.toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>
-                      {project.endDate?.toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>40%</TableCell>
-                    <TableCell>{group.name}</TableCell>
-                  </TableRow>
-                ))}
+                          </div>
+                        </Link>
+                      </TableCell>
+                      <TableCell>
+                        <Chips type="status" value={project.status} />
+                      </TableCell>
+                      <TableCell>
+                        <UserArray
+                          users={worker}
+                          orientation="col"
+                          maxAmount={3}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        {project.startDate?.toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        {project.endDate?.toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>40%</TableCell>
+                      <TableCell>{group.name}</TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </section>
         </TabsContent>
         <TabsContent value="wbs">
           <div className="flex flex-col gap-8 p-4">
-            {group?.projects.map((project, i) => (
-              <div key={i} className="flex flex-col">
-                <h2 className="text-lg font-semibold">{project.name}</h2>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[200px]">작업</TableHead>
-                      <TableHead>작업자</TableHead>
-                      <TableHead>시작일</TableHead>
-                      <TableHead>종료일</TableHead>
-                      <TableHead>완료 여부</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {project.tasks.map((task, i) => (
-                      <TableRow key={i}>
-                        <TableCell className="font-medium">
-                          {task.name}
-                        </TableCell>
-                        <TableCell>
-                          <div
-                            className={`flex flex-row items-center ${
-                              getUniqueWorkers(project.tasks).length >= 3
-                                ? "-space-x-2"
-                                : "gap-3"
-                            }`}
-                          >
-                            {getUniqueWorkers(
-                              project.tasks as TaskWithWorkers[]
-                            ).map((worker, index) => {
-                              return (
-                                <UserAvatar
-                                  key={index}
-                                  user={worker}
-                                  label={
-                                    getUniqueWorkers(project.tasks).length <= 3
-                                  }
-                                />
-                              );
-                            })}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          {task.startDate.toLocaleDateString()}
-                        </TableCell>
-                        <TableCell>
-                          {task.endDate.toLocaleDateString()}
-                        </TableCell>
-                        <TableCell>
-                          {task.isComplete ? "완료" : "미완료"}
-                        </TableCell>
+            {group?.projects.map((project, i) => {
+              return (
+                <div key={i} className="flex flex-col">
+                  <h2 className="text-lg font-semibold">{project.name}</h2>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-[200px]">작업</TableHead>
+                        <TableHead>작업자</TableHead>
+                        <TableHead>시작일</TableHead>
+                        <TableHead>종료일</TableHead>
+                        <TableHead>완료 여부</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            ))}
+                    </TableHeader>
+                    <TableBody>
+                      {project.tasks.map((task, i) => {
+                        const worker = getUniqueWorkers(project.tasks);
+                        return (
+                          <TableRow key={i}>
+                            <TableCell className="font-medium">
+                              {task.name}
+                            </TableCell>
+                            <TableCell>
+                              <UserArray
+                                users={worker}
+                                orientation="col"
+                                maxAmount={3}
+                              />
+                            </TableCell>
+                            <TableCell>
+                              {task.startDate.toLocaleDateString()}
+                            </TableCell>
+                            <TableCell>
+                              {task.endDate.toLocaleDateString()}
+                            </TableCell>
+                            <TableCell>
+                              {task.isComplete ? "완료" : "미완료"}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              );
+            })}
           </div>
         </TabsContent>
       </Tabs>

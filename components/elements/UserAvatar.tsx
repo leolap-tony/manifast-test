@@ -25,7 +25,7 @@ const avatarVariants = cva(
   }
 );
 
-const labelVariants = cva("h-full", {
+const labelVariants = cva("h-ful text-nowrap", {
   variants: {
     size: {
       xl: "text-title-sm",
