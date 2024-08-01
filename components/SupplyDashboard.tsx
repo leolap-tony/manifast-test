@@ -22,6 +22,9 @@ import SummaryCard from "./SummaryCard";
 
 export default async function SupplyDashboard() {
   const session = await auth();
+
+  const koreaDayStart = new Date().setHours(0, 0, 0, 0);
+  const koresDayEnd = new Date().setHours(23, 59, 59, 999);
   const user =
     session &&
     (await prisma.user.findUnique({
@@ -76,7 +79,8 @@ export default async function SupplyDashboard() {
                   where: {
                     userId: session.user.sub,
                     date: {
-                      equals: new Date(),
+                      gte: new Date(koreaDayStart),
+                      lte: new Date(koresDayEnd),
                     },
                   },
                 },
