@@ -203,7 +203,17 @@ export default async function SupplyDashboard() {
                         <TableCell>
                           {project.endDate?.toLocaleDateString()}
                         </TableCell>
-                        <TableCell>40%</TableCell>
+                        <TableCell>
+                          {Math.round(
+                            (project.tasks.filter(
+                              (task) => task.isMilestone && task.isComplete,
+                            ).length /
+                              project.tasks.filter((task) => task.isMilestone)
+                                .length) *
+                              100,
+                          ) || 0}{" "}
+                          %
+                        </TableCell>
                         <TableCell>{project.group?.name}</TableCell>
                       </TableRow>
                     );
