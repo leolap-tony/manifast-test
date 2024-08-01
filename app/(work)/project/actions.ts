@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { ProjectType } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { Task } from "@/data/tasks";
 
 export async function createProject(formData: FormData) {
   const session = await auth();
@@ -109,6 +110,15 @@ export async function updateProject(tasks: any, formData: FormData) {
                   endDate: new Date(task.endDate),
                 })),
               },
+              // taskReport: {
+              //   create: tasks.flatMap((task: Task) => (task.taskReport)).map((taskReport: any) => ({
+              //     taskId: taskReport.taskId,
+              //     userId: taskReport.userId,
+              //     todayInputRate: taskReport.todayInputRate,
+              //     message: taskReport.message,
+              //     date: taskReport.date
+              //   }))
+              // }
             })),
           },
         },
@@ -176,6 +186,7 @@ export async function getProjectInfo(pid: string) {
                 worker: true,
               },
             },
+            taskReport: true
           },
         },
       },

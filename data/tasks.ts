@@ -21,6 +21,7 @@ export interface Task {
   startDate?: Date | undefined;
   endDate?: Date | undefined;
   workers?: [{ worker: string; workerName?: string; inputRate: number }];
+  taskReport?: [{ taskId: string, userId: string, todayInputRate: number, message: string, date: Date }]
 }
 
 export const TASKS: Tasks = {

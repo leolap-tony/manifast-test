@@ -104,6 +104,13 @@ const Page = () => {
           workerName: worker.worker.name,
           inputRate: worker.inputRate,
         })),
+        taskReport: task.taskReport.map((taskReport) => ({
+          taskId: taskReport.taskId,
+          userId: taskReport.userId,
+          todayInputRate: taskReport.todayInputRate,
+          message: taskReport.message,
+          date: taskReport.date
+        }))
       };
     });
     console.log("tasks:", tasks);
@@ -171,6 +178,7 @@ const Page = () => {
   return (
     <main className="page-contents">
       <Header type="page" title="프로젝트 수정" />
+      <p>{JSON.stringify(tasks)}</p>
       <form
         className="flex flex-col gap-8 p-8 w-full"
         action={updateProjectWithTasks}
