@@ -103,6 +103,13 @@ const Page = () => {
           workerName: worker.worker.name,
           inputRate: worker.inputRate,
         })),
+        taskReport: task.taskReport.map((report) => ({
+          taskId: report.taskId,
+          userId: report.userId,
+          todayInputRate: report.todayInputRate,
+          message: report.message,
+          date: report.date,
+        }))
       };
     });
     console.log("tasks:", tasks);
