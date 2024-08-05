@@ -109,6 +109,14 @@ export async function updateProject(tasks: any, formData: FormData) {
                   endDate: new Date(task.endDate),
                 })),
               },
+              taskReport: {
+                create: tasks[i].taskReport.map((report: any, j: number) => ({
+                  userId: report.userId,
+                  todayInputRate: report.todayInputRate,
+                  message: report.message,
+                  date: report.date
+                }))
+              }
             })),
           },
         },
@@ -176,6 +184,7 @@ export async function getProjectInfo(pid: string) {
                 worker: true,
               },
             },
+            taskReport: true
           },
         },
       },
