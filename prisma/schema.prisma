@@ -149,7 +149,7 @@ model TaskReport {
   user           User     @relation(fields: [userId], references: [id])
   todayInputRate Int
   message        String?
-  date           DateTime @db.Date
+  date           DateTime
 
   @@unique([taskId, userId, date])
 }
