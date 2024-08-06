@@ -184,7 +184,7 @@ export default function Page() {
           value={startDate?.toISOString()}
         />
         <input type="hidden" name="endDate" value={endDate?.toISOString()} />
-        <Button className="w-fit">프로젝트 요청</Button>
+        <Button className="w-fit mx-6">프로젝트 요청</Button>
       </form>
     </main>
   );
