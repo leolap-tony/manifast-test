@@ -1,6 +1,6 @@
 import { Project, Task } from "@prisma/client";
 import React from "react";
-import { Progress } from "./elements/Progress";
+import { Progress } from "./elements/progress";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 

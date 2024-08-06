@@ -2,7 +2,7 @@ import React from "react";
 import { auth } from "@/auth";
 import prisma from "@/db";
 
-import { Progress } from "@/components/elements/Progress";
+// import { Progress } from "@/components/elements/Progress";
 import {
   Tabs,
   TabsContent,
