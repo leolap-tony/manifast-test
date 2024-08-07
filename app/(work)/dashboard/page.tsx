@@ -56,19 +56,7 @@ export default async function page() {
     <main className="page-contents">
       {/*<pre>{JSON.stringify(myProjects, null, 2)}</pre>*/}
       <Header type="dashboard" />
-      <section className="page-section">
-        {/*<div className="w-full grid grid-cols-3 p-6 gap-4">
-          <SummaryCard type="project" value={0}></SummaryCard>
-          <SummaryCard type="inputRate" value={[0, 0]}></SummaryCard>
-          <SummaryCard type="project" value={0}></SummaryCard>
-        </div>
-        <DailyProjectTable projects={myProjects as ProjectWithTasks[]} />*/}
-        {session?.user?.role == "WORKER" || session?.user.role == "MANAGER" ? (
-          <SupplyDashboard />
-        ) : (
-          <DemandDashboard />
-        )}
-      </section>
+      <section className="page-section"></section>
     </main>
   );
 }

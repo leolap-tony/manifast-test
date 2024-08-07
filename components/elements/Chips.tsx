@@ -14,11 +14,12 @@ const chipStyles = cva("px-2 py-1  w-fit h-fit", {
       remaining: "rounded-[4px] text-body-sm-m",
     },
     status: {
-      REQUESTED: "bg-green-200",
-      STARTED: "bg-gray-200",
-      COMPLETED: "bg-blue-200",
-      STOPPED: "bg-yellow-200",
-      CANCELED: "bg-red-200",
+      REQUEST: "bg-green-200",
+      STANDBY: "bg-gray-200",
+      LIVE: "bg-blue-200",
+      COMPLETE: "bg-yellow-200",
+      STOP: "bg-red-200",
+      CANCEL: "bg-red-200",
     },
     difficulty: {
       1: "bg-primary/30",
@@ -37,19 +38,21 @@ export default function Chips({ type, value }: ChipsProps) {
 
   if (type === "status") {
     switch (value) {
-      case "REQUESTED":
+      case "REQUEST":
         label = "요청됨";
         break;
-      case "STARTED":
-        label = "시작됨";
+      case "STANDBY":
+        label = "시작전";
         break;
-      case "COMPLETED":
+      case "LIVE":
+        label = "진행중";
+        break;
+      case "COMPLETE":
         label = "완료됨";
         break;
-      case "STOPPED":
+      case "STOP":
         label = "중단됨";
-        break;
-      case "CANCELED":
+      case "CANCEL":
         label = "취소됨";
         break;
       default:

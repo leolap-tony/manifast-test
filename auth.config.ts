@@ -11,6 +11,7 @@ export default {
     async jwt(props) {
       if (props.user) {
         props.token.role = props.user.role;
+        props.token.authority = props.user.authority;
       }
       return props.token;
     },
@@ -18,6 +19,7 @@ export default {
       if (session.user) {
         session.user.sub = token ? token.sub : null;
         session.user.role = token.role;
+        session.user.authority = token.authority;
       }
       return session;
     },

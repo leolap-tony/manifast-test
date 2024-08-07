@@ -9,12 +9,14 @@ declare module "next-auth" {
       /** The user's postal address. */
       sub: string;
       role: string;
+      authority: string;
     } & DefaultSession["user"];
   }
 
   interface User extends DefaultUser {
     role: string;
-    phoen: string;
+    authority: string;
+    phone: string;
   }
 }
 
@@ -27,6 +29,7 @@ declare module "next-auth" {
 declare module "@auth/core/adapters" {
   export interface AdapterUser extends User {
     role: string;
+    authority: string;
     phone: string;
   }
 }

@@ -31,7 +31,6 @@ import {
 } from "@/components/ui/sheet";
 import prisma from "@/db";
 import { Separator } from "@/components/ui/separator";
-import { completeTask, createThread } from "../actions";
 import { MilestoneIcon } from "lucide-react";
 import Header from "@/components/navigation/Header";
 import KeyValueLabel from "@/components/elements/KeyValueLabel";
@@ -100,7 +99,7 @@ export default async function page({ params }: { params: { pid: string } }) {
       {/*<pre>{JSON.stringify(groupedThreads, null, 2)}</pre>*/}
       <Header type="projectdetail" title={project?.name}>
         {(session?.user.role == "WORKER" || session?.user.role == "MANAGER") &&
-        project?.status == "REQUESTED" ? (
+        project?.status == "REQUEST" ? (
           <Button asChild>
             <Link href={`/project/${params.pid}/check`}>프로젝트 검토하기</Link>
           </Button>
@@ -120,7 +119,7 @@ export default async function page({ params }: { params: { pid: string } }) {
           {project?.group.name}
         </KeyValueLabel>
         <KeyValueLabel direction="horizontal" label="종류" labelWidth={86}>
-          {project?.type}
+          {project?.projectTypeName}
         </KeyValueLabel>
         <KeyValueLabel direction="horizontal" label="작업자" labelWidth={86}>
           <UserArray users={uniqueWorkers} orientation="row" maxAmount={3} />
@@ -144,10 +143,7 @@ export default async function page({ params }: { params: { pid: string } }) {
           <TabsTrigger value="wbs">WBS</TabsTrigger>
         </TabsList>
         <TabsContent value="thread" className="flex flex-col gap-4">
-          <form
-            action={createThread}
-            className="flex flex-col gap-6 w-full p-4 items-start"
-          >
+          <form className="flex flex-col gap-6 w-full p-4 items-start">
             {/* <ToggleGroup type="single" className="">
               <ToggleGroupItem value="normal">일반 메시지</ToggleGroupItem>
               <ToggleGroupItem value="complete">프로젝트 완료</ToggleGroupItem>
@@ -193,7 +189,7 @@ export default async function page({ params }: { params: { pid: string } }) {
                             <div>{task.name}</div>
                           </SheetTrigger>
                           <SheetContent className="w-[400px] sm:w-[540px] p-0">
-                            <form action={completeTask}>
+                            <form>
                               <SheetHeader className="px-6 pt-8 pb-5 border-b">
                                 <SheetTitle className="text-title-lg text-text-title flex gap-2 items-center">
                                   {task.isMilestone && (
