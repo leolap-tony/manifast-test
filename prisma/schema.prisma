@@ -22,14 +22,14 @@ model User {
   role             Role?
   authority        Authority?
   accounts         Account[]
-  managementGroups Group[]         @relation("GroupManager")
-  owningGroup      Group?          @relation("GroupOwner")
+  ManagementGroups Group[]         @relation("GroupManager")
+  OwningGroup      Group?          @relation("GroupOwner")
   Project          Project[]
   ProjectThread    ProjectThread[]
-  sessions         Session[]
-  taskReport       TaskReport[]
-  tasks            TaskWorker[]
-  group            Group?          @relation(fields: [groupId], references: [id])
+  Sessions         Session[]
+  TaskReport       TaskReport[]
+  Tasks            TaskWorker[]
+  Group            Group?          @relation(fields: [groupId], references: [id])
 }
 
 model Account {
@@ -69,47 +69,76 @@ model VerificationToken {
 }
 
 model Group {
-  id             String    @id @default(cuid())
+  id             String          @id @default(cuid())
   name           String
-  ceo            String?
   email          String?
   phone          String?
-  address        String?
-  businessNumber String?
-  ownerId        String    @unique
+  ownerId        String          @unique
   managerId      String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
   supplyGroupId  String?
-  company        String?
-  manager        User?     @relation("GroupManager", fields: [managerId], references: [id])
-  owner          User      @relation("GroupOwner", fields: [ownerId], references: [id])
-  supplyGroup    Group?    @relation("SupplyGroup", fields: [supplyGroupId], references: [id])
-  demandGroups   Group[]   @relation("SupplyGroup")
+  manager        User?           @relation("GroupManager", fields: [managerId], references: [id])
+  owner          User?           @relation("GroupOwner", fields: [ownerId], references: [id])
+  supplyGroup    Group?          @relation("SupplyGroup", fields: [supplyGroupId], references: [id])
+  demandGroups   Group[]         @relation("SupplyGroup")
   projects       Project[]
   members        User[]
+  businessInfo   BusinessInfo?   @relation("GroupBusinessInfo")
+  membershipInfo MembershipInfo? @relation("GroupMembershipInfo")
+}
+
+model BusinessInfo {
+  groupId        String    @id
+  businessType   Int
+  companyName    String?
+  ceoName        String?
+  address        String?
+  businessNumber String?
+  category       String?
+  workforceSize  String?
+  foundingDate   DateTime?
+  group          Group     @relation("GroupBusinessInfo", fields: [groupId], references: [id], onDelete: Cascade)
+}
+
+model MembershipInfo {
+  groupId        String           @id
+  membershipType Int
+  status         MembershipStatus
+  startDate      DateTime         @default(now())
+  membership     MembershipData   @relation("usingMembership", fields: [membershipType], references: [id])
+  group          Group            @relation("GroupMembershipInfo", fields: [groupId], references: [id])
+}
+
+model MembershipData {
+  id              Int              @id
+  type            MembershipType
+  name            String
+  description     String?
+  cost            Int?
+  membershipGroup MembershipInfo[] @relation("usingMembership")
 }
 
 model Project {
-  id                String          @id @default(cuid())
-  name              String
-  groupId           String
-  projectTypeName   String
-  request_startDate DateTime?
-  request_endDate   DateTime?
-  startDate         DateTime?
-  endDate           DateTime?
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
-  message           String?
-  managerId         String?
-  status            ProjectStatus?
-  difficulty        Int             @default(2)
-  group             Group           @relation(fields: [groupId], references: [id])
-  manager           User?           @relation(fields: [managerId], references: [id])
-  projectType       ProjectType     @relation(fields: [projectTypeName], references: [name])
-  threads           ProjectThread[]
-  tasks             Task[]
+  id                  String           @id @default(cuid())
+  name                String
+  groupId             String
+  projectTemplateName String
+  request_startDate   DateTime?
+  request_endDate     DateTime?
+  startDate           DateTime?
+  endDate             DateTime?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  message             String?
+  managerId           String?
+  status              ProjectStatus?
+  difficulty          Int              @default(2)
+  group               Group            @relation(fields: [groupId], references: [id])
+  manager             User?            @relation(fields: [managerId], references: [id])
+  projectTemplate     ProjectTemplate? @relation(fields: [projectTemplateName], references: [name])
+  threads             ProjectThread[]
+  tasks               Task[]
 }
 
 model Task {
@@ -117,8 +146,8 @@ model Task {
   name        String
   isMilestone Boolean
   projectId   String
-  startDate   DateTime
-  endDate     DateTime
+  startDate   DateTime?
+  endDate     DateTime?
   isComplete  Boolean      @default(false)
   project     Project      @relation(fields: [projectId], references: [id])
   taskReport  TaskReport[]
@@ -163,24 +192,24 @@ model ProjectThread {
   project   Project  @relation(fields: [projectId], references: [id])
 }
 
-model ProjectType {
-  id        Int        @id @default(autoincrement())
-  cartegory String?
-  name      String     @unique
-  Project   Project[]
-  TaskType  TaskType[]
+model ProjectTemplate {
+  id           Int            @id @default(autoincrement())
+  category     String?
+  name         String         @unique
+  project      Project[]
+  taskTemplate TaskTemplate[]
 }
 
-model TaskType {
-  id              Int         @id @default(autoincrement())
-  projectTypeName String
-  isMilestone     Boolean     @default(true)
-  order           Int?        @default(0)
-  name            String
-  description     String?
-  standardAmount  String?
-  cost            Int?        @default(1)
-  ProjectType     ProjectType @relation(fields: [projectTypeName], references: [name])
+model TaskTemplate {
+  id                  Int             @id @default(autoincrement())
+  projectTemplateName String
+  isMilestone         Boolean         @default(true)
+  order               Int?            @default(0)
+  name                String
+  description         String?
+  standardAmount      String?
+  cost                Int?            @default(1)
+  projectTemplate     ProjectTemplate @relation(fields: [projectTemplateName], references: [name])
 }
 
 enum Authority {
@@ -196,6 +225,17 @@ enum ProjectStatus {
   COMPLETE
   STOP
   CANCEL
+}
+
+enum MembershipStatus {
+  EXPIRES
+  PAYING
+  ETC
+}
+
+enum MembershipType {
+  SUPPLY
+  DEMAND
 }
 
 enum Role {

@@ -10,7 +10,6 @@ interface ThreadDailyListProps {
   date: string;
   threads: Array<ProjectThread & { author: User }>;
 }
-
 function ThreadMessage({
   thread,
 }: {

@@ -5,7 +5,7 @@ export interface GroupWithProjects extends Group {
   projects: ProjectWithTasks[];
 }
 export interface ProjectWithTasks extends Project {
-  group: Pick<Group, "name">;
+  group?: Pick<Group, "name">;
   tasks: TaskWithWorkers[];
 }
 
