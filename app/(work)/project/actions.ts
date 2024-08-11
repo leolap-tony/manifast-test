@@ -2,7 +2,7 @@
 import { auth } from "@/auth";
 import prisma from "@/db";
 import { ProjectWithTasks } from "@/types/queryInterface";
-import { Task } from "@prisma/client";
+import { Project, Task } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
@@ -18,7 +18,7 @@ export async function createProject(formData: FormData) {
       select: {
         id: true,
         groupId: true,
-        Group: {
+        group: {
           select: {
             managerId: true,
           },
@@ -44,7 +44,7 @@ export async function createProject(formData: FormData) {
         request_startDate: new Date(formData.get("startDate") as string),
         request_endDate: new Date(formData.get("endDate") as string),
         message: formData.get("message") as string,
-        managerId: user.Group?.managerId,
+        managerId: user.group?.managerId,
         tasks: {
           create: task,
         },
@@ -67,36 +67,9 @@ export async function createProject(formData: FormData) {
   redirect(`/project/${project?.id}`);
 }
 
-export async function updateProject(data: Partial<ProjectWithTasks>) {
-  const project = await prisma.project.update({
-    where: { id: data.id },
-    data: {
-      name: data.name,
-      startDate: data.startDate,
-      endDate: data.endDate,
-      status: data.status,
-      difficulty: data.difficulty,
-    },
-  });
-
-  if (data.tasks) {
-    const upsertOps = data.tasks.flatMap((task) =>
-      task.workers.map((worker) =>
-        prisma.taskWorker.upsert({
-          where: { taskId_userId: { taskId: task.id, userId: worker.userId } },
-          update: { inputRate: worker.inputRate },
-          create: {
-            taskId: task.id,
-            userId: worker.userId,
-            inputRate: worker.inputRate,
-          },
-        })
-      )
-    );
-
-    // 모든 upsert 작업을 병렬로 실행하여 처리
-    await prisma.$transaction(upsertOps);
+export async function updateProject(data: ProjectWithTasks) {
+  try {
+  } catch (error) {
+    throw error; // 에러를 다시 던져 호출자가 처리할 수 있게 합니다.
   }
-
-  return project;
 }

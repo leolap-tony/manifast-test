@@ -4,6 +4,7 @@ import React from "react";
 import ProjectUpdateForm from "./ProjectUpdateForm";
 import { Project, User } from "@prisma/client";
 import { auth } from "@/auth";
+import { Button } from "react-day-picker";
 
 export default async function page({
   searchParams,
@@ -20,7 +21,7 @@ export default async function page({
       ? await prisma.user.findUnique({
           where: { id: session?.user.sub },
           select: {
-            Group: {
+            group: {
               select: {
                 members: { select: { id: true, name: true, image: true } },
               },
@@ -38,7 +39,7 @@ export default async function page({
       />
       <ProjectUpdateForm
         project={project as any}
-        members={members?.Group?.members as Partial<User>[]}
+        members={members?.group?.members as Partial<User>[]}
       />
     </main>
   );

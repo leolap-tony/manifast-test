@@ -108,7 +108,7 @@ export default function ProjectRequestForm({
   const handleSubmit = async () => {
     try {
       const form = useFormStore.getState() as ProjectWithTasks;
-      updateProject(form);
+      console.log(form);
     } catch (error) {}
   };
   const columns: ColumnDef<TaskWithWorkers>[] = useMemo(
