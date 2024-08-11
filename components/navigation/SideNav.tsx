@@ -43,11 +43,6 @@ export default function SideNav() {
           isSelected={pathname === "/dashboard"}
         />
         <SideNavItem
-          page="고객"
-          href="/customer"
-          isSelected={pathname.startsWith("/customer")}
-        />
-        <SideNavItem
           page="프로젝트"
           href="/project"
           isSelected={pathname.startsWith("/project")}

@@ -28,7 +28,10 @@ export default async function Page() {
       include: {
         group: {
           include: {
+            owner: true,
             members: true,
+            businessInfo: true,
+            membershipInfo: { select: { membership: true } },
           },
         },
       },

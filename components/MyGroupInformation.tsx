@@ -10,14 +10,25 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import KeyValueLabel from "@/components/elements/KeyValueLabel";
-import { Group, User } from "@prisma/client";
+import {
+  BusinessInfo,
+  Group,
+  MembershipData,
+  MembershipInfo,
+  User,
+} from "@prisma/client";
 import Header from "./navigation/Header";
 import UserAvatar from "./elements/UserAvatar";
 
 export default function MyGroupInformation({
   group,
 }: {
-  group: Group & { members: User[] };
+  group: Group & {
+    owner: User;
+    members: User[];
+    businessInfo: BusinessInfo;
+    membershipInfo: MembershipInfo & { membership: MembershipData };
+  };
 }) {
   return (
     <div>
@@ -29,7 +40,7 @@ export default function MyGroupInformation({
             label="그룹 관리자"
             labelWidth={86}
           >
-            {/*<UserAvatar size="md" user={user?.group?.owner}>*/}오너
+            <UserAvatar size="md" user={group?.owner} label />
           </KeyValueLabel>
         </li>
         <li>
@@ -62,7 +73,7 @@ export default function MyGroupInformation({
         </li>
         <li>
           <KeyValueLabel direction="horizontal" label="플랜" labelWidth={86}>
-            플랜
+            {group.membershipInfo.membership.name}
           </KeyValueLabel>
         </li>
       </ul>
@@ -100,8 +111,8 @@ export default function MyGroupInformation({
           </KeyValueLabel>
         </li>
         <li>
-          <KeyValueLabel direction="horizontal" label="플랜" labelWidth={86}>
-            {group.ceo}
+          <KeyValueLabel direction="horizontal" label="대표자" labelWidth={86}>
+            {group.businessInfo?.ceoName}
           </KeyValueLabel>
         </li>
         <li>
@@ -110,7 +121,7 @@ export default function MyGroupInformation({
             label="사업자등록번호"
             labelWidth={86}
           >
-            {group.businessNumber}
+            {group.businessInfo?.businessNumber}
           </KeyValueLabel>
         </li>
         <li>

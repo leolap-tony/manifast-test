@@ -22,14 +22,14 @@ model User {
   role             Role?
   authority        Authority?
   accounts         Account[]
-  ManagementGroups Group[]         @relation("GroupManager")
-  OwningGroup      Group?          @relation("GroupOwner")
-  Project          Project[]
-  ProjectThread    ProjectThread[]
-  Sessions         Session[]
-  TaskReport       TaskReport[]
-  Tasks            TaskWorker[]
-  Group            Group?          @relation(fields: [groupId], references: [id])
+  managementGroups Group[]         @relation("GroupManager")
+  owningGroup      Group?          @relation("GroupOwner")
+  project          Project[]
+  projectThread    ProjectThread[]
+  sessions         Session[]
+  taskReport       TaskReport[]
+  tasks            TaskWorker[]
+  group            Group?          @relation(fields: [groupId], references: [id])
 }
 
 model Account {
