@@ -108,8 +108,11 @@ export default function ProjectRequestForm({
   const handleSubmit = async () => {
     try {
       const form = useFormStore.getState() as ProjectWithTasks;
-      console.log(form);
-    } catch (error) {}
+      const data = Object.fromEntries(Object.entries(form).filter((e) => typeof (e[1]) !== 'function'))
+      await updateProject(data)
+    } catch (error) {
+      console.log(error)
+    }
   };
   const columns: ColumnDef<TaskWithWorkers>[] = useMemo(
     () => [
@@ -418,9 +421,9 @@ export default function ProjectRequestForm({
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                       </TableHead>
                     );
                   })}

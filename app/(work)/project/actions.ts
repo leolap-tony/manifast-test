@@ -67,9 +67,34 @@ export async function createProject(formData: FormData) {
   redirect(`/project/${project?.id}`);
 }
 
-export async function updateProject(data: ProjectWithTasks) {
+export async function updateProject(data: Partial<ProjectWithTasks>) {
   try {
+    console.log(data)
+    await prisma.$transaction([
+      prisma.task.deleteMany({
+        where: { projectId: data.id }
+      }),
+      prisma.project.update({
+        where: { id: data.id },
+        data: {
+          startDate: data.startDate && new Date(data.startDate),
+          endDate: data.endDate && new Date(data.endDate),
+          difficulty: data.difficulty,
+          tasks: {
+            create: data.tasks?.map((task) => ({
+              name: task.name,
+              isMilestone: task.isMilestone,
+              startDate: task.startDate,
+              endDate: task.endDate,
+              isComplete: task.isComplete
+            }))
+          }
+        }
+      })
+    ])
   } catch (error) {
     throw error; // 에러를 다시 던져 호출자가 처리할 수 있게 합니다.
   }
+  revalidatePath(`/project/${data.id}`)
+  redirect(`/project/${data.id}`)
 }
