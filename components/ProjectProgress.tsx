@@ -25,14 +25,14 @@ export default function ProjectProgress({ project }: ProjectProgressProps) {
   const progress = calculateProgress(project.tasks);
 
   const startDate =
-    project.status === "REQUESTED"
+    project.status === "REQUEST"
       ? project.request_startDate
       : project.startDate;
 
   const endDate =
-    project.status === "REQUESTED" ? project.request_endDate : project.endDate;
+    project.status === "REQUEST" ? project.request_endDate : project.endDate;
 
-  const isRequested = project.status === "REQUESTED";
+  const isRequested = project.status === "REQUEST";
 
   return (
     <div className="px-6 pt-4 pb-2.5 flex flex-col gap-2">

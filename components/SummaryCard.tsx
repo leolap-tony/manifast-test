@@ -1,4 +1,5 @@
 import React from "react";
+import { Separator } from "./ui/separator";
 
 type CardProps =
   | {
@@ -31,12 +32,26 @@ export default function SummaryCard({ type, value }: CardProps) {
 
   const InputRateType = ({ value }: { value: [number, number] }) => {
     return (
-      <div className="flex flex-row items-center gap-1 text-body-sm-n text-text-body">
-        <div>배정</div>
-        <div className="text-right text-title-md text-text-title">
-          {value[0]}
+      <div className="flex flex-row items-center gap-2 text-body-sm-n text-text-body">
+        <div className="flex flex-row items-center gap-1">
+          <div>배정</div>
+          <div className="text-right text-title-md text-text-title">
+            {value[0]}
+          </div>
+          <div>%</div>
         </div>
-        <div>%</div>
+        {value[1] ? (
+          <>
+            <Separator className="h-3" orientation="vertical" />
+            <div className="flex flex-row items-center gap-1">
+              <div>실제</div>
+              <div className="text-right text-title-md text-text-title">
+                {value[1]}
+              </div>
+              <div>%</div>
+            </div>
+          </>
+        ) : null}
       </div>
     );
   };

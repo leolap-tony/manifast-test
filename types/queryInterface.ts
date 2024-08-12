@@ -15,5 +15,6 @@ export interface TaskWithWorkers extends Task {
 
 // TaskWorkerWithWorker는 TaskWorker와 User를 포함합니다.
 export interface TaskWorkerWithWorker extends TaskWorker {
+  task?: Task;
   worker: User;
 }
