@@ -327,20 +327,16 @@ export default function ProjectRequestForm({
       <section>
         <Header type="section" title="기본 정보" />
         <div className="px-6 pb-6 grid grid-cols-2 gap-x-8 gap-y-3">
-          <KeyValueLabel
-            direction="horizontal"
-            label="프로젝트명"
-            labelWidth={80}
-          >
+          <KeyValueLabel direction="row" label="프로젝트명" labelWidth={80}>
             <Input
               defaultValue={name}
               onChange={(e) => setName(e.currentTarget.value)}
             />
           </KeyValueLabel>
-          <KeyValueLabel direction="horizontal" label="종류" labelWidth={80}>
+          <KeyValueLabel direction="row" label="종류" labelWidth={80}>
             <Input defaultValue={projectTemplateName} disabled />
           </KeyValueLabel>
-          <KeyValueLabel direction="horizontal" label="시작일" labelWidth={80}>
+          <KeyValueLabel direction="row" label="시작일" labelWidth={80}>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -365,7 +361,7 @@ export default function ProjectRequestForm({
               </PopoverContent>
             </Popover>
           </KeyValueLabel>
-          <KeyValueLabel direction="horizontal" label="종료일" labelWidth={80}>
+          <KeyValueLabel direction="row" label="종료일" labelWidth={80}>
             <Popover>
               <PopoverTrigger asChild>
                 <Button

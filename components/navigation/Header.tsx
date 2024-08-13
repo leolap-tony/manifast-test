@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 interface HeaderProps {
   type: "dashboard" | "projectdetail" | "page" | "section";
-  title?: string;
+  title?: string | React.ReactNode;
   children?: React.ReactNode;
   projectDetailComponent?: React.ReactNode;
   sectionComponent?: React.ReactNode;

@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import React from "react";
+import React, { Suspense } from "react";
 import Header from "@/components/navigation/Header";
 import prisma from "@/db";
 import MemberTable from "@/components/tables/MemberTable";
@@ -50,7 +50,9 @@ export default async function page() {
     <main className="page-contents">
       <Header type="page" title="멤버" />
       <section className="page-section">
-        <MemberTable members={data?.group?.members as any} />
+        <Suspense>
+          <MemberTable members={data?.group?.members as any} />
+        </Suspense>
       </section>
     </main>
   );

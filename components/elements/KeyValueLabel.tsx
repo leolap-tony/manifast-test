@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils";
 interface KeyValueLabelProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof labelVariants> {
-  direction: "vertical" | "horizontal"; // 방향 (수직 또는 수평)
-  label: string; // 라벨 텍스트
+  direction: "col" | "row"; // 방향 (수직 또는 수평)
+  label: string | React.ReactNode; // 라벨 텍스트
   hint?: string; // 힌트 텍스트
   children: React.ReactNode; // 라벨에 대응하는 값 또는 콘텐츠
   labelWidth?: number; // 라벨의 가로 길이 (숫자)
@@ -19,12 +19,12 @@ interface KeyValueLabelProps
 const labelVariants = cva("w-full h-fit flex", {
   variants: {
     direction: {
-      vertical: "flex-col gap-2", // 수직 레이아웃
-      horizontal: "flex-row items-center gap-3", // 수평 레이아웃
+      col: "flex-col gap-2", // 수직 레이아웃
+      row: "flex-row items-center gap-3", // 수평 레이아웃
     },
   },
   defaultVariants: {
-    direction: "vertical", // 기본 레이아웃 방향은 수직
+    direction: "col", // 기본 레이아웃 방향은 수직
   },
 });
 
@@ -33,12 +33,12 @@ const labelStyleVariants = cva(
   {
     variants: {
       direction: {
-        vertical: "w-full",
-        horizontal: "", // 가로 레이아웃일 경우 max-width를 동적으로 설정
+        col: "w-full",
+        row: "", // 가로 레이아웃일 경우 max-width를 동적으로 설정
       },
     },
     defaultVariants: {
-      direction: "vertical",
+      direction: "col",
     },
   }
 );
@@ -46,7 +46,7 @@ const labelStyleVariants = cva(
 // KeyValueLabel 컴포넌트 정의
 export default function KeyValueLabel({
   className,
-  direction = "vertical", // 기본 값 설정
+  direction = "col", // 기본 값 설정
   label,
   children,
   hint,
@@ -55,7 +55,7 @@ export default function KeyValueLabel({
 }: KeyValueLabelProps) {
   const labelStyle = labelWidth
     ? { width: `${labelWidth}px` }
-    : direction === "horizontal"
+    : direction === "row"
       ? { width: "104px" }
       : {};
 
@@ -68,7 +68,7 @@ export default function KeyValueLabel({
         {label}
       </span>
       <div className="w-full text-text-body text-body-md-n">{children}</div>
-      {direction === "vertical" && hint && <div>{hint}</div>}
+      {direction === "row" && hint && <div>{hint}</div>}
     </div>
   );
 }

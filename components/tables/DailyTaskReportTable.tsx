@@ -180,7 +180,7 @@ export default function DailyTaskReportTable({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="py-1.5">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

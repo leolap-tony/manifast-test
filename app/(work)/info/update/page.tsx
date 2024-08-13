@@ -30,7 +30,7 @@ const page = () => {
         </div>
         <div className="flex justify-center gap-6">
           <Button asChild variant="outline">
-            <Link href="/myinfo">이전</Link>
+            <Link href="/info">이전</Link>
           </Button>
           <Button>수정 완료</Button>
         </div>

@@ -54,8 +54,8 @@ export default function SideNav() {
         />
         <SideNavItem
           page="내 정보"
-          href="/myinfo"
-          isSelected={pathname.startsWith("/myinfo")}
+          href="/info"
+          isSelected={pathname.startsWith("/info")}
         />
       </ul>
     </nav>

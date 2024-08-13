@@ -54,36 +54,20 @@ export default function TaskWbs({ tasks }: { tasks: TaskWithWorkers[] }) {
                 {row.original.name}
               </SheetHeader>
               <div className="flex flex-col gap-3 px-6 py-4 bg-background-gray">
-                <KeyValueLabel
-                  label="작업자"
-                  labelWidth={86}
-                  direction="horizontal"
-                >
+                <KeyValueLabel label="작업자" labelWidth={86} direction="row">
                   <UserArray users={users} maxAmount={2} orientation="row" />
                 </KeyValueLabel>
-                <KeyValueLabel
-                  label="시작일"
-                  labelWidth={86}
-                  direction="horizontal"
-                >
+                <KeyValueLabel label="시작일" labelWidth={86} direction="row">
                   {row.original.startDate
                     ? format(row.original.startDate, "PPP", { locale: ko })
                     : "미정"}
                 </KeyValueLabel>
-                <KeyValueLabel
-                  label="종료일"
-                  labelWidth={86}
-                  direction="horizontal"
-                >
+                <KeyValueLabel label="종료일" labelWidth={86} direction="row">
                   {row.original.endDate
                     ? format(row.original.endDate, "PPP", { locale: ko })
                     : "미정"}
                 </KeyValueLabel>
-                <KeyValueLabel
-                  label="상태"
-                  labelWidth={86}
-                  direction="horizontal"
-                >
+                <KeyValueLabel label="상태" labelWidth={86} direction="row">
                   {row.original.isComplete ? (
                     <Chips type="status" value="COMPLETE" />
                   ) : (

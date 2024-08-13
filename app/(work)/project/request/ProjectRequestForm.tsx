@@ -62,14 +62,10 @@ export default function ProjectRequestForm({
       <section>
         <Header type="section" title="기본 정보" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-4 px-6 pb-6">
-          <KeyValueLabel
-            direction="horizontal"
-            label="프로젝트 명"
-            labelWidth={64}
-          >
+          <KeyValueLabel direction="row" label="프로젝트 명" labelWidth={64}>
             <Input name="name" required />
           </KeyValueLabel>
-          <KeyValueLabel direction="horizontal" label="종류" labelWidth={64}>
+          <KeyValueLabel direction="row" label="종류" labelWidth={64}>
             <Select
               name="projectTemplateName"
               required
@@ -98,7 +94,7 @@ export default function ProjectRequestForm({
               </SelectContent>
             </Select>
           </KeyValueLabel>
-          <KeyValueLabel direction="horizontal" label="시작일" labelWidth={64}>
+          <KeyValueLabel direction="row" label="시작일" labelWidth={64}>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -123,7 +119,7 @@ export default function ProjectRequestForm({
               </PopoverContent>
             </Popover>
           </KeyValueLabel>
-          <KeyValueLabel direction="horizontal" label="종료일" labelWidth={64}>
+          <KeyValueLabel direction="row" label="종료일" labelWidth={64}>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
