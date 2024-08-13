@@ -69,10 +69,10 @@ export async function createProject(formData: FormData) {
 
 export async function updateProject(data: Partial<ProjectWithTasks>) {
   try {
-    console.log(data)
+    console.log(data);
     await prisma.$transaction([
       prisma.task.deleteMany({
-        where: { projectId: data.id }
+        where: { projectId: data.id },
       }),
       prisma.project.update({
         where: { id: data.id },
@@ -86,15 +86,27 @@ export async function updateProject(data: Partial<ProjectWithTasks>) {
               isMilestone: task.isMilestone,
               startDate: task.startDate,
               endDate: task.endDate,
-              isComplete: task.isComplete
-            }))
-          }
-        }
-      })
-    ])
+              isComplete: task.isComplete,
+            })),
+          },
+        },
+      }),
+    ]);
   } catch (error) {
     throw error; // 에러를 다시 던져 호출자가 처리할 수 있게 합니다.
   }
-  revalidatePath(`/project/${data.id}`)
-  redirect(`/project/${data.id}`)
+  revalidatePath(`/project/${data.id}`);
+  redirect(`/project/${data.id}`);
+}
+
+export async function completeTask(taskId: string, status: boolean) {
+  const session = await auth();
+  try {
+    await prisma.task.update({
+      where: { id: taskId, workers: { some: { userId: session?.user.sub } } },
+      data: { isComplete: status },
+    });
+  } catch (e) {
+    throw e;
+  }
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import { Project, ProjectStatus, Task } from "@prisma/client";
 import React from "react";
 import { Progress } from "./elements/progress";

@@ -10,39 +10,19 @@ import {
 } from "@/components/elements/Tabs";
 import { Textarea } from "@/components/elements/Textarea";
 import { Button } from "@/components/elements/Button";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+
 import prisma from "@/db";
 import { Separator } from "@/components/ui/separator";
-import { MilestoneIcon } from "lucide-react";
+
 import Header from "@/components/navigation/Header";
-import KeyValueLabel from "@/components/elements/KeyValueLabel";
-import UserAvatar from "@/components/elements/UserAvatar";
+
 import { Project, ProjectThread, Task, User } from "@prisma/client";
-import Chips from "@/components/elements/Chips";
+
 import ThreadDailyList from "@/components/ThreadDailyList";
 import ProjectProgress from "@/components/ProjectProgress";
-import { getUniqueWorkers } from "@/lib/getUniqueWorkers";
-import { TaskWithWorkers } from "@/types/queryInterface";
-import UserArray from "@/components/UserArray";
 
+import TaskWbs from "@/components/TaskWbs";
+import ProjectDetail from "./ProjectDetail";
 export default async function page({ params }: { params: { pid: string } }) {
   const session = await auth();
   const project = await prisma.project.findUnique({
@@ -54,10 +34,16 @@ export default async function page({ params }: { params: { pid: string } }) {
         include: { manager: true, owner: true },
       },
       tasks: {
-        include: {
+        select: {
+          id: true,
+          name: true,
+          startDate: true,
+          endDate: true,
+          isComplete: true,
+          isMilestone: true,
           workers: {
-            include: {
-              worker: true,
+            select: {
+              worker: { select: { id: true, name: true, image: true } },
             },
           },
         },
@@ -93,10 +79,9 @@ export default async function page({ params }: { params: { pid: string } }) {
   if (project?.threads && project.threads.length > 0) {
     groupedThreads = groupByDate(project.threads);
   }
-  const uniqueWorkers = getUniqueWorkers(project?.tasks as TaskWithWorkers[]);
+
   return (
     <main className="page-contents">
-      {/*<pre>{JSON.stringify(groupedThreads, null, 2)}</pre>*/}
       <Header type="projectdetail" title={project?.name}>
         {(session?.user.role == "WORKER" || session?.user.role == "MANAGER") &&
         project?.status == "REQUEST" ? (
@@ -113,31 +98,8 @@ export default async function page({ params }: { params: { pid: string } }) {
           </Button>
         )}
       </Header>
-      <div className="grid grid-cols-3 gap-4 px-6 py-4 bg-background-light">
-        <KeyValueLabel direction="horizontal" label="전담 PM" labelWidth={86}>
-          <UserAvatar size="md" user={project?.group.manager as User} label />
-        </KeyValueLabel>
-        <KeyValueLabel direction="horizontal" label="그룹" labelWidth={86}>
-          {project?.group.name}
-        </KeyValueLabel>
-        <KeyValueLabel direction="horizontal" label="종류" labelWidth={86}>
-          {project?.projectTemplateName}
-        </KeyValueLabel>
-        <KeyValueLabel direction="horizontal" label="작업자" labelWidth={86}>
-          <UserArray users={uniqueWorkers} orientation="row" maxAmount={3} />
-        </KeyValueLabel>
-        <KeyValueLabel
-          direction="horizontal"
-          label="그룹 관리자"
-          labelWidth={86}
-        >
-          <UserAvatar size="md" user={project?.group.owner as User} label />
-        </KeyValueLabel>
-        <KeyValueLabel direction="horizontal" label="상태" labelWidth={86}>
-          <Chips type="status" value={project?.status as string} />
-        </KeyValueLabel>
-      </div>
-      <ProjectProgress project={project as Project & { tasks: Task[] }} />
+      <ProjectDetail project={project as any} />
+      <ProjectProgress project={project as any} />
 
       <Tabs defaultValue="thread" className="">
         <TabsList>
@@ -163,7 +125,9 @@ export default async function page({ params }: { params: { pid: string } }) {
           </div>
         </TabsContent>
         <TabsContent value="wbs">
-          <div className="flex flex-col p-6"></div>
+          <div className="flex flex-col p-6">
+            <TaskWbs tasks={project?.tasks as any} />
+          </div>
         </TabsContent>
       </Tabs>
     </main>

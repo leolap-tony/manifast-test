@@ -7,7 +7,12 @@ import prisma from "@/db";
 export default async function MyProjects() {
   const session = await auth();
   const project = await prisma.project.findMany({
-    where: { managerId: session?.user.sub },
+    where: {
+      OR: [
+        { managerId: session?.user.sub },
+        { group: { members: { some: { id: session?.user.sub } } } },
+      ],
+    },
     select: {
       id: true,
       name: true,
