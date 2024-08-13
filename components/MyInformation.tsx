@@ -4,7 +4,10 @@ import KeyValueLabel from "./elements/KeyValueLabel";
 import { Button } from "./elements/Button";
 import Link from "next/link";
 import Image from "next/image";
-import { User } from "@prisma/client";
+import { Authority, Role, User } from "@prisma/client";
+import { roleAndAuthorityToKorean } from "@/lib/textReplacer";
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
 
 export default function MyInformation({ user }: { user: User }) {
   return (
@@ -23,7 +26,7 @@ export default function MyInformation({ user }: { user: User }) {
         </li>
         <li>
           <KeyValueLabel direction="horizontal" label="가입일" labelWidth={86}>
-            {user?.createdAt.toLocaleDateString()}
+            {format(user?.createdAt, "PPP", { locale: ko })}
           </KeyValueLabel>
         </li>
         <li>
@@ -33,12 +36,12 @@ export default function MyInformation({ user }: { user: User }) {
         </li>
         <li>
           <KeyValueLabel direction="horizontal" label="권한" labelWidth={86}>
-            authority
+            {roleAndAuthorityToKorean(user.authority as Authority)}
           </KeyValueLabel>
         </li>
         <li>
           <KeyValueLabel direction="horizontal" label="역할" labelWidth={86}>
-            {user?.role}
+            {roleAndAuthorityToKorean(user.role as Role)}
           </KeyValueLabel>
         </li>
         <li>

@@ -19,7 +19,10 @@ import {
 import Link from "next/link";
 import UserAvatar from "../elements/UserAvatar";
 import Header from "../navigation/Header";
-import { getDifficultyIcon } from "@/lib/textReplacer";
+import {
+  getDifficultyIcon,
+  roleAndAuthorityToKorean,
+} from "@/lib/textReplacer";
 import Chips from "../elements/Chips";
 
 export interface MemberTableProps extends Partial<User> {
@@ -42,7 +45,11 @@ const columns: ColumnDef<MemberTableProps>[] = [
       );
     },
   },
-  { accessorKey: "role", header: "직무" },
+  {
+    accessorKey: "role",
+    header: "직무",
+    accessorFn: (info) => roleAndAuthorityToKorean(info.role as Role),
+  },
   {
     id: "todayDifficulty",
     accessorKey: "project",

@@ -11,14 +11,19 @@ import {
 } from "@/components/ui/table";
 import KeyValueLabel from "@/components/elements/KeyValueLabel";
 import {
+  Authority,
   BusinessInfo,
   Group,
   MembershipData,
   MembershipInfo,
+  Role,
   User,
 } from "@prisma/client";
 import Header from "./navigation/Header";
 import UserAvatar from "./elements/UserAvatar";
+import { roleAndAuthorityToKorean } from "@/lib/textReplacer";
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
 
 export default function MyGroupInformation({
   group,
@@ -63,7 +68,7 @@ export default function MyGroupInformation({
         </li>
         <li>
           <KeyValueLabel direction="horizontal" label="생성일" labelWidth={86}>
-            {group?.createdAt.toLocaleDateString()}
+            {format(group?.createdAt, "PPP", { locale: ko })}
           </KeyValueLabel>
         </li>
         <li>
@@ -96,8 +101,12 @@ export default function MyGroupInformation({
                     <UserAvatar user={member} label />
                   </TableCell>
                   <TableCell>{member.email}</TableCell>
-                  <TableCell>{member.role}</TableCell>
-                  <TableCell>{member.job}</TableCell>
+                  <TableCell>
+                    {roleAndAuthorityToKorean(member.authority as Authority)}
+                  </TableCell>
+                  <TableCell>
+                    {roleAndAuthorityToKorean(member.role as Role)}
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>

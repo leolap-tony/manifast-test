@@ -1,4 +1,4 @@
-import { ProjectStatus } from "@prisma/client";
+import { Authority, ProjectStatus, Role } from "@prisma/client";
 
 export const getDifficultyIcon = (difficultyRate: number) => {
   if (difficultyRate <= 0.74) {
@@ -16,7 +16,7 @@ export const getDifficultyIcon = (difficultyRate: number) => {
   }
 };
 
-export const statusToString = (status: ProjectStatus | null) => {
+export const statusToKorean = (status: ProjectStatus | null) => {
   switch (status) {
     case "REQUEST":
       return "요청됨";
@@ -25,11 +25,28 @@ export const statusToString = (status: ProjectStatus | null) => {
     case "LIVE":
       return "진행중";
     case "COMPLETE":
-      return "완료";
+      return "완료됨";
     case "STOP":
-      return "중단";
+      return "중단됨";
     case "CANCEL":
-      return "취소";
+      return "취소됨";
+    default:
+      return "에러!";
+  }
+};
+
+export const roleAndAuthorityToKorean = (value: Authority | Role) => {
+  switch (value) {
+    case "OWNER":
+      return "대표관리자";
+    case "ADMIN":
+      return "관리자";
+    case "MEMBER":
+      return "멤버";
+    case "MANAGER":
+      return "PM";
+    case "WORKER":
+      return "작업자";
     default:
       return "에러!";
   }

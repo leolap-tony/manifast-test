@@ -3,7 +3,7 @@ import React from "react";
 import { Progress } from "./elements/progress";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { statusToString } from "@/lib/textReplacer";
+import { statusToKorean } from "@/lib/textReplacer";
 
 interface ProjectProgressProps {
   project: Pick<
@@ -41,7 +41,7 @@ export default function ProjectProgress({ project }: ProjectProgressProps) {
         <div className="flex flex-row items-baseline gap-2">
           <div className="text-title-lg text-text-title">{progress}%</div>
           <div className="text-body-sm-m text-text-sub">
-            {statusToString(project.status)}
+            {statusToKorean(project.status)}
           </div>
         </div>
         <div className="flex flex-row gap-1 text-body-sm-m text-text-sub">
