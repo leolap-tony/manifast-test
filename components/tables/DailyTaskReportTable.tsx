@@ -130,9 +130,9 @@ export default function DailyTaskReportTable({
               className="w-[120px]"
               disabled={row.original.task.taskReport.length >= 1}
               defaultValue={
-                row.original.task.taskReport[0].message
-                  ? row.original.task.taskReport[0].message
-                  : "없음"
+                row.original?.task.taskReport.length > 0
+                  ? row.original.task.taskReport[0].message ?? "없음"
+                  : ""
               }
             />
           );

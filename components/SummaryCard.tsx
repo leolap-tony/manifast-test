@@ -1,5 +1,6 @@
 import React from "react";
 import { Separator } from "./ui/separator";
+import { getDifficultyIcon } from "@/lib/textReplacer";
 
 type CardProps =
   | {
@@ -58,25 +59,11 @@ export default function SummaryCard({ type, value }: CardProps) {
 
   const DifficultyType = ({ value }: { value: [number, number] }) => {
     const difficultyRate = value[0] / value[1];
-    let icon = "";
 
-    if (difficultyRate <= 0.74) {
-      icon = "😎";
-    } else if (difficultyRate <= 1.0) {
-      icon = "🙂";
-    } else if (difficultyRate <= 1.24) {
-      icon = "😵‍💫";
-    } else if (difficultyRate <= 1.49) {
-      icon = "😵";
-    } else if (1.5 <= difficultyRate) {
-      icon = "☠️";
-    } else {
-      icon = "🤔";
-    }
     return (
       <div className="flex flex-row items-baseline gap-4">
         <div className="text-right text-body-sm-n text-text-body">{`${value[0]} / ${value[1]}`}</div>
-        <div className="text-3xl">{icon}</div>
+        <div className="text-3xl">{getDifficultyIcon(difficultyRate)}</div>
       </div>
     );
   };
