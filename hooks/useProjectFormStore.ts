@@ -1,21 +1,21 @@
 import {
-  ProjectWithTasks,
-  TaskWithWorkers,
+  ProjectWithTaskReport,
+  TaskWithWorkersAndReports,
   TaskWorkerWithWorker,
 } from "@/types/queryInterface";
 import { Project, ProjectStatus, Task } from "@prisma/client";
 import { create } from "zustand";
 
 interface ProjectFormAction {
-  initData: (project: ProjectWithTasks) => void;
+  initData: (project: ProjectWithTaskReport) => void;
   setName: (name: string) => void;
   setDate: (isRequest: boolean, target: "start" | "end", date: Date) => void;
   setStatus: (status: ProjectStatus) => void;
   setMessage: (message: string) => void;
   setDifficulty: (difficulty: number) => void;
-  addTask: (task: TaskWithWorkers) => void;
+  addTask: (task: TaskWithWorkersAndReports) => void;
   removeTask: (index: number) => void;
-  updateTask: (index: number, updatedTask: Partial<TaskWithWorkers>) => void;
+  updateTask: (index: number, updatedTask: Partial<TaskWithWorkersAndReports>) => void;
   modifyTaskWorkers: (
     taskIndex: number,
     modifyWorkerFn: (workers: TaskWorkerWithWorker[]) => TaskWorkerWithWorker[]
@@ -30,10 +30,10 @@ interface ProjectFormAction {
 }
 
 export const useFormStore = create<
-  Partial<ProjectWithTasks> & ProjectFormAction
+  Partial<ProjectWithTaskReport> & ProjectFormAction
 >()((set, get) => ({
   tasks: [],
-  initData: (project: ProjectWithTasks) => set(project),
+  initData: (project: ProjectWithTaskReport) => set(project),
 
   setName: (name: string) => set({ name }),
 
@@ -55,7 +55,7 @@ export const useFormStore = create<
 
   setDifficulty: (difficulty: number) => set({ difficulty }),
 
-  addTask: (task: TaskWithWorkers) =>
+  addTask: (task: TaskWithWorkersAndReports) =>
     set((state) => ({
       tasks: [...(state.tasks || []), task],
     })),
@@ -65,7 +65,7 @@ export const useFormStore = create<
       tasks: state.tasks ? state.tasks.filter((_, i) => i !== index) : [],
     })),
 
-  updateTask: (index: number, updatedTask: Partial<TaskWithWorkers>) =>
+  updateTask: (index: number, updatedTask: Partial<TaskWithWorkersAndReports>) =>
     set((state) => ({
       tasks: state.tasks
         ? state.tasks.map((task, i) =>
