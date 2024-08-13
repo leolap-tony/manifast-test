@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Button } from "@/components/elements/Button";
 
 import Header from "@/components/navigation/Header";
-import MyProjects from "@/components/tables/MyProjects";
 import Loading from "./loading";
+import MyProjectsPage from "./MyProjectsPage";
 
 export default function page() {
   return (
@@ -16,7 +16,7 @@ export default function page() {
         </Button>
       </Header>
       <Suspense fallback={<Loading />}>
-        <MyProjects />
+        <MyProjectsPage />
       </Suspense>
     </main>
   );

@@ -1,5 +1,8 @@
 "use client";
 
+import { ProjectWithTasks } from "@/types/queryInterface";
+import React from "react";
+
 import Chips from "@/components/elements/Chips";
 import UserAvatar from "@/components/elements/UserAvatar";
 import UserArray from "@/components/UserArray";
@@ -9,6 +12,7 @@ import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import Link from "next/link";
+import { DataTable } from "./data-table";
 
 export const columns: ColumnDef<Project>[] = [
   {
@@ -55,3 +59,11 @@ export const columns: ColumnDef<Project>[] = [
   },
   { accessorKey: "group.name", header: "고객" },
 ];
+
+export default function MyProjectsTable({
+  projects,
+}: {
+  projects: ProjectWithTasks;
+}) {
+  return <DataTable columns={columns} data={projects as any} filter />;
+}

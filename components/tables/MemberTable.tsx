@@ -113,7 +113,7 @@ export default function MemberTable({
   return (
     <>
       <section>
-        <div className="px-6 pb-6">
+        <div className="p-6">
           <DataTable columns={columns} data={members} filter />
         </div>
       </section>

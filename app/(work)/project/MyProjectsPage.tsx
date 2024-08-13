@@ -1,10 +1,11 @@
 import React from "react";
-import { DataTable } from "./data-table";
-import { columns } from "./columns";
+import { DataTable } from "../../../components/tables/data-table";
 import { auth } from "@/auth";
 import prisma from "@/db";
 
-export default async function MyProjects() {
+import MyProjectsTable from "@/components/tables/MyProjectsTable";
+
+export default async function MyProjectsPage() {
   const session = await auth();
   const project = await prisma.project.findMany({
     where: {
@@ -35,7 +36,7 @@ export default async function MyProjects() {
   });
   return (
     <div className="p-6">
-      <DataTable columns={columns} data={project as any} filter />
+      <MyProjectsTable projects={project as any} />
     </div>
   );
 }

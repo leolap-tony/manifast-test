@@ -1,16 +1,14 @@
 "use client";
 import React, { useMemo } from "react";
 import { ProjectWithTasks } from "@/types/queryInterface";
-import prisma from "@/db";
-import { auth } from "@/auth";
+
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Project } from "@prisma/client";
-import { access } from "fs";
+
 import {
   Table,
   TableBody,
@@ -23,8 +21,7 @@ import Chips from "../elements/Chips";
 import Link from "next/link";
 import { getUniqueWorkers } from "@/lib/getUniqueWorkers";
 import UserArray from "../UserArray";
-import { Progress } from "../elements/progress";
-import ProgressIndicator from "../ProgressIndicator";
+import ProgressBar from "../ProgressBar";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 
@@ -101,7 +98,7 @@ export default function DailyProjectTable({
           return progress;
         },
         cell: (info) => (
-          <ProgressIndicator size="sm" value={info.getValue() as number} />
+          <ProgressBar size="sm" value={info.getValue() as number} />
         ),
       },
       { accessorKey: "group.name", header: "고객명" },

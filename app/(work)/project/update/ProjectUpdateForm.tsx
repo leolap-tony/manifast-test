@@ -49,7 +49,7 @@ import KeyValueLabel from "@/components/elements/KeyValueLabel";
 import {
   ToggleGroup,
   ToggleGroupItem,
-} from "@/components/elements/toggle-group";
+} from "@/components/elements/Toggle-group";
 import { updateProject } from "../actions";
 
 export default function ProjectRequestForm({
@@ -108,10 +108,12 @@ export default function ProjectRequestForm({
   const handleSubmit = async () => {
     try {
       const form = useFormStore.getState() as ProjectWithTasks;
-      const data = Object.fromEntries(Object.entries(form).filter((e) => typeof (e[1]) !== 'function'))
-      await updateProject(data)
+      const data = Object.fromEntries(
+        Object.entries(form).filter((e) => typeof e[1] !== "function")
+      );
+      await updateProject(data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
   const columns: ColumnDef<TaskWithWorkers>[] = useMemo(
@@ -421,9 +423,9 @@ export default function ProjectRequestForm({
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
                       </TableHead>
                     );
                   })}

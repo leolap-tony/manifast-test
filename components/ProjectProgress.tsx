@@ -2,7 +2,7 @@
 
 import { Project, ProjectStatus, Task } from "@prisma/client";
 import React from "react";
-import { Progress } from "./elements/progress";
+import { Progress } from "./elements/Progress";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { statusToKorean } from "@/lib/textReplacer";

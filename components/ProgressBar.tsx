@@ -1,7 +1,6 @@
 import React from "react";
-import { Progress } from "./elements/progress";
+import { Progress } from "./elements/Progress";
 import { cva } from "class-variance-authority";
-import { cn } from "../lib/utils"; // 클래스 네임을 병합하는 유틸리티 함수가 있다고 가정
 
 // 컴포넌트에 대한 CVA 정의
 const progressIndicatorClasses = cva(
@@ -32,7 +31,7 @@ const progressClasses = cva("", {
   },
 });
 
-export default function ProgressIndicator({
+export default function ProgressBar({
   value,
   size = "lg",
 }: {
