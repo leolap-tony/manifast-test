@@ -47,7 +47,7 @@ export default async function page() {
   });
 
   return (
-    <main className="page-contents">
+    <main className="page-layout">
       <Header type="page" title="멤버" />
       <section className="page-section">
         <Suspense>

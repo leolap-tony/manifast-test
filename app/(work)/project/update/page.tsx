@@ -30,7 +30,7 @@ export default async function page({
         })
       : null;
   return (
-    <main className="page-contents">
+    <main className="page-layout">
       <Header
         type="page"
         title={

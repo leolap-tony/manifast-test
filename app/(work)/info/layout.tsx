@@ -17,7 +17,7 @@ export default function layout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="page-contents">
+    <main className="page-layout">
       <Header type="page" title="마이 페이지" />
       <Tabs defaultValue="myinfo" className="">
         <TabsList>
@@ -27,6 +27,7 @@ export default function layout({
         <TabsContent value="myinfo">{user}</TabsContent>
         <TabsContent value="groupinfo">{group}</TabsContent>
       </Tabs>
+      {children}
     </main>
   );
 }

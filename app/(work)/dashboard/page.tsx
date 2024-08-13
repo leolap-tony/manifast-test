@@ -15,7 +15,7 @@ export default async function page() {
   const session = await auth();
 
   return (
-    <main className="page-contents">
+    <main className="page-layout">
       <Header type="dashboard" />
       <section className="page-section">
         <Suspense

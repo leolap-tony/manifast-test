@@ -131,7 +131,7 @@
   @apply container w-full h-full min-h-screen flex flex-row gap-0 border-x
 }
 
-.page-contents {
+.page-layout {
  @apply w-full h-full flex flex-col
 }
 

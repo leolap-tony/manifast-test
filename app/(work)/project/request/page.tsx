@@ -10,7 +10,7 @@ export default async function Page() {
   });
 
   return (
-    <main className="page-contents">
+    <main className="page-layout">
       <Header type="page" title="프로젝트 요청" />
       <section className="page-section">
         {<ProjectRequestForm templates={template as any} />}

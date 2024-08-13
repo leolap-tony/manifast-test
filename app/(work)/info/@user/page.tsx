@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { getMyInfo } from "../actions";
 import { auth } from "@/auth";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 export default async function user() {
   const session = await auth();
@@ -63,9 +64,14 @@ export default async function user() {
         </li>
       </ul>
       <div className="px-6">
-        <Button variant="outline" asChild className="w-fit">
-          <Link href="/info/update">수정</Link>
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline" className="w-fit">
+              수정
+            </Button>
+          </DialogTrigger>
+          <DialogContent></DialogContent>
+        </Dialog>
       </div>
     </section>
   );
