@@ -87,11 +87,18 @@ export async function updateProject(data: Partial<ProjectWithTasks>) {
               startDate: task.startDate,
               endDate: task.endDate,
               isComplete: task.isComplete,
-            })),
-          },
-        },
-      }),
-    ]);
+              workers: {
+                create: task.workers.map((worker)=>({
+                  userId:worker.userId,                  
+                  inputRate:worker.inputRate
+                }))
+              }
+              
+            }))
+          }
+        }
+      })
+    ])
   } catch (error) {
     throw error; // 에러를 다시 던져 호출자가 처리할 수 있게 합니다.
   }
