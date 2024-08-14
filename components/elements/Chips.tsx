@@ -14,12 +14,12 @@ const chipStyles = cva("px-2 py-1  w-fit h-fit", {
       remaining: "rounded-[4px] text-body-sm-m",
     },
     status: {
-      REQUEST: "bg-green-200",
-      STANDBY: "bg-gray-200",
-      LIVE: "bg-blue-200",
-      COMPLETE: "bg-yellow-200",
-      STOP: "bg-red-200",
-      CANCEL: "bg-red-200",
+      REQUEST: "bg-[#E0F2FE]",
+      STANDBY: "bg-background-gray",
+      LIVE: "bg-[#FEF3C7]",
+      COMPLETE: "bg-[#DCFCE7]",
+      STOP: "bg-[#F3E8FF]",
+      CANCEL: "bg-background-primary",
     },
     difficulty: {
       1: "bg-primary/30",
