@@ -66,6 +66,7 @@ export default function ProjectRequestForm({
     endDate,
     difficulty,
     setDifficulty,
+    setStatus,
     request_endDate,
     request_startDate,
     setDate,
@@ -81,7 +82,7 @@ export default function ProjectRequestForm({
 
   useEffect(() => {
     initData(project);
-  }, [initData, project]);
+  }, []);
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 

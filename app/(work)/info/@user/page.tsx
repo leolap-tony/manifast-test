@@ -10,7 +10,11 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { getMyInfo } from "../actions";
 import { auth } from "@/auth";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/elements/Dialog";
 
 export default async function user() {
   const session = await auth();

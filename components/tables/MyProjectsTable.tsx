@@ -40,7 +40,7 @@ export const columns: ColumnDef<Project>[] = [
     header: "작업자",
     cell: (props) => {
       const worker = getUniqueWorkers(props.getValue() as any);
-      return <UserArray users={worker} orientation="col" maxAmount={3} />;
+      return <UserArray users={worker} orientation="col" maxAmount={1} />;
     },
   },
   {

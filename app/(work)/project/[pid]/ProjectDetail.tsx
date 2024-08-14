@@ -13,6 +13,7 @@ export default function ProjectDetail({
   project,
 }: {
   project: Project & {
+    manager: User;
     tasks: Task[];
     group: Group & { manager: User; owner: User };
   };
@@ -21,7 +22,7 @@ export default function ProjectDetail({
   return (
     <div className="grid grid-cols-3 gap-4 px-6 py-4 bg-background-light">
       <KeyValueLabel direction="row" label="전담 PM" labelWidth={86}>
-        <UserAvatar size="md" user={project?.group.manager as User} label />
+        <UserAvatar size="md" user={project?.manager as User} label />
       </KeyValueLabel>
       <KeyValueLabel direction="row" label="그룹" labelWidth={86}>
         {project?.group.name}

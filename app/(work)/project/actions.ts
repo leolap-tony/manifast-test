@@ -88,22 +88,62 @@ export async function updateProject(data: Partial<ProjectWithTasks>) {
               endDate: task.endDate,
               isComplete: task.isComplete,
               workers: {
-                create: task.workers.map((worker)=>({
-                  userId:worker.userId,                  
-                  inputRate:worker.inputRate
-                }))
-              }
-              
-            }))
-          }
-        }
-      })
-    ])
+                create: task.workers.map((worker) => ({
+                  userId: worker.userId,
+                  inputRate: worker.inputRate,
+                })),
+              },
+            })),
+          },
+        },
+      }),
+    ]);
   } catch (error) {
     throw error; // 에러를 다시 던져 호출자가 처리할 수 있게 합니다.
   }
   revalidatePath(`/project/${data.id}`);
   redirect(`/project/${data.id}`);
+}
+
+export async function getProject(projectId: string) {
+  try {
+    return await prisma.project.findUnique({
+      where: {
+        id: projectId,
+      },
+      include: {
+        manager: true,
+        group: {
+          include: { manager: true, owner: true },
+        },
+        tasks: {
+          select: {
+            id: true,
+            name: true,
+            startDate: true,
+            endDate: true,
+            isComplete: true,
+            isMilestone: true,
+            workers: {
+              select: {
+                worker: { select: { id: true, name: true, image: true } },
+              },
+            },
+          },
+        },
+        threads: {
+          include: {
+            author: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
 }
 
 export async function completeTask(taskId: string, status: boolean) {
@@ -115,5 +155,40 @@ export async function completeTask(taskId: string, status: boolean) {
     });
   } catch (e) {
     throw e;
+  }
+}
+
+export async function getAllMyProject() {
+  const session = await auth();
+  try {
+    return await prisma.project.findMany({
+      where: {
+        OR: [
+          { managerId: session?.user.sub },
+          { group: { members: { some: { id: session?.user.sub } } } },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        status: true,
+        manager: { select: { name: true, image: true } },
+        difficulty: true,
+        startDate: true,
+        endDate: true,
+        request_startDate: true,
+        request_endDate: true,
+        group: { select: { name: true } },
+        tasks: {
+          select: {
+            workers: {
+              select: { worker: { select: { name: true, image: true } } },
+            },
+          },
+        },
+      },
+    });
+  } catch (error) {
+    throw error;
   }
 }

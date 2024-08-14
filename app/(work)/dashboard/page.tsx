@@ -15,20 +15,28 @@ export default async function page() {
   const session = await auth();
 
   return (
-    <main className="page-layout">
-      <Header type="dashboard" />
-      <section className="page-section">
-        <Suspense
-          fallback={
-            <div className=" w-full grid grid-cols-3 gap-4 p-6">
-              <Skeleton className="w-full h-20 rounded-md" />
-              <Skeleton className="w-full h-20 rounded-md" />
-              <Skeleton className="w-full h-20 rounded-md" />
-            </div>
-          }
-        >
-          <Summary />
-        </Suspense>
+    <section className="page-section">
+      <Suspense
+        fallback={
+          <div className=" w-full grid grid-cols-3 gap-4 p-6">
+            <Skeleton className="w-full h-20 rounded-md" />
+            <Skeleton className="w-full h-20 rounded-md" />
+            <Skeleton className="w-full h-20 rounded-md" />
+          </div>
+        }
+      >
+        <Summary />
+      </Suspense>
+      <Suspense
+        fallback={
+          <div className="w-full h-[200px] p-6">
+            <Skeleton className="w-full h-full rounded-lg" />
+          </div>
+        }
+      >
+        <TaskDataPage />
+      </Suspense>
+      {session?.user.role !== "MEMBER" && (
         <Suspense
           fallback={
             <div className="w-full h-[200px] p-6">
@@ -36,20 +44,9 @@ export default async function page() {
             </div>
           }
         >
-          <TaskDataPage />
+          <ProjectDataPage />
         </Suspense>
-        {session?.user.role !== "MEMBER" && (
-          <Suspense
-            fallback={
-              <div className="w-full h-[200px] p-6">
-                <Skeleton className="w-full h-full rounded-lg" />
-              </div>
-            }
-          >
-            <ProjectDataPage />
-          </Suspense>
-        )}
-      </section>
-    </main>
+      )}
+    </section>
   );
 }

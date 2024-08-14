@@ -23,41 +23,10 @@ import ProjectProgress from "@/components/ProjectProgress";
 
 import TaskWbs from "@/components/TaskWbs";
 import ProjectDetail from "./ProjectDetail";
+import { getProject } from "../actions";
 export default async function page({ params }: { params: { pid: string } }) {
   const session = await auth();
-  const project = await prisma.project.findUnique({
-    where: {
-      id: params.pid,
-    },
-    include: {
-      group: {
-        include: { manager: true, owner: true },
-      },
-      tasks: {
-        select: {
-          id: true,
-          name: true,
-          startDate: true,
-          endDate: true,
-          isComplete: true,
-          isMilestone: true,
-          workers: {
-            select: {
-              worker: { select: { id: true, name: true, image: true } },
-            },
-          },
-        },
-      },
-      threads: {
-        include: {
-          author: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      },
-    },
-  });
+  const project = await getProject(params.pid);
 
   const groupByDate = (threads: Array<ProjectThread & { author: User }>) => {
     return threads.reduce(
@@ -83,17 +52,12 @@ export default async function page({ params }: { params: { pid: string } }) {
   return (
     <main className="page-layout">
       <Header type="projectdetail" title={project?.name}>
-        {(session?.user.role == "WORKER" || session?.user.role == "MANAGER") &&
-        project?.status == "REQUEST" ? (
-          <Button asChild>
+        {project?.managerId === session?.user.sub && (
+          <Button>
             <Link href={`/project/update?pid=${params.pid}`}>
-              프로젝트 검토하기
-            </Link>
-          </Button>
-        ) : (
-          <Button asChild>
-            <Link href={`/project/${params.pid}/update`}>
-              프로젝트 수정하기
+              {project?.status === "REQUEST"
+                ? "프로젝트 검토하기"
+                : "프로젝트 수정하기"}
             </Link>
           </Button>
         )}

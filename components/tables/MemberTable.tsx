@@ -1,5 +1,12 @@
 "use client";
-
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Task } from "@/data/tasks";
 import {
   Group,
@@ -10,12 +17,16 @@ import {
   User,
 } from "@prisma/client";
 import React from "react";
-import { DataTable } from "./data-table";
+
 import {
   ColumnDef,
+  ColumnFiltersState,
+  flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { useState } from "react";
 import Link from "next/link";
 import UserAvatar from "../elements/UserAvatar";
 import Header from "../navigation/Header";
@@ -24,6 +35,8 @@ import {
   roleAndAuthorityToKorean,
 } from "@/lib/textReplacer";
 import Chips from "../elements/Chips";
+import { Input } from "../elements/Input";
+import { DataTable } from "./data-table";
 
 export interface MemberTableProps extends Partial<User> {
   project: Partial<Project[]>;
@@ -95,7 +108,11 @@ const columns: ColumnDef<MemberTableProps>[] = [
         if (value == 0) return "STANDBY";
         return "LIVE";
       };
-      return <Chips type="status" value={status()} />;
+      return (
+        <div className="w-full flex justify-center">
+          <Chips type="status" value={status()} />
+        </div>
+      );
     },
   },
 ];
@@ -105,18 +122,16 @@ export default function MemberTable({
 }: {
   members: MemberTableProps[];
 }) {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
     columns: columns,
     data: members,
     getCoreRowModel: getCoreRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      columnFilters,
+    },
   });
-  return (
-    <>
-      <section>
-        <div className="p-6">
-          <DataTable columns={columns} data={members} filter />
-        </div>
-      </section>
-    </>
-  );
+  return <DataTable columns={columns} data={members} filter />;
 }

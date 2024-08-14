@@ -54,7 +54,7 @@ export function DataTable<TData, TValue>({
             onChange={(e) =>
               table.getColumn("name")?.setFilterValue(e.target.value)
             }
-            className="w-[200px]"
+            className="w-[320px]"
             placeholder="검색"
           />
         </div>

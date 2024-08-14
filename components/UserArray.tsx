@@ -3,11 +3,11 @@ import React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import UserAvatar from "./elements/UserAvatar";
 
-const userArrayStyles = cva("flex items-center", {
+const userArrayStyles = cva("flex", {
   variants: {
     orientation: {
-      row: "flex-row",
-      col: "flex-col",
+      row: "flex-row items-center",
+      col: "flex-col items-start",
     },
     isFull: {
       true: "-space-x-2 flex-row",
@@ -48,7 +48,7 @@ const UserArray = ({
         <UserAvatar key={i} user={user} label={!isFull} />
       ))}
       {isFull && users.length > maxAmount && (
-        <div className="flex items-center justify-center w-6 h-6 bg-gray-300 rounded-full text-body-sm-n">
+        <div className="flex items-center justify-center w-6 h-6 border bg-background-gray rounded-full text-body-sm-n">
           +{users.length - maxAmount}
         </div>
       )}
