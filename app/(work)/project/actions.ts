@@ -1,7 +1,7 @@
 "use server";
 import { auth } from "@/auth";
 import prisma from "@/db";
-import { ProjectWithTasks } from "@/types/queryInterface";
+import { ProjectWithTaskReport, ProjectWithTasks } from "@/types/queryInterface";
 import { Project, Task } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -67,7 +67,7 @@ export async function createProject(formData: FormData) {
   redirect(`/project/${project?.id}`);
 }
 
-export async function updateProject(data: Partial<ProjectWithTasks>) {
+export async function updateProject(data: Partial<ProjectWithTaskReport>) {
   try {
     console.log(data);
     await prisma.$transaction([
@@ -94,6 +94,15 @@ export async function updateProject(data: Partial<ProjectWithTasks>) {
                   inputRate: worker.inputRate,
                 })),
               },
+              taskReport: {
+                create: task.taskReport.map((report) => ({
+                  userId: report.userId,
+                  standardInputRate: report.standardInputRate,
+                  todayInputRate: report.todayInputRate,
+                  message: report.message,
+                  date: new Date(report.date)
+                }))
+              }
             })),
           },
         },
