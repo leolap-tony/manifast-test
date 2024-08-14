@@ -80,6 +80,7 @@ export async function updateProject(data: Partial<ProjectWithTasks>) {
           startDate: data.startDate && new Date(data.startDate),
           endDate: data.endDate && new Date(data.endDate),
           difficulty: data.difficulty,
+          status: data.status === 'REQUEST' ? 'STANDBY' : data.status,
           tasks: {
             create: data.tasks?.map((task) => ({
               name: task.name,
