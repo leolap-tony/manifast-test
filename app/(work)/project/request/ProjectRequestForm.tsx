@@ -191,7 +191,9 @@ export default function ProjectRequestForm({
         value={endDate?.toString()}
         required
       />
-      <Button>프로젝트 요청</Button>
+      <div className="p-6">
+        <Button>프로젝트 요청</Button>
+      </div>
     </form>
   );
 }
