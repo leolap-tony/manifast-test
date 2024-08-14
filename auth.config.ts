@@ -12,6 +12,9 @@ export default {
       if (props.user) {
         props.token.role = props.user.role;
         props.token.authority = props.user.authority;
+        if (props.trigger === "signUp") {
+          props.token.isNewUser = true; // 토큰에 새 유저 여부 저장
+        }
       }
       return props.token;
     },
@@ -20,6 +23,10 @@ export default {
         session.user.sub = token ? token.sub : null;
         session.user.role = token.role;
         session.user.authority = token.authority;
+
+        if (token.isNewUser) {
+          session.isNewUser = token.isNewUser;
+        }
       }
       return session;
     },

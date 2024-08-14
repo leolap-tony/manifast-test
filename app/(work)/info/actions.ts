@@ -64,6 +64,24 @@ export async function getMyGroup(userId: string) {
   }
 }
 
+export async function setMyUserInfo(formData: FormData) {
+  try {
+    await prisma.user.update({
+      where: {
+        email: formData.get("email") as string,
+      },
+      data: {
+        name: formData.get("name") as string,
+        phone: formData.get("phone") as string,
+        job: formData.get("job") as string,
+      },
+    });
+  } catch (e) {
+    throw e;
+  }
+  redirect("/onboarding/group");
+}
+
 export async function updateMyInfo(formData: FormData) {
   const session = await auth();
   try {

@@ -5,6 +5,7 @@ declare module "next-auth" {
    * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
    */
   interface Session {
+    isNewUser: boolean;
     user: {
       /** The user's postal address. */
       sub: string;
@@ -16,20 +17,12 @@ declare module "next-auth" {
   interface User extends DefaultUser {
     role: string;
     authority: string;
-    phone: string;
   }
 }
-
-// declare module "next-auth/jwt" {
-//   interface JWT {
-//     role: string
-//   }
-// }
 
 declare module "@auth/core/adapters" {
   export interface AdapterUser extends User {
     role: string;
     authority: string;
-    phone: string;
   }
 }
