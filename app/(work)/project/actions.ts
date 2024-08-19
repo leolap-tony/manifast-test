@@ -2,7 +2,7 @@
 import { auth } from "@/auth";
 import prisma from "@/db";
 import { ProjectWithTasks } from "@/types/queryInterface";
-import { Project, ProjectStatus, Task, ThreadType } from "@prisma/client";
+import { Project, ProjectStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
@@ -52,8 +52,7 @@ export async function createProject(formData: FormData) {
         threads: {
           create: [
             {
-              authorId: user.id,
-              type: "SYSTEM",
+              type: "REQUEST",
               message: "프로젝트 요청입니다",
             },
           ],
@@ -211,7 +210,7 @@ export async function postThreadMessage({
   message,
 }: {
   projectId: string;
-  type: ThreadType;
+  type: ProjectStatus;
   authorId?: string;
   message?: string;
 }) {
