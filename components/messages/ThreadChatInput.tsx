@@ -8,13 +8,13 @@ import { useSession } from "next-auth/react";
 import { postThreadMessage } from "@/app/(work)/project/actions";
 
 export default function ThreadChatInput({ projectId }: { projectId: string }) {
-  const [messageType, setMessageType] = useState("MESSAGE");
+  const [messageType, setMessageType] = useState("");
   const messageRef = useRef<HTMLTextAreaElement>(null);
   const session = useSession();
   const handleSubmit = async () => {
-    if (messageType === "PROJECT_REPORT_START") {
+    if (messageType === "START") {
     }
-    if (messageType === "PROJECT_REPORT_STOP") {
+    if (messageType === "STOP") {
     }
     if (messageType === "MESSAGE") {
       await postThreadMessage({
@@ -37,11 +37,11 @@ export default function ThreadChatInput({ projectId }: { projectId: string }) {
           className="border w-fit mb-2 rounded-md"
           onValueChange={(e) => setMessageType(e)}
         >
-          <ToggleGroupItem value="MESSAGE">메시지</ToggleGroupItem>
-          <ToggleGroupItem value="PROJECT_REPORT_START">시작</ToggleGroupItem>
-          <ToggleGroupItem value="PROJECT_REPORT_STOP">중단</ToggleGroupItem>
+          <ToggleGroupItem value="">메시지</ToggleGroupItem>
+          <ToggleGroupItem value="START">시작</ToggleGroupItem>
+          <ToggleGroupItem value="STOP">중단</ToggleGroupItem>
         </ToggleGroup>
-        {messageType === "MESSAGE" ? (
+        {messageType === "" ? (
           <Textarea
             ref={messageRef}
             placeholder="메시지를 입력하세요."

@@ -1,3 +1,4 @@
+import { TooltipProvider } from "@/components/elements/Tooltip";
 import SideNav from "@/components/navigation/SideNav";
 
 export default function WorkLayout({
@@ -6,9 +7,9 @@ export default function WorkLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+    <TooltipProvider>
       <SideNav />
       {children}
-    </>
+    </TooltipProvider>
   );
 }

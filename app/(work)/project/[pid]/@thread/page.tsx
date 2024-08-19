@@ -28,7 +28,7 @@ export default async function thread({ params }: { params: { pid: string } }) {
   }
   return (
     <section className="page-contents">
-      <div className="w-full px-6 flex flex-col gap-6">
+      <div className="w-full px-6 pb-10 flex flex-col gap-6">
         {Object.entries(groupedThreads).map(([date, threads]) => (
           <ThreadDailyList key={date} date={date} threads={threads} />
         ))}
