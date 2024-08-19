@@ -182,14 +182,14 @@ model TaskReport {
 }
 
 model ProjectThread {
-  id        Int      @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   projectId String
-  authorId  String
-  type      String?
-  createdAt DateTime @default(now())
+  authorId  String?
+  type      ThreadType?
+  createdAt DateTime    @default(now())
   message   String?
-  author    User     @relation(fields: [authorId], references: [id])
-  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  author    User?       @relation(fields: [authorId], references: [id])
+  project   Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }
 
 model ProjectTemplate {
@@ -241,4 +241,12 @@ enum MembershipType {
 enum Role {
   MANAGER
   WORKER
+}
+
+enum ThreadType {
+  MESSAGE
+  PROJECT_REPORT_START
+  PROJECT_REPORT_COMPLETE
+  PROJECT_REPORT_STOP
+  SYSTEM
 }

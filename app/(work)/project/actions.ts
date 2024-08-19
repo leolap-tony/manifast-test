@@ -2,7 +2,7 @@
 import { auth } from "@/auth";
 import prisma from "@/db";
 import { ProjectWithTasks } from "@/types/queryInterface";
-import { Project, Task } from "@prisma/client";
+import { Project, ProjectStatus, Task, ThreadType } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
@@ -80,7 +80,7 @@ export async function updateProject(data: Partial<ProjectWithTasks>) {
           startDate: data.startDate && new Date(data.startDate),
           endDate: data.endDate && new Date(data.endDate),
           difficulty: data.difficulty,
-          status: data.status === 'REQUEST' ? 'STANDBY' : data.status,
+          status: data.status === "REQUEST" ? "STANDBY" : data.status,
           tasks: {
             create: data.tasks?.map((task) => ({
               name: task.name,
@@ -132,14 +132,24 @@ export async function getProject(projectId: string) {
             },
           },
         },
-        threads: {
-          include: {
-            author: true,
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-        },
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getProjectThreads(projectId: string) {
+  try {
+    return await prisma.projectThread.findMany({
+      where: {
+        projectId: projectId,
+      },
+      include: {
+        author: { select: { id: true, name: true, image: true } },
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
   } catch (error) {
@@ -193,3 +203,29 @@ export async function getAllMyProject() {
     throw error;
   }
 }
+
+export async function postThreadMessage({
+  projectId,
+  type,
+  authorId,
+  message,
+}: {
+  projectId: string;
+  type: ThreadType;
+  authorId?: string;
+  message?: string;
+}) {
+  try {
+    await prisma.projectThread.create({
+      data: { projectId, type, authorId, message },
+    });
+    return { result: "success" };
+  } catch (error) {
+    return { result: "error" };
+  }
+}
+
+export async function updateProjectStatus(
+  projectId: string,
+  status: ProjectStatus
+) {}

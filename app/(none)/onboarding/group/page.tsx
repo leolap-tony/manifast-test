@@ -1,18 +1,44 @@
-import { auth } from "@/auth";
+"use client";
+
+import { setMyGroup } from "@/app/(work)/info/actions";
+import { signOut } from "next-auth/react";
 import { Button } from "@/components/elements/Button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/elements/Dialog";
 import { Input } from "@/components/elements/Input";
 import KeyValueLabel from "@/components/elements/KeyValueLabel";
-import UserAvatar from "@/components/elements/UserAvatar";
-import React from "react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import React, { useState } from "react";
 
-export default async function page() {
-  const session = await auth();
+export default function Page() {
+  const [open, setOpen] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const session = useSession();
+  const handleSubmit = async (e: FormData) => {
+    const result = await setMyGroup(e);
+    if (result?.result === "error") {
+      setSuccess(false);
+      setOpen(true);
+    } else {
+      setSuccess(true);
+      setOpen(true);
+    }
+  };
+
   return (
     <section className="page-section">
       <div className="w-full h-full flex justify-center items-center">
-        <div className="flex flex-col gap-8 w-[400px]">
+        <form
+          action={(e) => handleSubmit(e)}
+          className="flex flex-col gap-8 w-[400px]"
+        >
           <h1 className="w-full text-left text-title-lg">
-            {session?.user.name}님 반갑습니다.
+            {session.data?.user.name}님 반갑습니다.
           </h1>
           <KeyValueLabel
             direction="col"
@@ -24,19 +50,34 @@ export default async function page() {
             }
             hint="ID는 그룹 관리자에게 문의하세요."
           >
-            <Input
-              placeholder="입력해주세요"
-              defaultValue={session?.user.name as string}
-            />
+            <Input name="groupId" required placeholder="입력해주세요" />
           </KeyValueLabel>
           <Button size="lg">참여</Button>
+          <Dialog open={open} onOpenChange={(e) => setOpen(e)}>
+            <DialogContent>
+              {success ? (
+                <>
+                  <DialogTitle>성공했습니다.</DialogTitle>
+                  <DialogDescription>
+                    정보 반영을 위해 다시로그인
+                  </DialogDescription>
+                  <Button onClick={() => signOut()}>계속하기</Button>
+                </>
+              ) : (
+                <>
+                  <DialogTitle>실패했습니다.</DialogTitle>
+                  <DialogDescription>다시 시도하세요.</DialogDescription>
+                </>
+              )}
+            </DialogContent>
+          </Dialog>
           {/*<div className="w-full p-8 bg-background-gray rounded-[10px] flex flex-row justify-between gap-8">
             <p className="text-body-md-n w-full">그룹이 없나요?</p>
             <Button variant="outline" className="w-full">
               그룹 새로 생성
             </Button>
           </div>*/}
-        </div>
+        </form>
       </div>
     </section>
   );

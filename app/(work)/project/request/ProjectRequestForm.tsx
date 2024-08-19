@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Input } from "@/components/elements/Input";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@/components/elements/Textarea";
 import {
   Table,
   TableBody,

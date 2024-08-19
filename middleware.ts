@@ -23,14 +23,13 @@ export default auth((req) => {
     return redirect("/dashboard");
   }
 
-  // 인증된 사용자가 아직 완전한 프로필을 갖추지 않았을 경우
-  if (auth && (auth.isNewUser || !auth.user?.role || !auth.user?.authority)) {
-    if (pathname !== "/onboarding/user") {
-      // 이미 onboarding 페이지가 아닌 경우에만 리디렉션
-      return redirect("/onboarding/user");
-    }
+  if (
+    auth &&
+    (!auth.user.role || !auth.user.authority) &&
+    !pathname.startsWith("/onboarding")
+  ) {
+    return redirect("/onboarding/user");
   }
-
   // 나머지 경우에는 요청한 경로로 접근 허용
   return NextResponse.next();
 });
