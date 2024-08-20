@@ -5,7 +5,7 @@ import {
   ProjectWithTaskReport,
   ProjectWithTasks,
 } from "@/types/queryInterface";
-import { Project, Task } from "@prisma/client";
+import { Project, ProjectStatus, Task } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
