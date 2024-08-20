@@ -11,7 +11,8 @@ const chipStyles = cva("px-2 py-1  w-fit h-fit", {
     type: {
       status: "rounded-full text-body-sm-m",
       difficulty: "rounded-md text-body-sm-m",
-      remaining: "rounded-[4px] text-body-sm-m",
+      remaining:
+        "rounded-[4px] text-body-md-m text-primary border border-primary bg-background-primary",
     },
     status: {
       REQUEST: "bg-[#E0F2FE]",

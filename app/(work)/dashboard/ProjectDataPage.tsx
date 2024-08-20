@@ -16,7 +16,17 @@ export default async function ProjectDataPage({}: {}) {
       endDate: true,
       difficulty: true,
       group: { select: { name: true } },
-      tasks: { select: { isComplete: true, isMilestone: true, workers: true } },
+      tasks: {
+        select: {
+          isComplete: true,
+          isMilestone: true,
+          workers: {
+            select: {
+              worker: { select: { id: true, name: true, image: true } },
+            },
+          },
+        },
+      },
     },
   });
   return (

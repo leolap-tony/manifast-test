@@ -7,7 +7,7 @@ import {
   TableBody,
   TableCell,
   TableHead,
-} from "./ui/table";
+} from "../ui/table";
 import {
   ColumnDef,
   flexRender,
@@ -16,24 +16,24 @@ import {
 } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import UserArray from "./UserArray";
+import UserArray from "../UserArray";
 import { getUniqueWorkers } from "@/lib/getUniqueWorkers";
 import { TaskWithWorkers } from "@/types/queryInterface";
-import Chips from "./elements/Chips";
+import Chips from "../elements/Chips";
 import {
   Sheet,
   SheetContent,
   SheetFooter,
   SheetHeader,
   SheetTrigger,
-} from "./ui/sheet";
-import { Textarea } from "./elements/Textarea";
-import Header from "./navigation/Header";
-import KeyValueLabel from "./elements/KeyValueLabel";
-import { Button } from "./elements/Button";
+} from "../ui/sheet";
+import { Textarea } from "../elements/Textarea";
+import Header from "../navigation/Header";
+import KeyValueLabel from "../elements/KeyValueLabel";
+import { Button } from "../elements/Button";
 import { completeTask } from "@/app/(work)/project/actions";
 
-export default function TaskWbs({ tasks }: { tasks: TaskWithWorkers[] }) {
+export default function TaskWbsTable({ tasks }: { tasks: TaskWithWorkers[] }) {
   const columns: ColumnDef<TaskWithWorkers>[] = [
     {
       accessorKey: "name",

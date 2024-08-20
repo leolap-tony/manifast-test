@@ -1,7 +1,9 @@
+import UserAvatar from "@/components/elements/UserAvatar";
+
 export default function page() {
   return (
     <section className="page-sections">
-      <h1>헬로</h1>
+      <UserAvatar size="lg" user={{ image: "", name: "ss" }} label />
     </section>
   );
 }

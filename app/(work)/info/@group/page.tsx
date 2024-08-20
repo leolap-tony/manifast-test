@@ -1,18 +1,13 @@
 import React from "react";
-import Header from "../../../../components/navigation/Header";
-import KeyValueLabel from "../../../../components/elements/KeyValueLabel";
-import { Button } from "../../../../components/elements/Button";
-import Link from "next/link";
-import Image from "next/image";
-import { Authority, Role, User } from "@prisma/client";
-import { roleAndAuthorityToKorean } from "@/lib/textReplacer";
+import Header from "@/components/navigation/Header";
+import KeyValueLabel from "@/components/elements/KeyValueLabel";
+import { User } from "@prisma/client";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { getMyGroup, getMyInfo } from "../actions";
+import { getMyGroup } from "../actions";
 import { auth } from "@/auth";
 import UserAvatar from "@/components/elements/UserAvatar";
-import MemberControl from "./MemberControl";
-import { group } from "console";
+import GroupMemberControl from "@/components/GroupMemberControl";
 
 export default async function user() {
   const session = await auth();
@@ -53,7 +48,7 @@ export default async function user() {
             </KeyValueLabel>
           </li>
         </ul>
-        <MemberControl
+        <GroupMemberControl
           userId={session?.user.sub as string}
           groupId={data?.group?.id as string}
           members={data?.group?.members as any}

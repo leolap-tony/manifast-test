@@ -1,6 +1,12 @@
 import React from "react";
 import { Separator } from "./ui/separator";
 import { getDifficultyIcon } from "@/lib/textReplacer";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./elements/Tooltip";
 
 type CardProps =
   | {
@@ -61,25 +67,45 @@ export default function SummaryCard({ type, value }: CardProps) {
     const difficultyRate = value[0] / value[1];
 
     return (
-      <div className="flex flex-row items-baseline gap-4">
+      <div className="flex flex-row items-baseline gap-4 bg-background">
         <div className="text-right text-body-sm-n text-text-body">{`${value[0]} / ${value[1]}`}</div>
-        <div className="text-3xl">{getDifficultyIcon(difficultyRate)}</div>
+        <div className="text-3xl">{getDifficultyIcon(difficultyRate)} </div>
       </div>
     );
   };
 
   return (
-    <div className="relative w-full h-20 border rounded-lg text-body-md-m text-text-sub">
-      <div className="absolute left-4 top-4 text-left">{label}</div>
-      <div className="absolute right-4 bottom-4">
-        {type === "project" && <ProjectType value={value as number} />}
-        {type === "inputRate" && (
-          <InputRateType value={value as [number, number]} />
-        )}
-        {type === "difficulty" && (
-          <DifficultyType value={value as [number, number]} />
-        )}
-      </div>
-    </div>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div className="relative w-full h-20 border rounded-lg text-body-md-m text-text-sub">
+          <div className="absolute left-4 top-4 text-left">{label}</div>
+          <div className="absolute right-4 bottom-4">
+            {type === "project" && <ProjectType value={value as number} />}
+            {type === "inputRate" && (
+              <InputRateType value={value as [number, number]} />
+            )}
+            {type === "difficulty" && (
+              <DifficultyType value={value as [number, number]} />
+            )}
+          </div>
+        </div>
+      </TooltipTrigger>
+      {type === "project" && (
+        <TooltipContent>
+          오늘 기준 진행 중인 프로젝트의 총 수량이에요.
+        </TooltipContent>
+      )}
+      {type === "inputRate" && (
+        <TooltipContent>
+          오늘 기준 아직 종료되지 않은 작업에 배정된 투입률의 합이에요.
+        </TooltipContent>
+      )}
+      {type === "difficulty" && (
+        <TooltipContent>
+          프로젝트의 1개당 표준 난이도가 2점으로 가정하고 내가 평가한 상대적
+          난이도예요.
+        </TooltipContent>
+      )}
+    </Tooltip>
   );
 }

@@ -2,6 +2,7 @@ import React from "react";
 import * as Avatar from "@radix-ui/react-avatar";
 import { User } from "next-auth";
 import { cva, type VariantProps } from "class-variance-authority";
+import { Skeleton } from "../ui/skeleton";
 
 interface AvatarProps {
   size?: "xl" | "lg" | "md";
@@ -25,7 +26,7 @@ const avatarVariants = cva(
   }
 );
 
-const labelVariants = cva("h-ful text-nowrap", {
+const labelVariants = cva("h-full text-nowrap", {
   variants: {
     size: {
       xl: "text-title-sm",
@@ -51,7 +52,9 @@ export default function UserAvatar({
           className="w-full h-full object-cover"
           alt={user?.name as string}
         />
-        <Avatar.AvatarFallback>U</Avatar.AvatarFallback>
+        <Avatar.AvatarFallback className="w-full h-full">
+          <Skeleton className="w-full h-full" />
+        </Avatar.AvatarFallback>
       </Avatar.Root>
       {label && (
         <div className={labelVariants({ size })}>

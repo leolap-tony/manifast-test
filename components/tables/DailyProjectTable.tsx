@@ -59,8 +59,8 @@ export default function DailyProjectTable({
       {
         accessorKey: "tasks",
         header: "작업자",
-        cell: (props) => {
-          const worker = getUniqueWorkers(props.getValue() as any);
+        cell: ({ row }) => {
+          const worker = getUniqueWorkers(row.original.tasks);
           return <UserArray users={worker} orientation="col" maxAmount={3} />;
         },
       },

@@ -1,9 +1,11 @@
 "use server";
 
-import { auth } from "@/auth";
+import { auth, signIn, signOut } from "@/auth";
 import prisma from "@/db";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { useSession } from "next-auth/react";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { cache } from "react";
 
 export async function getMyInfo(userId: string) {
   try {
@@ -48,6 +50,7 @@ export async function getMyGroup(userId: string) {
               select: {
                 id: true,
                 name: true,
+                email: true,
                 image: true,
                 role: true,
                 authority: true,
@@ -62,6 +65,45 @@ export async function getMyGroup(userId: string) {
   } catch (e) {
     throw e;
   }
+}
+
+export async function setMyGroup(formData: FormData) {
+  const session = await auth();
+  try {
+    await prisma.user.update({
+      where: {
+        id: session?.user.sub,
+      },
+      data: {
+        groupId: formData.get("groupId") as string,
+        role: "WORKER",
+        authority: "MEMBER",
+      },
+    });
+    return { result: "success" };
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      return { result: "error" };
+    }
+  }
+}
+
+export async function setMyUserInfo(formData: FormData) {
+  try {
+    await prisma.user.update({
+      where: {
+        email: formData.get("email") as string,
+      },
+      data: {
+        name: formData.get("name") as string,
+        phone: formData.get("phone") as string,
+        job: formData.get("job") as string,
+      },
+    });
+  } catch (e) {
+    throw e;
+  }
+  redirect("/onboarding/group");
 }
 
 export async function updateMyInfo(formData: FormData) {

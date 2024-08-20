@@ -1,33 +1,15 @@
 import { ProjectThread, User } from "@prisma/client";
 import React from "react";
-import { Separator } from "./ui/separator";
-import UserAvatar from "./elements/UserAvatar";
-import formatDistanceDate from "@/lib/formatDistanceDate";
+import { Separator } from "../ui/separator";
+
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 
+import ThreadMessage from "./ThreadMessage";
+
 interface ThreadDailyListProps {
   date: string;
-  threads: Array<ProjectThread & { author: User }>;
-}
-function ThreadMessage({
-  thread,
-}: {
-  thread: ProjectThread & { author: User };
-}) {
-  return (
-    <div className="w-full flex flex-col gap-2">
-      <div className="flex flex-row justify-between items-center pr-5">
-        <UserAvatar size="xl" user={thread.author} label />
-        <div className="text-body-sm-n text-text-sub">
-          {formatDistanceDate(thread.createdAt)}
-        </div>
-      </div>
-      <div className="pl-14 pr-5 pb-3 text-body-md-n text-text-body">
-        {thread.message}
-      </div>
-    </div>
-  );
+  threads: Array<ProjectThread & { author: Partial<User> }>;
 }
 
 export default function ThreadDailyList({

@@ -1,7 +1,10 @@
 "use server";
 import { auth } from "@/auth";
 import prisma from "@/db";
-import { ProjectWithTaskReport, ProjectWithTasks } from "@/types/queryInterface";
+import {
+  ProjectWithTaskReport,
+  ProjectWithTasks,
+} from "@/types/queryInterface";
 import { Project, Task } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -52,8 +55,7 @@ export async function createProject(formData: FormData) {
         threads: {
           create: [
             {
-              authorId: user.id,
-              type: "SYSTEM",
+              type: "REQUEST",
               message: "프로젝트 요청입니다",
             },
           ],
@@ -77,10 +79,11 @@ export async function updateProject(data: Partial<ProjectWithTaskReport>) {
       prisma.project.update({
         where: { id: data.id },
         data: {
+          name: data.name,
           startDate: data.startDate && new Date(data.startDate),
           endDate: data.endDate && new Date(data.endDate),
           difficulty: data.difficulty,
-          status: data.status === 'REQUEST' ? 'STANDBY' : data.status,
+          status: data.status === "REQUEST" ? "STANDBY" : data.status,
           tasks: {
             create: data.tasks?.map((task) => ({
               name: task.name,
@@ -100,9 +103,9 @@ export async function updateProject(data: Partial<ProjectWithTaskReport>) {
                   standardInputRate: report.standardInputRate,
                   todayInputRate: report.todayInputRate,
                   message: report.message,
-                  date: new Date(report.date)
-                }))
-              }
+                  date: new Date(report.date),
+                })),
+              },
             })),
           },
         },
@@ -141,14 +144,24 @@ export async function getProject(projectId: string) {
             },
           },
         },
-        threads: {
-          include: {
-            author: true,
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-        },
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getProjectThreads(projectId: string) {
+  try {
+    return await prisma.projectThread.findMany({
+      where: {
+        projectId: projectId,
+      },
+      include: {
+        author: { select: { id: true, name: true, image: true } },
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
   } catch (error) {
@@ -200,5 +213,47 @@ export async function getAllMyProject() {
     });
   } catch (error) {
     throw error;
+  }
+}
+
+export async function postThreadMessage({
+  projectId,
+  type,
+  authorId,
+  message,
+}: {
+  projectId: string;
+  type?: ProjectStatus;
+  authorId?: string;
+  message?: string;
+}) {
+  try {
+    await prisma.projectThread.create({
+      data: { projectId, type, authorId, message },
+    });
+    return { result: "success" };
+  } catch (error) {
+    return { result: "error" };
+  }
+}
+
+export async function updateProjectStatus(
+  projectId: string,
+  status: ProjectStatus
+) {
+  const session = await auth();
+  try {
+    await prisma.$transaction([
+      prisma.project.update({
+        where: { id: projectId, managerId: session?.user.sub },
+        data: { status },
+      }),
+      prisma.projectThread.create({
+        data: { projectId: projectId, type: status },
+      }),
+    ]);
+    return { result: "success" };
+  } catch (error) {
+    return { result: "error" };
   }
 }
