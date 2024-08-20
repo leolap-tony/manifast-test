@@ -1,4 +1,4 @@
-import { ProjectThread, ThreadType, User } from "@prisma/client";
+import { ProjectThread, User } from "@prisma/client";
 import React from "react";
 import UserAvatar from "../elements/UserAvatar";
 import formatDistanceDate from "@/lib/formatDistanceDate";
@@ -32,7 +32,7 @@ function ThreadNotice({ type }: { type: string }) {
   return (
     <div className="bg-background-gray border-l-2 border-foreground p-3 text-text text-title-sm">
       <span className="mr-3">🖍️</span>
-      {threadNotice({ type: type })}
+      {threadNotice({ type: type as any })}
     </div>
   );
 }

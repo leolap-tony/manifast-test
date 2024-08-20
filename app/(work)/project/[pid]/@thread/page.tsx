@@ -24,7 +24,9 @@ export default async function thread({ params }: { params: { pid: string } }) {
   } = {};
 
   if (threads && threads.length > 0) {
-    groupedThreads = groupByDate(threads);
+    groupedThreads = groupByDate(
+      threads as Array<ProjectThread & { author: User }>
+    );
   }
   return (
     <section className="page-contents">
