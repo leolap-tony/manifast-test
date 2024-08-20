@@ -21,8 +21,9 @@ const threadNotice = cva("", {
   variants: {
     type: {
       REQUEST: "프로젝트가 요청되었습니다.",
-      START: "프로젝트가 시작되었습니다.",
-      STOP: "",
+      LIVE: "프로젝트가 시작되었습니다.",
+      STOP: "프로젝트가 중단되었습니다.",
+      CANCEL: "프로젝트가 취소되었습니다.",
     },
   },
 });

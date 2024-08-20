@@ -50,6 +50,7 @@ export async function getMyGroup(userId: string) {
               select: {
                 id: true,
                 name: true,
+                email: true,
                 image: true,
                 role: true,
                 authority: true,

@@ -33,10 +33,9 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import React, { useEffect, useMemo, useState } from "react";
-import { updateOwner } from "../actions";
-import user from "./page";
+import { updateOwner } from "../app/(work)/info/actions";
 
-export default function MemberControl({
+export default function GroupMemberControl({
   userId,
   groupId,
   members,
@@ -45,8 +44,12 @@ export default function MemberControl({
   groupId: string;
   members: Partial<User>[];
 }) {
-  const [canEdit, setEdit] = useState(
+  const [isOwner, setIsOwner] = useState(
     userId === members.find((member) => member.authority === "OWNER")?.id
+  );
+  const [isAdmin, setIsAdmin] = useState(
+    userId ===
+      members.find((member) => member.authority === ("ADMIN" || "OWNER"))?.id
   );
   const [memberState, setMemberState] = useState(members);
   const [selectedOwner, setSelectedOwner] = useState<Partial<User> | undefined>(
@@ -78,7 +81,7 @@ export default function MemberControl({
         cell: ({ row }) =>
           row.original.authority === "OWNER" ? (
             "그룹 관리자"
-          ) : (
+          ) : isAdmin ? (
             <Select
               defaultValue={row.original.authority as string}
               onValueChange={(newValue) =>
@@ -99,39 +102,44 @@ export default function MemberControl({
                 <SelectItem value="MEMBER">구성원</SelectItem>
               </SelectContent>
             </Select>
+          ) : (
+            row.original.authority
           ),
       },
       {
         accessorKey: "role",
         header: "역할",
-        cell: ({ row }) => (
-          <Select
-            defaultValue={
-              memberState.find((item) => item.id === row.original.id)
-                ?.role as string
-            }
-            onValueChange={(newValue) =>
-              setMemberState((prev) =>
-                prev.map((item) =>
-                  item.id === row.original.id
-                    ? { ...item, role: newValue as Role }
-                    : item
+        cell: ({ row }) =>
+          isAdmin ? (
+            <Select
+              defaultValue={
+                memberState.find((item) => item.id === row.original.id)
+                  ?.role as string
+              }
+              onValueChange={(newValue) =>
+                setMemberState((prev) =>
+                  prev.map((item) =>
+                    item.id === row.original.id
+                      ? { ...item, role: newValue as Role }
+                      : item
+                  )
                 )
-              )
-            }
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="MANAGER">책임자</SelectItem>
-              <SelectItem value="WORKER">수행자</SelectItem>
-            </SelectContent>
-          </Select>
-        ),
+              }
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="MANAGER">책임자</SelectItem>
+                <SelectItem value="WORKER">작업자</SelectItem>
+              </SelectContent>
+            </Select>
+          ) : (
+            row.original.role
+          ),
       },
     ],
-    [memberState]
+    [memberState, isAdmin]
   );
 
   const table = useReactTable({
@@ -159,7 +167,7 @@ export default function MemberControl({
   return (
     <section>
       <Header type="section" title="멤버 정보">
-        {canEdit && (
+        {isOwner && (
           <Dialog>
             <DialogTrigger asChild>
               <Button>그룹 관리자 변경</Button>

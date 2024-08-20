@@ -76,6 +76,7 @@ export async function updateProject(data: Partial<ProjectWithTasks>) {
       prisma.project.update({
         where: { id: data.id },
         data: {
+          name: data.name,
           startDate: data.startDate && new Date(data.startDate),
           endDate: data.endDate && new Date(data.endDate),
           difficulty: data.difficulty,
@@ -210,7 +211,7 @@ export async function postThreadMessage({
   message,
 }: {
   projectId: string;
-  type: ProjectStatus;
+  type?: ProjectStatus;
   authorId?: string;
   message?: string;
 }) {
@@ -227,4 +228,20 @@ export async function postThreadMessage({
 export async function updateProjectStatus(
   projectId: string,
   status: ProjectStatus
-) {}
+) {
+  const session = await auth();
+  try {
+    await prisma.$transaction([
+      prisma.project.update({
+        where: { id: projectId, managerId: session?.user.sub },
+        data: { status },
+      }),
+      prisma.projectThread.create({
+        data: { projectId: projectId, type: status },
+      }),
+    ]);
+    return { result: "success" };
+  } catch (error) {
+    return { result: "error" };
+  }
+}

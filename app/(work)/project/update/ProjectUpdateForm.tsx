@@ -50,7 +50,8 @@ import {
   ToggleGroup,
   ToggleGroupItem,
 } from "@/components/elements/Toggle-group";
-import { updateProject } from "../actions";
+import { updateProject, updateProjectStatus } from "../actions";
+import { useRouter } from "next/navigation";
 
 export default function ProjectRequestForm({
   project,
@@ -79,6 +80,7 @@ export default function ProjectRequestForm({
     updateWorker,
     removeTask,
   } = useFormStore();
+  const router = useRouter();
 
   useEffect(() => {
     initData(project);
@@ -117,6 +119,15 @@ export default function ProjectRequestForm({
       console.log(error);
     }
   };
+  const handleCancle = async () => {
+    if (project.status === "CANCEL") {
+      await updateProjectStatus(project.id, "STANDBY");
+    } else {
+      await updateProjectStatus(project.id, "CANCEL");
+    }
+    router.push(`/project/${project.id}`);
+  };
+
   const columns: ColumnDef<TaskWithWorkers>[] = useMemo(
     () => [
       {
@@ -475,7 +486,20 @@ export default function ProjectRequestForm({
           </ToggleGroup>
         </div>
       </section>
-      <Button onClick={() => handleSubmit()}>검토 완료</Button>
+      <div className="w-full px-6 flex flex-row justify-between">
+        <Button onClick={() => handleSubmit()} className="w-fit">
+          검토 완료
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => handleCancle()}
+          className="w-fit text-primary"
+        >
+          {project.status === "CANCEL"
+            ? "프로젝트 재개하기"
+            : "프로젝트 취소하기"}
+        </Button>
+      </div>
     </div>
   );
 }
