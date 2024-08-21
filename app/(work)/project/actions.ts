@@ -98,7 +98,7 @@ export async function updateProject(data: Partial<ProjectWithTaskReport>) {
                 })),
               },
               taskReport: {
-                create: task.taskReport.map((report) => ({
+                create: task.taskReport?.map((report) => ({
                   userId: report.userId,
                   standardInputRate: report.standardInputRate,
                   todayInputRate: report.todayInputRate,
