@@ -95,7 +95,7 @@ export default function DailyProjectTable({
           const progress = milestoneTasks.length
             ? (completed / milestoneTasks.length) * 100
             : 0;
-          return progress;
+          return Math.round(progress);
         },
         cell: (info) => (
           <ProgressBar size="sm" value={info.getValue() as number} />
