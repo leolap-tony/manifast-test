@@ -57,8 +57,16 @@ export default function ProjectRequestForm({
     );
   }, [templateName, templates]);
 
+  const handleSubmit = async (formData : FormData) => {
+    try {
+      await createProject(formData)
+    } catch (e) {
+      alert('프로젝트를 생성할 수 없습니다.')
+    }
+  }
+
   return (
-    <form action={createProject} method="POST">
+    <form action={handleSubmit} method="POST">
       <section>
         <Header type="section" title="기본 정보" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-4 px-6 pb-6">

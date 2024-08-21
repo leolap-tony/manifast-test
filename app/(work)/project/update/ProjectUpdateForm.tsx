@@ -116,7 +116,7 @@ export default function ProjectRequestForm({
       );
       await updateProject(data);
     } catch (error) {
-      console.log(error);
+      alert('프로젝트를 수정할 수 없습니다.');
     }
   };
   const handleCancle = async () => {

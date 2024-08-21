@@ -82,10 +82,12 @@ export default function TaskWbsTable({ tasks }: { tasks: TaskWithWorkers[] }) {
               <Button
                 variant={row.original.isComplete ? "outline" : "default"}
                 className="absolute right-6 bottom-2 w-fit"
-                onClick={(e) => {
+                onClick={async (e) => {
                   try {
-                    completeTask(row.original.id, !row.original.isComplete);
-                  } catch (error) {}
+                    await completeTask(row.original.id, !row.original.isComplete);
+                  } catch (error) {
+                    alert('작업을 수정할 수 없습니다.')
+                  }
                 }}
               >
                 {row.original.isComplete ? "완료 취소" : "작업 완료"}

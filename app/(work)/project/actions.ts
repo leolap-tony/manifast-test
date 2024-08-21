@@ -63,7 +63,8 @@ export async function createProject(formData: FormData) {
       },
     });
   } catch (error) {
-    console.error(error);
+    // console.error(error);
+    throw error
     return;
   }
   redirect(`/project/${project?.id}`);
