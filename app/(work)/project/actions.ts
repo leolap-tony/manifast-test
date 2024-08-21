@@ -179,6 +179,7 @@ export async function completeTask(taskId: string, status: boolean) {
   } catch (e) {
     throw e;
   }
+  revalidatePath('/project')
 }
 
 export async function getAllMyProject() {
