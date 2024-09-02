@@ -149,6 +149,7 @@ export default function ProjectRequestForm({
                   initialFocus
                   selected={endDate}
                   onSelect={setEndDate}
+                  fromDate={startDate}
                 />
               </PopoverContent>
             </Popover>
