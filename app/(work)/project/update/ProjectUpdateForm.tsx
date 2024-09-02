@@ -77,6 +77,7 @@ export default function ProjectRequestForm({
     tasks,
     initData,
     addTask,
+    removeWorker,
     updateTask,
     addWorker,
     updateWorker,
@@ -296,7 +297,10 @@ export default function ProjectRequestForm({
                             });
                           }}
                         />
-                        <span>%</span>
+                        {/* <span>%</span> */}
+                      </div>
+                      <div className="">
+                        <Button variant='ghost' className="bg-gray-200 rounded-full h-5 w-5" onClick={()=>{removeWorker(row.index,idx)}}>✕</Button>
                       </div>
                     </div>
                   );
