@@ -231,6 +231,9 @@ export default function ProjectRequestForm({
                 initialFocus
                 selected={row.original.endDate || undefined}
                 onSelect={(date) => updateTask(row.index, { endDate: date })}
+                fromDate={
+                  row.original.startDate ? row.original.startDate : undefined
+                }
               />
             </PopoverContent>
           </Popover>
@@ -346,7 +349,7 @@ export default function ProjectRequestForm({
             />
           </KeyValueLabel>
           <KeyValueLabel direction="row" label="종류" labelWidth={80}>
-            <Input defaultValue={projectTemplateName} disabled />
+            <Input defaultValue={projectTemplateName} />
           </KeyValueLabel>
           <KeyValueLabel direction="row" label="시작일" labelWidth={80}>
             <Popover>
@@ -394,6 +397,7 @@ export default function ProjectRequestForm({
                   initialFocus
                   selected={endDate || undefined}
                   onSelect={(date) => setDate(false, "end", date as Date)}
+                  fromDate={startDate ? startDate : undefined}
                 />
               </PopoverContent>
             </Popover>
