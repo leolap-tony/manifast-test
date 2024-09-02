@@ -13,6 +13,7 @@ interface ProjectFormAction {
   setStatus: (status: ProjectStatus) => void;
   setMessage: (message: string) => void;
   setDifficulty: (difficulty: number) => void;
+  setManagerId: (managerId: string) => void;
   addTask: (task: TaskWithWorkers) => void;
   removeTask: (index: number) => void;
   updateTask: (index: number, updatedTask: Partial<TaskWithWorkers>) => void;
@@ -54,6 +55,8 @@ export const useFormStore = create<
   setMessage: (message: string) => set({ message }),
 
   setDifficulty: (difficulty: number) => set({ difficulty }),
+
+  setManagerId: (managerId: string) => set({ managerId }),
 
   addTask: (task: TaskWithWorkers) =>
     set((state) => ({

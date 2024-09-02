@@ -7,6 +7,7 @@ export interface GroupWithProjects extends Group {
 export interface ProjectWithTasks extends Project {
   group?: Pick<Group, "name">;
   tasks: TaskWithWorkers[];
+  manager?: User;
 }
 
 export interface TaskWithWorkers extends Task {
@@ -19,14 +20,17 @@ export interface TaskWorkerWithWorker extends TaskWorker {
   worker: User;
 }
 
-const projectWithTaskReport = Prisma.validator<Prisma.ProjectDefaultArgs>()({
-  include: {
-    tasks: {
-      include: { workers: true, taskReport: true },
+const projectWithTaskAndManager = Prisma.validator<Prisma.ProjectDefaultArgs>()(
+  {
+    include: {
+      tasks: {
+        include: { workers: true, taskReport: true },
+      },
+      manager: true,
     },
   },
-});
+);
 
-export type ProjectWithTaskReport = Prisma.ProjectGetPayload<
-  typeof projectWithTaskReport
+export type projectWithTaskAndManager = Prisma.ProjectGetPayload<
+  typeof projectWithTaskAndManager
 >;

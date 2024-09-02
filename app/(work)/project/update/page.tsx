@@ -14,7 +14,10 @@ export default async function page({
   const session = await auth();
   const project = await prisma.project.findUnique({
     where: { id: searchParams.pid },
-    include: { tasks: { include: { workers: true, taskReport: true } } },
+    include: {
+      tasks: { include: { workers: true, taskReport: true } },
+      manager: true,
+    },
   });
   const members =
     session?.user.sub === project?.managerId

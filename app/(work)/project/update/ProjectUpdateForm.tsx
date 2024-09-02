@@ -72,6 +72,8 @@ export default function ProjectRequestForm({
     request_startDate,
     setDate,
     projectTemplateName,
+    managerId,
+    setManagerId,
     tasks,
     initData,
     addTask,
@@ -349,7 +351,7 @@ export default function ProjectRequestForm({
             />
           </KeyValueLabel>
           <KeyValueLabel direction="row" label="종류" labelWidth={80}>
-            <Input defaultValue={projectTemplateName} />
+            <Input defaultValue={projectTemplateName} disabled/>
           </KeyValueLabel>
           <KeyValueLabel direction="row" label="시작일" labelWidth={80}>
             <Popover>
@@ -445,6 +447,46 @@ export default function ProjectRequestForm({
               ))}
             </TableHeader>
             <TableBody>
+              <TableRow>
+                <TableCell></TableCell>
+                <TableCell>PM 업무</TableCell>
+                <TableCell>-</TableCell>
+                <TableCell>{project.startDate?.toLocaleDateString()}</TableCell>
+                <TableCell>{project.endDate?.toLocaleDateString()}</TableCell>
+                <TableCell>
+                  <div className="w-[108px]">
+                    <Select
+                      onValueChange={(e) =>
+                        setManagerId(e)
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={
+                            <UserAvatar
+                              user={memberDataSelector(managerId as string)}
+                              label
+                            />
+                          }                         
+                        >
+                          <UserAvatar
+                            user={memberDataSelector(managerId as string)}
+                            label
+                          />
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent className="w-[108px] flex flex-col gap-2">
+                        {members &&
+                          members.map((member, idx) => (
+                            <SelectItem key={idx} value={member.id as string}>
+                              <UserAvatar user={member} label />
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </TableCell>
+              </TableRow>
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow

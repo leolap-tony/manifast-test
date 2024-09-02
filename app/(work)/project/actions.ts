@@ -2,7 +2,7 @@
 import { auth } from "@/auth";
 import prisma from "@/db";
 import {
-  ProjectWithTaskReport,
+  projectWithTaskAndManager,
   ProjectWithTasks,
 } from "@/types/queryInterface";
 import { Project, ProjectStatus, Task } from "@prisma/client";
@@ -70,7 +70,7 @@ export async function createProject(formData: FormData) {
   redirect(`/project/${project?.id}`);
 }
 
-export async function updateProject(data: Partial<ProjectWithTaskReport>) {
+export async function updateProject(data: Partial<projectWithTaskAndManager>) {
   try {
     console.log(data);
     await prisma.$transaction([
@@ -85,6 +85,7 @@ export async function updateProject(data: Partial<ProjectWithTaskReport>) {
           endDate: data.endDate && new Date(data.endDate),
           difficulty: data.difficulty,
           status: data.status === "REQUEST" ? "STANDBY" : data.status,
+          managerId: data.managerId,
           tasks: {
             create: data.tasks?.map((task) => ({
               name: task.name,
