@@ -106,17 +106,17 @@ export default function ProjectRequestForm({
     (userId: string) => {
       return members?.find((member) => member.id === userId);
     },
-    [members]
+    [members],
   );
   const handleSubmit = async () => {
     try {
       const form = useFormStore.getState() as ProjectWithTasks;
       const data = Object.fromEntries(
-        Object.entries(form).filter((e) => typeof e[1] !== "function")
+        Object.entries(form).filter((e) => typeof e[1] !== "function"),
       );
       await updateProject(data);
     } catch (error) {
-      alert('프로젝트를 수정할 수 없습니다.');
+      alert("프로젝트를 수정할 수 없습니다.");
     }
   };
   const handleCancle = async () => {
@@ -321,7 +321,7 @@ export default function ProjectRequestForm({
         ),
       },
     ],
-    [members, memberDataSelector, addWorker, updateTask, updateWorker]
+    [members, memberDataSelector, addWorker, updateTask, updateWorker],
   );
 
   const table = useReactTable({
@@ -432,7 +432,7 @@ export default function ProjectRequestForm({
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext()
+                              header.getContext(),
                             )}
                       </TableHead>
                     );
@@ -451,7 +451,7 @@ export default function ProjectRequestForm({
                       <TableCell key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </TableCell>
                     ))}

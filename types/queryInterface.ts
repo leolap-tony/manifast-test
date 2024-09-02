@@ -22,9 +22,11 @@ export interface TaskWorkerWithWorker extends TaskWorker {
 const projectWithTaskReport = Prisma.validator<Prisma.ProjectDefaultArgs>()({
   include: {
     tasks: {
-      include: { workers: true, taskReport: true }
-    }
-  }
-})
+      include: { workers: true, taskReport: true },
+    },
+  },
+});
 
-export type ProjectWithTaskReport = Prisma.ProjectGetPayload<typeof projectWithTaskReport>
+export type ProjectWithTaskReport = Prisma.ProjectGetPayload<
+  typeof projectWithTaskReport
+>;

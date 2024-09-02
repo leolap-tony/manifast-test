@@ -18,14 +18,14 @@ interface ProjectFormAction {
   updateTask: (index: number, updatedTask: Partial<TaskWithWorkers>) => void;
   modifyTaskWorkers: (
     taskIndex: number,
-    modifyWorkerFn: (workers: TaskWorkerWithWorker[]) => TaskWorkerWithWorker[]
+    modifyWorkerFn: (workers: TaskWorkerWithWorker[]) => TaskWorkerWithWorker[],
   ) => void;
   addWorker: (taskIndex: number, worker: TaskWorkerWithWorker) => void;
   removeWorker: (taskIndex: number, workerIndex: number) => void;
   updateWorker: (
     taskIndex: number,
     workerIndex: number,
-    updatedWorker: Partial<TaskWorkerWithWorker>
+    updatedWorker: Partial<TaskWorkerWithWorker>,
   ) => void;
 }
 
@@ -69,21 +69,21 @@ export const useFormStore = create<
     set((state) => ({
       tasks: state.tasks
         ? state.tasks.map((task, i) =>
-            i === index ? { ...task, ...updatedTask } : task
+            i === index ? { ...task, ...updatedTask } : task,
           )
         : [],
     })),
 
   modifyTaskWorkers: (
     taskIndex: number,
-    modifyWorkerFn: (workers: TaskWorkerWithWorker[]) => TaskWorkerWithWorker[]
+    modifyWorkerFn: (workers: TaskWorkerWithWorker[]) => TaskWorkerWithWorker[],
   ) =>
     set((state) => ({
       tasks: state.tasks
         ? state.tasks.map((task, i) =>
             i === taskIndex
               ? { ...task, workers: modifyWorkerFn(task.workers || []) }
-              : task
+              : task,
           )
         : [],
     })),
@@ -93,17 +93,17 @@ export const useFormStore = create<
 
   removeWorker: (taskIndex: number, workerIndex: number) =>
     get().modifyTaskWorkers(taskIndex, (workers) =>
-      workers.filter((_, j) => j !== workerIndex)
+      workers.filter((_, j) => j !== workerIndex),
     ),
 
   updateWorker: (
     taskIndex: number,
     workerIndex: number,
-    updatedWorker: Partial<TaskWorkerWithWorker>
+    updatedWorker: Partial<TaskWorkerWithWorker>,
   ) =>
     get().modifyTaskWorkers(taskIndex, (workers) =>
       workers.map((worker, j) =>
-        j === workerIndex ? { ...worker, ...updatedWorker } : worker
-      )
+        j === workerIndex ? { ...worker, ...updatedWorker } : worker,
+      ),
     ),
 }));

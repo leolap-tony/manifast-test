@@ -45,15 +45,15 @@ export default function GroupMemberControl({
   members: Partial<User>[];
 }) {
   const [isOwner, setIsOwner] = useState(
-    userId === members.find((member) => member.authority === "OWNER")?.id
+    userId === members.find((member) => member.authority === "OWNER")?.id,
   );
   const [isAdmin, setIsAdmin] = useState(
     userId ===
-      members.find((member) => member.authority === ("ADMIN" || "OWNER"))?.id
+      members.find((member) => member.authority === ("ADMIN" || "OWNER"))?.id,
   );
   const [memberState, setMemberState] = useState(members);
   const [selectedOwner, setSelectedOwner] = useState<Partial<User> | undefined>(
-    members.find((member) => member.authority === "OWNER")
+    members.find((member) => member.authority === "OWNER"),
   );
   const [loading, setLoading] = useState(false);
 
@@ -89,8 +89,8 @@ export default function GroupMemberControl({
                   prev.map((item) =>
                     item.id === row.original.id
                       ? { ...item, authority: newValue as Authority }
-                      : item
-                  )
+                      : item,
+                  ),
                 )
               }
             >
@@ -121,8 +121,8 @@ export default function GroupMemberControl({
                   prev.map((item) =>
                     item.id === row.original.id
                       ? { ...item, role: newValue as Role }
-                      : item
-                  )
+                      : item,
+                  ),
                 )
               }
             >
@@ -139,7 +139,7 @@ export default function GroupMemberControl({
           ),
       },
     ],
-    [memberState, isAdmin]
+    [memberState, isAdmin],
   );
 
   const table = useReactTable({
@@ -158,9 +158,9 @@ export default function GroupMemberControl({
               ? { ...item, authority: "OWNER" }
               : item.authority === "OWNER"
                 ? { ...item, authority: "ADMIN" }
-                : item
-          )
-        )
+                : item,
+          ),
+        ),
       )
       .finally(() => setLoading(false));
   };
@@ -220,7 +220,7 @@ export default function GroupMemberControl({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -239,7 +239,7 @@ export default function GroupMemberControl({
                     <TableCell key={cell.id} className="py-1.5">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

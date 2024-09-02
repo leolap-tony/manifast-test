@@ -84,9 +84,12 @@ export default function TaskWbsTable({ tasks }: { tasks: TaskWithWorkers[] }) {
                 className="absolute right-6 bottom-2 w-fit"
                 onClick={async (e) => {
                   try {
-                    await completeTask(row.original.id, !row.original.isComplete);
+                    await completeTask(
+                      row.original.id,
+                      !row.original.isComplete,
+                    );
                   } catch (error) {
-                    alert('작업을 수정할 수 없습니다.')
+                    alert("작업을 수정할 수 없습니다.");
                   }
                 }}
               >
@@ -154,7 +157,7 @@ export default function TaskWbsTable({ tasks }: { tasks: TaskWithWorkers[] }) {
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                 </TableHead>
               );

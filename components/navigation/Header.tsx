@@ -42,7 +42,7 @@ const headerContentVariants = cva(
     defaultVariants: {
       type: "page",
     },
-  }
+  },
 );
 
 const titleVariants = cva("text-title-lg", {

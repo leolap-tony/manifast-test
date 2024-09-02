@@ -17,7 +17,7 @@ interface ProjectProgressProps {
 const calculateProgress = (tasks: Task[]): number => {
   const milestoneTasks = tasks.filter((task) => task.isMilestone);
   const completedMilestones = milestoneTasks.filter(
-    (task) => task.isComplete
+    (task) => task.isComplete,
   ).length;
   return milestoneTasks.length > 0
     ? Math.round((completedMilestones / milestoneTasks.length) * 100)

@@ -23,7 +23,7 @@ const avatarVariants = cva(
     defaultVariants: {
       size: "md",
     },
-  }
+  },
 );
 
 const labelVariants = cva("h-full text-nowrap", {

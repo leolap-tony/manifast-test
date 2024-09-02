@@ -70,7 +70,7 @@ const columns: ColumnDef<MemberTableProps>[] = [
     cell: ({ row }) => {
       const rate = row.original.project.reduce(
         (acc, item) => acc + (item ? item.difficulty : 0),
-        0
+        0,
       );
       const today = rate / row.original.project.length;
       return getDifficultyIcon(today ? today : 0);
@@ -84,7 +84,7 @@ const columns: ColumnDef<MemberTableProps>[] = [
       if (!info.tasks.length) return 0 + "%";
       const totalInput = info.tasks.reduce(
         (acc, task) => acc + (task.inputRate ?? 0),
-        0
+        0,
       );
       return totalInput + "%";
     },

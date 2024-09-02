@@ -5,7 +5,7 @@ import { User } from "@prisma/client";
 export function getUniqueWorkers(tasks: TaskWithWorkers[]): User[] {
   // 모든 Task에서 작업자 추출
   const workers = tasks.flatMap((task) =>
-    task.workers.map((taskWorker) => taskWorker.worker)
+    task.workers.map((taskWorker) => taskWorker.worker),
   );
 
   // 중복 제거를 위한 Set 사용

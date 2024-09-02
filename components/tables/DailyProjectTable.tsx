@@ -87,10 +87,10 @@ export default function DailyProjectTable({
         header: "진척률",
         accessorFn: (row) => {
           const milestoneTasks = row.tasks.filter(
-            (task) => task.isMilestone === true
+            (task) => task.isMilestone === true,
           );
           const completed = milestoneTasks.filter(
-            (task) => task.isComplete === true
+            (task) => task.isComplete === true,
           ).length;
           const progress = milestoneTasks.length
             ? (completed / milestoneTasks.length) * 100
@@ -103,7 +103,7 @@ export default function DailyProjectTable({
       },
       { accessorKey: "group.name", header: "고객명" },
     ],
-    []
+    [],
   );
   const table = useReactTable({
     columns: columns,
@@ -122,7 +122,7 @@ export default function DailyProjectTable({
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                 </TableHead>
               );

@@ -64,7 +64,7 @@ export async function createProject(formData: FormData) {
     });
   } catch (error) {
     // console.error(error);
-    throw error
+    throw error;
     return;
   }
   redirect(`/project/${project?.id}`);
@@ -180,7 +180,7 @@ export async function completeTask(taskId: string, status: boolean) {
   } catch (e) {
     throw e;
   }
-  revalidatePath('/project')
+  revalidatePath("/project");
 }
 
 export async function getAllMyProject() {
@@ -241,7 +241,7 @@ export async function postThreadMessage({
 
 export async function updateProjectStatus(
   projectId: string,
-  status: ProjectStatus
+  status: ProjectStatus,
 ) {
   const session = await auth();
   try {

@@ -16,7 +16,7 @@ export default async function thread({ params }: { params: { pid: string } }) {
         groups[date].push(thread);
         return groups;
       },
-      {} as { [key: string]: Array<ProjectThread & { author: User }> }
+      {} as { [key: string]: Array<ProjectThread & { author: User }> },
     );
   };
   let groupedThreads: {
@@ -25,7 +25,7 @@ export default async function thread({ params }: { params: { pid: string } }) {
 
   if (threads && threads.length > 0) {
     groupedThreads = groupByDate(
-      threads as Array<ProjectThread & { author: User }>
+      threads as Array<ProjectThread & { author: User }>,
     );
   }
   return (

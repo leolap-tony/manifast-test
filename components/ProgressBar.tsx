@@ -15,7 +15,7 @@ const progressIndicatorClasses = cva(
     defaultVariants: {
       size: "lg",
     },
-  }
+  },
 );
 
 // Progress 컴포넌트의 스타일을 CVA로 정의

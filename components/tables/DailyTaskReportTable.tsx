@@ -139,7 +139,7 @@ export default function DailyTaskReportTable({
         },
       },
     ],
-    []
+    [],
   );
   const table = useReactTable({
     columns: columns,
@@ -164,7 +164,7 @@ export default function DailyTaskReportTable({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -183,7 +183,7 @@ export default function DailyTaskReportTable({
                     <TableCell key={cell.id} className="py-1.5">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

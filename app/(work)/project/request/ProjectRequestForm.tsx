@@ -45,7 +45,7 @@ export default function ProjectRequestForm({
     .map((item) => item.category)
     .filter(
       (category, index, self) =>
-        category !== null && self.indexOf(category) === index
+        category !== null && self.indexOf(category) === index,
     );
   const [templateName, setTemplateName] = useState<string | null>(null);
   const [templateTaskList, setTemplateTaskList] = useState<TaskTemplate[]>();
@@ -53,17 +53,18 @@ export default function ProjectRequestForm({
   const [endDate, setEndDate] = useState<Date>();
   useEffect(() => {
     setTemplateTaskList(
-      templates.find((template) => template.name === templateName)?.taskTemplate
+      templates.find((template) => template.name === templateName)
+        ?.taskTemplate,
     );
   }, [templateName, templates]);
 
-  const handleSubmit = async (formData : FormData) => {
+  const handleSubmit = async (formData: FormData) => {
     try {
-      await createProject(formData)
+      await createProject(formData);
     } catch (e) {
-      alert('프로젝트를 생성할 수 없습니다.')
+      alert("프로젝트를 생성할 수 없습니다.");
     }
-  }
+  };
 
   return (
     <form action={handleSubmit} method="POST">

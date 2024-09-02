@@ -18,7 +18,7 @@ export const useReportStore = create<
   updateTaskReports: (index, updated) => {
     set((state) => ({
       taskReports: state.taskReports.map((report, i) =>
-        i === index ? { ...report, ...updated } : report
+        i === index ? { ...report, ...updated } : report,
       ),
     }));
   },

@@ -40,7 +40,6 @@
     --text-body: 51 65 85;
     --text-sub: 100 116 139;
     --text-foreground: 255 255 255;
-
   }
 
   .dark {
@@ -88,9 +87,24 @@
 }
 @layer base {
   html {
-    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+    font-family:
+      "Pretendard Variable",
+      Pretendard,
+      -apple-system,
+      BlinkMacSystemFont,
+      system-ui,
+      Roboto,
+      "Helvetica Neue",
+      "Segoe UI",
+      "Apple SD Gothic Neo",
+      "Noto Sans KR",
+      "Malgun Gothic",
+      "Apple Color Emoji",
+      "Segoe UI Emoji",
+      "Segoe UI Symbol",
+      sans-serif;
     scrollbar-gutter: stable;
-}
+  }
   * {
     @apply border-border;
   }
@@ -100,42 +114,40 @@
 }
 
 @layer components {
+  .text-title-lg {
+    @apply font-semibold text-2xl leading-8;
+  }
+  .text-title-md {
+    @apply font-semibold text-xl leading-7;
+  }
+  .text-title-sm {
+    @apply font-semibold text-base leading-6;
+  }
+  .text-body-lg {
+    @apply font-medium text-base leading-6;
+  }
+  .text-body-md-m {
+    @apply font-medium text-sm leading-5;
+  }
+  .text-body-md-n {
+    @apply font-normal text-sm leading-5;
+  }
+  .text-body-sm-m {
+    @apply font-medium text-xs leading-4;
+  }
+  .text-body-sm-n {
+    @apply font-normal text-xs leading-4;
+  }
 
-  .text-title-lg{
-    @apply font-semibold text-2xl leading-8 
-  }
-  .text-title-md{
-    @apply font-semibold text-xl leading-7
-  }
-  .text-title-sm{
-    @apply font-semibold text-base leading-6
-  }
-  .text-body-lg{
-    @apply font-medium text-base leading-6
-  }
-  .text-body-md-m{
-    @apply font-medium text-sm leading-5
-  }
-  .text-body-md-n{
-    @apply font-normal text-sm leading-5
-  }
-  .text-body-sm-m{
-    @apply font-medium text-xs leading-4
-  }
-  .text-body-sm-n{
-    @apply font-normal text-xs leading-4
+  .page-frame {
+    @apply container w-full h-full min-h-screen flex flex-row gap-0 border-x;
   }
 
+  .page-layout {
+    @apply w-full h-full flex flex-col;
+  }
 
-.page-frame {
-  @apply container w-full h-full min-h-screen flex flex-row gap-0 border-x
-}
-
-.page-layout {
- @apply w-full h-full flex flex-col
-}
-
-.page-section {
-  @apply w-full h-full flex flex-col
-}
+  .page-section {
+    @apply w-full h-full flex flex-col;
+  }
 }

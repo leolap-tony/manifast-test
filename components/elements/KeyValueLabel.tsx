@@ -40,7 +40,7 @@ const labelStyleVariants = cva(
     defaultVariants: {
       direction: "col",
     },
-  }
+  },
 );
 
 // KeyValueLabel 컴포넌트 정의
