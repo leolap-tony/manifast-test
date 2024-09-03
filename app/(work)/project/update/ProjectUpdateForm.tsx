@@ -254,7 +254,7 @@ export default function ProjectRequestForm({
                   return (
                     <div key={idx} className="flex flex-row items-center gap-2">
                       <div className="w-[108px]">
-                        <Select
+                        <Select 
                           onValueChange={(e) =>
                             updateWorker(row.index, idx, { userId: e })
                           }
@@ -289,7 +289,7 @@ export default function ProjectRequestForm({
                       </div>
                       <div className="flex flex-row items-center gap-1">
                         <Input
-                          className="w-[48px] text-right"
+                          className="w-[68px] text-right"
                           defaultValue={worker.inputRate || 0}
                           onChange={(e) => {
                             updateWorker(row.index, idx, {
@@ -300,7 +300,15 @@ export default function ProjectRequestForm({
                         {/* <span>%</span> */}
                       </div>
                       <div className="">
-                        <Button variant='ghost' className="bg-gray-200 rounded-full h-5 w-5" onClick={()=>{removeWorker(row.index,idx)}}>✕</Button>
+                        <Button
+                          variant="ghost"
+                          className="bg-gray-100 rounded-full h-5 w-5 text-xs p-1"
+                          onClick={() => {
+                            removeWorker(row.index, idx);
+                          }}
+                        >
+                          ✕
+                        </Button>
                       </div>
                     </div>
                   );
@@ -321,10 +329,9 @@ export default function ProjectRequestForm({
                   inputRate: 0,
                 } as TaskWorkerWithWorker);
               }}
-              className="gap-1"
+              className="gap-1 ml-4"
             >
-              작업자
-              <Icon icon="plus" />
+              <Icon icon="userPlus" />
             </Button>
           </div>
         ),
@@ -355,7 +362,7 @@ export default function ProjectRequestForm({
             />
           </KeyValueLabel>
           <KeyValueLabel direction="row" label="종류" labelWidth={80}>
-            <Input defaultValue={projectTemplateName} disabled/>
+            <Input defaultValue={projectTemplateName} disabled />
           </KeyValueLabel>
           <KeyValueLabel direction="row" label="시작일" labelWidth={80}>
             <Popover>
@@ -459,11 +466,7 @@ export default function ProjectRequestForm({
                 <TableCell>{project.endDate?.toLocaleDateString()}</TableCell>
                 <TableCell>
                   <div className="w-[108px]">
-                    <Select
-                      onValueChange={(e) =>
-                        setManagerId(e)
-                      }
-                    >
+                    <Select onValueChange={(e) => setManagerId(e)}>
                       <SelectTrigger>
                         <SelectValue
                           placeholder={
@@ -471,7 +474,7 @@ export default function ProjectRequestForm({
                               user={memberDataSelector(managerId as string)}
                               label
                             />
-                          }                         
+                          }
                         >
                           <UserAvatar
                             user={memberDataSelector(managerId as string)}

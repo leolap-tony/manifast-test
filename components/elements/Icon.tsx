@@ -1,4 +1,5 @@
 import {
+  IconUserPlus,
   IconArrow,
   IconCalendar,
   IconCheck,
@@ -21,6 +22,7 @@ interface IconProps {
 }
 
 const icons = {
+  userPlus: IconUserPlus,
   arrow: IconArrow,
   calendar: IconCalendar,
   check: IconCheck,
