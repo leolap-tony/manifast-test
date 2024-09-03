@@ -96,8 +96,10 @@ model BusinessInfo {
   address        String?
   businessNumber String?
   category       String?
+  companySize    String?
   workforceSize  String?
   foundingDate   DateTime?
+  comment        String?
   group          Group     @relation("GroupBusinessInfo", fields: [groupId], references: [id], onDelete: Cascade)
 }
 

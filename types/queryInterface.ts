@@ -34,3 +34,13 @@ const projectWithTaskAndManager = Prisma.validator<Prisma.ProjectDefaultArgs>()(
 export type projectWithTaskAndManager = Prisma.ProjectGetPayload<
   typeof projectWithTaskAndManager
 >;
+
+const groupWithBusinessInfo = Prisma.validator<Prisma.GroupDefaultArgs>()(
+  {
+  include: {
+    businessInfo: true
+  }
+})
+export type GroupWithBusinessInfo = Prisma.GroupGetPayload<
+  typeof groupWithBusinessInfo
+>

@@ -52,7 +52,14 @@ export default function Page() {
           >
             <Input name="groupId" required placeholder="입력해주세요" />
           </KeyValueLabel>
-          <Button size="lg">참여</Button>
+          <div className='flex justify-between gap-5'>
+            <Button variant='outline' size='lg' className='w-full' type='button'><Link href={'/onboarding/user'}>이전</Link></Button>
+            <Button size="lg" className="w-full">참여</Button>
+          </div>
+          <div className="bg-slate-50 w-full rounded-xl flex justify-between p-8">
+            <div>그룹의 계정이 없나요?</div>
+            <Button variant='outline'><Link href={'/onboarding/group/create'}>그룹 새로 생성</Link></Button>
+          </div>
           <Dialog open={open} onOpenChange={(e) => setOpen(e)}>
             <DialogContent>
               {success ? (
